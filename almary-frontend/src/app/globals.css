@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Anchor offset sotto la navbar fixed */
+  section[id] {
+    scroll-margin-top: 80px;
+  }
+
+  ::selection {
+    background-color: #15cb9e;
+    color: #ffffff;
+  }
+}
+
+@layer utilities {
+  /* Eyebrow: micro-label maiuscola spaziata come il riferimento */
+  .eyebrow {
+    @apply font-sans text-xs font-medium uppercase tracking-eyebrow text-secondary;
+  }
+}

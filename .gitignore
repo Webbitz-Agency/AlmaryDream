@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Dipendenze e build (il progetto Next.js è in almary-frontend/)
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+.vercel
+.env*.local
+
+# Asset master video (troppo grandi per Git)
+_masters/
+
+# Screenshot di riferimento (pesanti, solo interni)
+ScreenNapoli/

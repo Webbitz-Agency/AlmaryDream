@@ -1,0 +1,114 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { NAV_LINKS, SITE, bookingHref } from "@/lib/site";
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const solid = scrolled || open;
+
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        solid ? "bg-white/90 shadow-nav backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:h-20 lg:px-8">
+        {/* Logo — versione colori su navbar solida, bianca su hero trasparente */}
+        <a href="#top" className="relative z-10 flex items-center" aria-label="Almary Dream — home">
+          <Image
+            src={solid ? "/Logo/logo.png" : "/Logo/logoBianco.png"}
+            alt="Almary Dream"
+            width={72}
+            height={72}
+            priority
+            className="h-14 w-14 object-contain lg:h-[4.5rem] lg:w-[4.5rem]"
+          />
+        </a>
+
+        {/* Link desktop */}
+        <ul className="hidden items-center gap-8 lg:flex">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className={`text-sm font-medium transition-colors hover:text-accent ${
+                  solid ? "text-ink" : "text-white/90"
+                }`}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* CTA desktop */}
+        <a
+          href={bookingHref("Ciao Almary Dream! Vorrei prenotare un soggiorno.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary lg:inline-flex"
+        >
+          Prenota Ora
+        </a>
+
+        {/* Hamburger mobile */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Chiudi menu" : "Apri menu"}
+          aria-expanded={open}
+          className="relative z-10 flex h-11 w-11 items-center justify-center lg:hidden"
+        >
+          <span className="sr-only">Menu</span>
+          <div className="flex w-6 flex-col gap-1.5">
+            <span className={`h-0.5 w-full transition-all ${solid ? "bg-ink" : "bg-white"} ${open ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`h-0.5 w-full transition-all ${solid ? "bg-ink" : "bg-white"} ${open ? "opacity-0" : ""}`} />
+            <span className={`h-0.5 w-full transition-all ${solid ? "bg-ink" : "bg-white"} ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          </div>
+        </button>
+      </nav>
+
+      {/* Menu mobile a tendina */}
+      <div
+        className={`overflow-hidden bg-white transition-[max-height] duration-300 lg:hidden ${
+          open ? "max-h-96 border-t border-black/5" : "max-h-0"
+        }`}
+      >
+        <ul className="flex flex-col px-5 py-4">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="block py-3 text-base font-medium text-ink"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li className="pt-3">
+            <a
+              href={bookingHref("Ciao Almary Dream! Vorrei prenotare un soggiorno.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-12 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-white"
+            >
+              Prenota Ora
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+  );
+}
