@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
  * Il colore si imposta via `text-…` (usa currentColor), la dimensione via `h-…`.
  *
  * Animazione "line drawing": quando la sezione entra in viewport, la linea
- * si disegna seguendo il perimetro in ~5s. Usa `pathLength={1}` per normalizzare
+ * si disegna seguendo il perimetro in ~3.5s. Usa `pathLength={1}` per normalizzare
  * la lunghezza del tracciato → niente flash della sagoma completa prima dell'avvio.
  */
 export default function SardiniaShape({ className = "" }: { className?: string }) {
@@ -58,7 +58,7 @@ export default function SardiniaShape({ className = "" }: { className?: string }
         strokeDasharray={1}
         strokeDashoffset={drawn ? 0 : 1}
         style={{
-          transition: instant ? "none" : "stroke-dashoffset 5s ease-in-out",
+          transition: instant ? "none" : "stroke-dashoffset 3.5s ease-in-out",
         }}
       />
     </svg>
