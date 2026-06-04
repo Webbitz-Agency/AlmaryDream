@@ -1,10 +1,47 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
 /**
  * Sagoma stilizzata della Sardegna (solo contorno).
  * Il colore si imposta via `text-…` (usa currentColor), la dimensione via `h-…`.
+ *
+ * Animazione "line drawing": quando la sezione entra in viewport, la linea
+ * si disegna seguendo il perimetro in ~5s. Usa `pathLength={1}` per normalizzare
+ * la lunghezza del tracciato → niente flash della sagoma completa prima dell'avvio.
  */
 export default function SardiniaShape({ className = "" }: { className?: string }) {
+  const ref = useRef<SVGSVGElement>(null);
+  const [drawn, setDrawn] = useState(false);
+  const [instant, setInstant] = useState(false);
+
+  useEffect(() => {
+    // Rispetta chi preferisce meno animazioni: mostra la sagoma già completa.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setInstant(true);
+      setDrawn(true);
+      return;
+    }
+
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setDrawn(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <svg
+      ref={ref}
       viewBox="0 0 312 568"
       fill="none"
       className={className}
@@ -17,6 +54,12 @@ export default function SardiniaShape({ className = "" }: { className?: string }
         strokeWidth="3"
         strokeLinejoin="round"
         strokeLinecap="round"
+        pathLength={1}
+        strokeDasharray={1}
+        strokeDashoffset={drawn ? 0 : 1}
+        style={{
+          transition: instant ? "none" : "stroke-dashoffset 5s ease-in-out",
+        }}
       />
     </svg>
   );
