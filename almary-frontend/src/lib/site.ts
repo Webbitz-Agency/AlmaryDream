@@ -140,37 +140,37 @@ export type Activity = {
 /** Cosa fare nei dintorni di Baja Sardinia (Costa Smeralda) — anche per la SEO locale */
 export const ACTIVITIES: Activity[] = [
   {
-    image: "/images/dintorni/beach.webp",
+    image: "/images/Dintorni/beach.webp",
     title: "Spiagge da sogno",
     description:
       "Cala Battistoni a 3 minuti a piedi, la spiaggia di Baja Sardinia e le calette di Cala Granu con acqua cristallina.",
   },
   {
-    image: "/images/dintorni/arcipelago.webp",
+    image: "/images/Dintorni/arcipelago.webp",
     title: "Arcipelago di La Maddalena",
     description:
       "Gite in barca tra Spargi, Budelli e la celebre Spiaggia Rosa, nel cuore del parco marino più bello del Mediterraneo.",
   },
   {
-    image: "/images/dintorni/phi.webp",
+    image: "/images/Dintorni/phi.webp",
     title: "Phi Beach & aperitivi al tramonto",
     description:
       "Tramonti mozzafiato sugli scogli di Forte Cappellini, tra musica, cocktail e l'atmosfera glamour della Costa Smeralda.",
   },
   {
-    image: "/images/dintorni/portocervo.webp",
+    image: "/images/Dintorni/portocervo.webp",
     title: "Porto Cervo",
     description:
       "A soli 15 minuti, lo shopping di lusso, il porto e la vita mondana del borgo simbolo della Costa Smeralda.",
   },
   {
-    image: "/images/dintorni/snorkeling.webp",
+    image: "/images/Dintorni/snorkeling.webp",
     title: "Snorkeling & diving",
     description:
       "Fondali di granito e acque trasparenti: immersioni e snorkeling tra le insenature più suggestive della costa.",
   },
   {
-    image: "/images/dintorni/trekking.webp",
+    image: "/images/Dintorni/trekking.webp",
     title: "Trekking & natura",
     description:
       "Sentieri panoramici tra macchia mediterranea, capo Ferro e il faro, alla scoperta di cale nascoste e viste sul mare.",
