@@ -112,14 +112,14 @@ export default function BookingBar({ className = "" }: { className?: string }) {
         <div className="flex flex-col gap-1.5">
           <span className={labelCls}>Check-in</span>
           <button type="button" onClick={() => openPicker("checkin")} className={`${fieldBase} text-left`}>
-            {checkin ? fmt(checkin) : <span className="text-muted">Aggiungi data</span>}
+            {checkin ? fmt(checkin) : <span className="text-muted">–</span>}
           </button>
         </div>
 
         <div className="flex flex-col gap-1.5">
           <span className={labelCls}>Check-out</span>
           <button type="button" onClick={() => openPicker("checkout")} className={`${fieldBase} text-left`}>
-            {checkout ? fmt(checkout) : <span className="text-muted">Aggiungi data</span>}
+            {checkout ? fmt(checkout) : <span className="text-muted">–</span>}
           </button>
         </div>
 
