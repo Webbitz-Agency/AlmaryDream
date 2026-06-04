@@ -138,7 +138,7 @@ export default function Rooms() {
                   </h3>
                   <p className="mt-4 text-base leading-relaxed text-muted">{room.description}</p>
 
-                  <ul className="mt-7 grid grid-cols-1 gap-x-8 gap-y-3.5 sm:grid-cols-2">
+                  <ul className="mt-7 grid grid-cols-2 gap-x-4 gap-y-3.5 sm:gap-x-8">
                     {room.amenities.map((a) => (
                       <li key={a} className="flex items-center gap-3 text-sm text-ink/80">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-secondary">
@@ -149,19 +149,21 @@ export default function Rooms() {
                     ))}
                   </ul>
 
-                  <a
-                    href={bookingHref(
-                      `Ciao Almary Dream! Vorrei informazioni e disponibilità per la ${room.name}.`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-8 inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-                  >
-                    Verifica disponibilità
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
-                  </a>
+                  <div className="mt-8 flex justify-center lg:block">
+                    <a
+                      href={bookingHref(
+                        `Ciao Almary Dream! Vorrei informazioni e disponibilità per la ${room.name}.`
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
+                    >
+                      Verifica disponibilità
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </a>
+                  </div>
                 </Reveal>
               </div>
             </article>

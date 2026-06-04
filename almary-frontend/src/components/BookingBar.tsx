@@ -101,13 +101,13 @@ export default function BookingBar({ className = "" }: { className?: string }) {
 
   const labelCls = "text-[10px] font-medium uppercase tracking-wide text-muted sm:text-xs";
   const fieldBase =
-    "w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20";
+    "w-full rounded-lg border border-black/10 bg-white px-2.5 py-2.5 text-sm text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:px-3";
 
   return (
     <>
       <form
         onSubmit={handleSubmit}
-        className={`grid grid-cols-2 gap-3 rounded-xl bg-white p-4 shadow-card sm:grid-cols-4 sm:items-end lg:p-5 ${className}`}
+        className={`grid grid-cols-3 gap-2.5 rounded-xl bg-white p-4 shadow-card sm:grid-cols-4 sm:items-end sm:gap-3 lg:p-5 ${className}`}
       >
         <div className="flex flex-col gap-1.5">
           <span className={labelCls}>Check-in</span>
@@ -140,7 +140,7 @@ export default function BookingBar({ className = "" }: { className?: string }) {
 
         <button
           type="submit"
-          className="col-span-2 h-[46px] rounded-lg bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-secondary sm:col-span-1"
+          className="col-span-3 h-[46px] rounded-lg bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-secondary sm:col-span-1"
         >
           Verifica Disponibilità
         </button>

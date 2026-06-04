@@ -48,8 +48,8 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Tre colonne: Menu · Contatti · Dove siamo */}
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1.2fr_1fr_1.4fr]">
+        {/* Colonne: su mobile Menu + Contatti affiancati, mappa sotto a tutta larghezza */}
+        <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1.2fr_1fr_1.4fr] lg:gap-12">
           {/* Menu */}
           <nav>
             <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">Menu</h3>
@@ -103,7 +103,7 @@ export default function Footer() {
           </div>
 
           {/* Mappa */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">Dove siamo</h3>
             <div className="mt-5 overflow-hidden rounded-xl border border-white/10">
               <iframe
