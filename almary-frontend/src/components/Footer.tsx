@@ -83,18 +83,19 @@ export default function Footer() {
                   {SITE.email}
                 </a>
               </li>
-              <li className="flex flex-wrap gap-3 pt-2">
+              <li className="flex items-center gap-2 pt-2">
                 <a
                   href={bookingHref("Ciao Almary Dream! Vorrei alcune informazioni.")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-10 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-dark transition-colors hover:bg-white"
+                  aria-label="WhatsApp"
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent text-dark transition-colors hover:bg-white"
                 >
-                  WhatsApp
+                  <SocialIcon name="whatsapp" />
                 </a>
                 <a
                   href={SITE.phoneHref}
-                  className="inline-flex h-10 items-center rounded-lg border border-white/20 px-4 text-sm font-semibold text-white transition-colors hover:border-accent hover:text-accent"
+                  className="inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-lg border border-white/20 px-3 text-sm font-semibold text-white transition-colors hover:border-accent hover:text-accent"
                 >
                   Chiama ora
                 </a>

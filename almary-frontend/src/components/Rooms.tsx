@@ -149,21 +149,19 @@ export default function Rooms() {
                     ))}
                   </ul>
 
-                  <div className="mt-8 flex justify-center lg:block">
-                    <a
-                      href={bookingHref(
-                        `Ciao Almary Dream! Vorrei informazioni e disponibilità per la ${room.name}.`
-                      )}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-                    >
-                      Verifica disponibilità
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </a>
-                  </div>
+                  <a
+                    href={bookingHref(
+                      `Ciao Almary Dream! Vorrei informazioni e disponibilità per la ${room.name}.`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-8 inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
+                  >
+                    Verifica disponibilità
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </a>
                 </Reveal>
               </div>
             </article>

@@ -131,10 +131,10 @@ export default function BookingBar({ className = "" }: { className?: string }) {
             onChange={(e) => setGuests(e.target.value)}
             className={fieldBase}
           >
-            <option value="1">1 ospite</option>
-            <option value="2">2 ospiti</option>
-            <option value="3">3 ospiti</option>
-            <option value="4">4 ospiti</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
           </select>
         </div>
 
