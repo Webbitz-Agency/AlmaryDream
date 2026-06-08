@@ -25,7 +25,7 @@ export default function Hero() {
       <div className="relative z-10 flex flex-1 flex-col">
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 pt-28 lg:px-8 lg:pt-32">
           <div className="max-w-2xl animate-fade-up">
-            <p className="eyebrow !text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">Luxury B&B · Costa Smeralda</p>
+            <p className="eyebrow !text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">Almary Dream · Luxury B&B · Costa Smeralda</p>
             <h1 className="mt-4 font-serif text-[2.75rem] font-normal leading-[1.05] tracking-tightest text-white sm:text-6xl lg:text-7xl">
               Un respiro di <em className="italic text-accent">eleganza</em> sul mare
             </h1>
