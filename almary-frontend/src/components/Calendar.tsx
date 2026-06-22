@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const WEEKDAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 const MONTHS = [
@@ -10,6 +10,13 @@ const MONTHS = [
 
 function iso(y: number, m: number, d: number) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+/** Somma `n` giorni a una data "YYYY-MM-DD". */
+function addDaysIso(d: string, n: number) {
+  const [y, m, dd] = d.split("-").map(Number);
+  const t = new Date(y, m - 1, dd + n);
+  return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
 }
 
 type Props = {
@@ -25,11 +32,11 @@ type Props = {
   /** Fase di selezione corrente: "checkin" o "checkout". */
   selecting?: "checkin" | "checkout";
   /**
-   * In fase "checkout": prima notte occupata dopo il check-in. È l'ultima data
-   * selezionabile come uscita (ci si può "check-out" la mattina di quel giorno),
-   * mentre le date successive vengono disabilitate. undefined = nessun limite.
+   * Pernottamento minimo (notti). Default 2.
+   * Eccezione "gap night": una notte libera ISOLATA (occupata prima e dopo) è
+   * comunque prenotabile per 1 sola notte.
    */
-  checkoutMax?: string;
+  minNights?: number;
 };
 
 export default function Calendar({
@@ -40,11 +47,56 @@ export default function Calendar({
   onPickDay,
   readOnly = false,
   selecting = "checkin",
-  checkoutMax,
+  minNights = 2,
 }: Props) {
   // Mese mostrato: parte dal check-in se presente, altrimenti dal mese di oggi.
   const base = (checkin || today).split("-").map(Number);
   const [view, setView] = useState({ year: base[0], month: base[1] - 1 });
+
+  // Date occupate ordinate → per trovare la prima notte occupata dopo una data.
+  const occupied = useMemo(() => Array.from(unavailable).sort(), [unavailable]);
+  const firstBlockedAfter = (c: string) => {
+    for (const o of occupied) if (o > c) return o;
+    return null;
+  };
+
+  /** Una notte non utilizzabile: occupata o nel passato. */
+  const blockedNight = (d: string) => unavailable.has(d) || d < today;
+
+  /**
+   * Info sul check-in candidato `c` (presunto libero):
+   *  - gap1: c'è una sola notte libera in avanti (la notte successiva è occupata)
+   *  - fb: prima notte occupata dopo c (o null se nessuna)
+   */
+  const startInfo = (c: string) => {
+    const n1 = addDaysIso(c, 1);
+    const gap1 = unavailable.has(n1);
+    const fb = gap1 ? n1 : firstBlockedAfter(c);
+    return { gap1, fb };
+  };
+
+  /** `c` può iniziare un soggiorno valido? */
+  const canStart = (c: string) => {
+    if (blockedNight(c)) return false;
+    const { gap1 } = startInfo(c);
+    if (!gap1) return true; // almeno 2 notti libere in avanti → ok per minimo ≤ 2
+    if (minNights <= 1) return true;
+    // Una sola notte libera: ammessa solo se ISOLATA (notte precedente occupata/passata).
+    return blockedNight(addDaysIso(c, -1));
+  };
+
+  // Finestra di check-out valida per il check-in selezionato (fase "checkout").
+  const selectingCheckout = !readOnly && selecting === "checkout" && Boolean(checkin);
+  let checkoutMin = "";
+  let checkoutMax: string | null = null;
+  let boundary: string | null = null; // notte occupata ammessa come uscita
+  if (selectingCheckout) {
+    const { gap1, fb } = startInfo(checkin);
+    const minN = gap1 ? 1 : Math.max(1, minNights);
+    checkoutMin = addDaysIso(checkin, minN);
+    checkoutMax = fb; // null = nessun limite superiore
+    boundary = checkoutMax && unavailable.has(checkoutMax) ? checkoutMax : null;
+  }
 
   const firstOfMonth = new Date(view.year, view.month, 1);
   // Lunedì-primo: (getDay()+6)%7 → 0 = lunedì.
@@ -107,20 +159,21 @@ export default function Calendar({
           if (day === null) return <span key={`e${i}`} />;
           const d = iso(view.year, view.month, day);
 
-          const isPast = d < today;
-          const isBooked = unavailable.has(d);
-
-          // In fase check-out: la prima notte occupata è ammessa come uscita,
-          // le date oltre quel giorno sono disabilitate (no range a cavallo).
-          const selectingCheckout = !readOnly && selecting === "checkout" && Boolean(checkin);
-          const isCheckoutBound = selectingCheckout && !!checkoutMax && d === checkoutMax;
-          const beyondMax = selectingCheckout && !!checkoutMax && d > checkoutMax;
-          const blocked = isBooked && !isCheckoutBound; // notte occupata → barrata
-
           let disabled: boolean;
-          if (readOnly) disabled = true;
-          else if (selectingCheckout) disabled = isPast || blocked || beyondMax;
-          else disabled = isPast || isBooked;
+          let blocked: boolean; // notte occupata → barrata
+          if (readOnly) {
+            disabled = true;
+            blocked = unavailable.has(d);
+          } else if (selectingCheckout) {
+            blocked = unavailable.has(d) && d !== boundary;
+            const inWindow = d >= checkoutMin && (!checkoutMax || d <= checkoutMax);
+            const restart = d < checkin && canStart(d); // clic su un check-in alternativo precedente
+            disabled = !(inWindow || restart);
+          } else {
+            // Fase check-in: selezionabile solo se può iniziare un soggiorno valido.
+            blocked = unavailable.has(d);
+            disabled = !canStart(d);
+          }
 
           const isCheckin = d === checkin;
           const isCheckout = d === checkout;

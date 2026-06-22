@@ -37,6 +37,22 @@ function hasBookedNight(unavailable: Set<string>, checkin: string, checkout: str
   return false;
 }
 
+/**
+ * Rispetta il minimo di 2 notti, con eccezione "gap night": 1 notte è ammessa
+ * solo se isolata (notte precedente e successiva occupate/passate).
+ */
+function meetsMinNights(unavailable: Set<string>, today: string, checkin: string, checkout: string) {
+  const n = nights(checkin, checkout);
+  if (n >= 2) return true;
+  if (n === 1) {
+    const prev = addDaysIso(checkin, -1);
+    const prevBlocked = unavailable.has(prev) || (today !== "" && prev < today);
+    const nextBlocked = unavailable.has(checkout); // notte successiva alla singola notte
+    return prevBlocked && nextBlocked;
+  }
+  return false;
+}
+
 type Props = {
   checkin: string;
   checkout: string;
@@ -59,7 +75,10 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
   const evaluated = ROOMS.map((room) => {
     const unavailable = new Set(roomsAvailability[room.slug] ?? []);
     const fits = room.maxGuests >= guestsNum;
-    const free = validRange && !hasBookedNight(unavailable, checkin, checkout);
+    const free =
+      validRange &&
+      !hasBookedNight(unavailable, checkin, checkout) &&
+      meetsMinNights(unavailable, today, checkin, checkout);
     const reason = !fits ? "Capienza non sufficiente" : "Date occupate";
     return { room, unavailable, fits, available: fits && free, reason };
   });
@@ -217,12 +236,9 @@ function RoomCard({
   };
 
   const hasRange = Boolean(ci && co && co > ci);
-  const free = fits && hasRange && !hasBookedNight(unavailable, ci, co);
+  const free =
+    fits && hasRange && !hasBookedNight(unavailable, ci, co) && meetsMinNights(unavailable, today, ci, co);
   const nightsCount = nights(ci, co);
-
-  // In fase check-out: prima notte occupata dopo il check-in (limite di uscita).
-  const checkoutMax =
-    step === "checkout" && ci ? Array.from(unavailable).filter((x) => x > ci).sort()[0] : undefined;
 
   const badge = !fits
     ? { text: "Capienza non sufficiente", cls: "bg-black/60 text-white" }
@@ -244,7 +260,7 @@ function RoomCard({
       unavailable={unavailable}
       onPickDay={onPickDay}
       selecting={step}
-      checkoutMax={checkoutMax}
+      minNights={2}
     />
   );
 
@@ -328,7 +344,7 @@ function RoomCard({
         <div className="mt-4 rounded-xl border border-black/5 bg-offwhite p-3">
           {calendar}
           <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">
-            <span>Le date barrate non sono disponibili.</span>
+            <span>Soggiorno minimo 2 notti.</span>
             {(ci || co) && (
               <button type="button" onClick={resetDates} className="font-medium text-primary hover:underline">
                 Cancella
