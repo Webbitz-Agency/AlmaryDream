@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { ROOMS, bookingHref, type Room } from "@/lib/site";
 import Calendar from "@/components/Calendar";
 import BookingBar from "@/components/BookingBar";
+import RoomCarousel from "@/components/RoomCarousel";
 
 /** "2026-07-12" → "ven 12 lug" */
 function fmt(isoDate: string) {
@@ -54,16 +54,17 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
   const validRange = Boolean(checkin && checkout && checkout > checkin);
   const nightsCount = nights(checkin, checkout);
 
-  // Stato di ogni camera per le date/ospiti scelti.
+  // Stato iniziale di ogni camera (per ordinare: disponibili prima).
   const evaluated = ROOMS.map((room) => {
     const unavailable = new Set(roomsAvailability[room.slug] ?? []);
     const fits = room.maxGuests >= guestsNum;
     const free = validRange && !hasBookedNight(unavailable, checkin, checkout);
-    return { room, unavailable, fits, free, available: fits && free };
+    return { room, unavailable, fits, available: fits && free };
   });
+  const ordered = [...evaluated].sort((a, b) => Number(b.available) - Number(a.available));
 
-  const available = evaluated.filter((e) => e.available);
-  const others = evaluated.filter((e) => !e.available);
+  const noneFitsGuests = evaluated.every((e) => !e.fits);
+  const availableCount = evaluated.filter((e) => e.available).length;
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 lg:px-8 lg:py-16">
@@ -77,84 +78,41 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
           <span className="font-semibold text-ink">{fmt(checkin)}</span> → <span className="font-semibold text-ink">{fmt(checkout)}</span>
           {" · "}{nightsCount} {nightsCount === 1 ? "notte" : "notti"}
           {" · "}{guestsNum} {guestsNum === 1 ? "ospite" : "ospiti"}
+          {" · "}
+          <span className={availableCount > 0 ? "font-semibold text-primary" : "font-semibold text-ink"}>
+            {availableCount} {availableCount === 1 ? "camera disponibile" : "camere disponibili"}
+          </span>
         </p>
       ) : (
         <p className="mt-4 text-base text-muted">Scegli le date per vedere le camere disponibili.</p>
       )}
 
-      {/* Modifica ricerca */}
+      {/* Modifica ricerca globale */}
       <div className="mt-7 max-w-3xl">
         <BookingBar initialCheckin={checkin} initialCheckout={checkout} initialGuests={guests} />
       </div>
 
-      {/* Camere disponibili */}
-      <div className="mt-12">
-        {validRange && available.length > 0 && (
-          <>
-            <h2 className="mb-5 text-lg font-semibold text-ink">
-              {available.length} {available.length === 1 ? "camera disponibile" : "camere disponibili"}
-            </h2>
-            <div className="space-y-6">
-              {available.map((e) => (
-                <RoomResultCard
-                  key={e.room.slug}
-                  room={e.room}
-                  unavailable={e.unavailable}
-                  today={today}
-                  checkin={checkin}
-                  checkout={checkout}
-                  guests={guestsNum}
-                  available
-                />
-              ))}
-            </div>
-          </>
-        )}
+      {noneFitsGuests && (
+        <div className="mt-8 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-ink">
+          Per <strong>{guestsNum} ospiti</strong> può servire più di una camera: scegli comunque una camera qui
+          sotto e scrivici, oppure contattaci per combinare più stanze.
+        </div>
+      )}
 
-        {validRange && available.length === 0 && (
-          <div className="rounded-2xl border border-black/10 bg-white p-8 text-center">
-            <p className="text-lg font-semibold text-ink">Nessuna camera disponibile per questa ricerca</p>
-            <p className="mx-auto mt-2 max-w-md text-sm text-muted">
-              {guestsNum > Math.max(...ROOMS.map((r) => r.maxGuests))
-                ? "Per il numero di ospiti scelto può servire più di una camera: scrivici e troviamo la soluzione giusta."
-                : "Prova a modificare le date qui sopra, oppure scrivici: a volte abbiamo soluzioni non sincronizzate online."}
-            </p>
-            <a
-              href={bookingHref(
-                `Ciao Almary Dream! Vorrei verificare la disponibilità dal ${fmt(checkin)} al ${fmt(checkout)} per ${guestsNum} ospiti.`
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
-            >
-              Scrivici su WhatsApp
-            </a>
-          </div>
-        )}
-
-        {/* Altre camere (non disponibili per le date scelte) — calendario consultabile */}
-        {others.length > 0 && (
-          <div className="mt-12">
-            <h2 className="mb-5 text-lg font-semibold text-muted">
-              {validRange ? "Non disponibili per queste date" : "Le nostre camere"}
-            </h2>
-            <div className="space-y-6">
-              {others.map((e) => (
-                <RoomResultCard
-                  key={e.room.slug}
-                  room={e.room}
-                  unavailable={e.unavailable}
-                  today={today}
-                  checkin={checkin}
-                  checkout={checkout}
-                  guests={guestsNum}
-                  available={false}
-                  reason={!e.fits ? "Capienza non sufficiente" : "Date già occupate"}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Elenco camere — calendario interattivo per ognuna */}
+      <div className="mt-10 space-y-6">
+        {ordered.map((e) => (
+          <RoomResultCard
+            key={e.room.slug}
+            room={e.room}
+            unavailable={e.unavailable}
+            today={today}
+            fits={e.fits}
+            guests={guestsNum}
+            initialCheckin={validRange ? checkin : ""}
+            initialCheckout={validRange ? checkout : ""}
+          />
+        ))}
       </div>
     </section>
   );
@@ -164,46 +122,80 @@ function RoomResultCard({
   room,
   unavailable,
   today,
-  checkin,
-  checkout,
+  fits,
   guests,
-  available,
-  reason,
+  initialCheckin,
+  initialCheckout,
 }: {
   room: Room;
   unavailable: Set<string>;
   today: string;
-  checkin: string;
-  checkout: string;
+  fits: boolean;
   guests: number;
-  available: boolean;
-  reason?: string;
+  initialCheckin: string;
+  initialCheckout: string;
 }) {
-  const message = available
-    ? `Ciao Almary Dream! Vorrei prenotare la ${room.name} dal ${fmt(checkin)} al ${fmt(checkout)} per ${guests} ${guests === 1 ? "ospite" : "ospiti"}.`
+  // Date modificabili per QUESTA camera (partono dalla ricerca globale).
+  const [ci, setCi] = useState(initialCheckin);
+  const [co, setCo] = useState(initialCheckout);
+  const [step, setStep] = useState<"checkin" | "checkout">("checkin");
+
+  const onPickDay = (d: string) => {
+    if (step === "checkin" || !ci) {
+      setCi(d);
+      setCo("");
+      setStep("checkout");
+      return;
+    }
+    // step === "checkout": data valida solo se dopo il check-in e senza notti occupate.
+    if (d <= ci || hasBookedNight(unavailable, ci, d)) {
+      setCi(d);
+      setCo("");
+      setStep("checkout");
+      return;
+    }
+    setCo(d);
+    setStep("checkin");
+  };
+
+  const resetDates = () => {
+    setCi("");
+    setCo("");
+    setStep("checkin");
+  };
+
+  const hasRange = Boolean(ci && co && co > ci);
+  const free = fits && hasRange && !hasBookedNight(unavailable, ci, co);
+  const nightsCount = nights(ci, co);
+
+  // Badge dinamico in base allo stato corrente della camera.
+  const badge = !fits
+    ? { text: "Capienza non sufficiente", cls: "bg-black/60 text-white" }
+    : !hasRange
+      ? { text: step === "checkout" && ci ? "Scegli il check-out" : "Scegli le date", cls: "bg-black/50 text-white" }
+      : free
+        ? { text: "Disponibile", cls: "bg-primary text-white" }
+        : { text: "Non disponibile", cls: "bg-black/60 text-white" };
+
+  const message = free
+    ? `Ciao Almary Dream! Vorrei prenotare la ${room.name} dal ${fmt(ci)} al ${fmt(co)} per ${guests} ${guests === 1 ? "ospite" : "ospiti"}.`
     : `Ciao Almary Dream! Sono interessato/a alla ${room.name}, vorrei verificare le date disponibili.`;
 
   return (
-    <article className={`grid overflow-hidden rounded-2xl border md:grid-cols-2 ${available ? "border-black/10 bg-white" : "border-black/5 bg-white/60"}`}>
-      {/* Foto */}
-      <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[360px]">
-        <Image
-          src={room.images[0]}
-          alt={room.name}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className={`object-cover ${available ? "" : "opacity-70"}`}
+    <article className={`grid overflow-hidden rounded-2xl border md:grid-cols-2 ${free ? "border-primary/30 bg-white" : "border-black/10 bg-white"}`}>
+      {/* Carosello foto (frecce come in home) */}
+      <div className="relative md:h-full">
+        <RoomCarousel
+          images={room.images}
+          name={room.name}
+          className="group relative aspect-[4/3] w-full overflow-hidden bg-offwhite md:aspect-auto md:h-full md:min-h-[420px]"
         />
-        <span
-          className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold ${
-            available ? "bg-primary text-white" : "bg-black/60 text-white"
-          }`}
-        >
-          {available ? "Disponibile" : reason}
+        <span className={`pointer-events-none absolute left-4 top-4 z-20 rounded-full px-3 py-1 text-xs font-semibold ${badge.cls}`}>
+          {badge.text}
         </span>
       </div>
 
-      {/* Dettagli + calendario */}
+      {/* Dettagli + calendario interattivo */}
       <div className="flex flex-col p-5 lg:p-6">
         <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-eyebrow text-secondary">
           <span>{room.size}</span>
@@ -216,30 +208,41 @@ function RoomResultCard({
         <div className="mt-4 rounded-xl border border-black/5 bg-offwhite p-3">
           {today && (
             <Calendar
-              checkin={available ? checkin : ""}
-              checkout={available ? checkout : ""}
+              checkin={ci}
+              checkout={co}
               today={today}
               unavailable={unavailable}
-              onPickDay={() => {}}
-              readOnly
+              onPickDay={onPickDay}
             />
           )}
-          <p className="mt-2 text-center text-[11px] text-muted">
-            Le date barrate non sono disponibili per questa camera.
-          </p>
+          <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">
+            <span>Le date barrate non sono disponibili.</span>
+            {(ci || co) && (
+              <button type="button" onClick={resetDates} className="font-medium text-primary hover:underline">
+                Cancella
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Riepilogo selezione */}
+        <p className="mt-3 text-sm">
+          <span className="text-muted">Soggiorno: </span>
+          <span className="font-semibold text-ink">{fmt(ci)} → {fmt(co)}</span>
+          {hasRange && <span className="text-muted"> · {nightsCount} {nightsCount === 1 ? "notte" : "notti"}</span>}
+        </p>
 
         <a
           href={bookingHref(message)}
           target="_blank"
           rel="noopener noreferrer"
-          className={`mt-5 inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition-colors ${
-            available
+          className={`mt-4 inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition-colors ${
+            free
               ? "bg-primary text-white hover:bg-secondary"
               : "border border-primary/30 text-primary hover:bg-primary/5"
           }`}
         >
-          {available ? "Prenota questa camera" : "Chiedi altre date"}
+          {free ? "Prenota questa camera" : "Chiedi info su WhatsApp"}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>

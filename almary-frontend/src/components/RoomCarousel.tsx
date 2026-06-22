@@ -8,16 +8,21 @@ type Props = {
   name: string;
   /** true = la prima foto è above-the-fold → priority per LCP migliore */
   priority?: boolean;
+  /** Override delle classi del contenitore (deve includere group/relative/overflow-hidden). */
+  className?: string;
 };
 
-export default function RoomCarousel({ images, name, priority = false }: Props) {
+const DEFAULT_WRAPPER =
+  "group relative aspect-[4/3] w-full overflow-hidden bg-offwhite sm:aspect-[3/2] lg:aspect-auto lg:h-full lg:min-h-[42rem]";
+
+export default function RoomCarousel({ images, name, priority = false, className }: Props) {
   const [index, setIndex] = useState(0);
   const total = images.length;
 
   const go = (dir: number) => setIndex((p) => (p + dir + total) % total);
 
   return (
-    <div className="group relative aspect-[4/3] w-full overflow-hidden bg-offwhite sm:aspect-[3/2] lg:aspect-auto lg:h-full lg:min-h-[42rem]">
+    <div className={className ?? DEFAULT_WRAPPER}>
       {/* Slide impilate con dissolvenza → nessun layout shift */}
       {images.map((src, i) => (
         <Image
