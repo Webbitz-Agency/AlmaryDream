@@ -110,6 +110,12 @@ export default function BookingBar({
     router.push(`/disponibilita?${params.toString()}`);
   };
 
+  // In fase check-out: prima notte occupata dopo il check-in (limite di uscita).
+  const checkoutMax =
+    step === "checkout" && checkin
+      ? Array.from(unavailable).filter((x) => x > checkin).sort()[0]
+      : undefined;
+
   const labelCls = "text-[10px] font-medium uppercase tracking-wide text-muted sm:text-xs";
   const fieldBase =
     "w-full rounded-lg border border-black/10 bg-white px-2.5 py-2.5 text-sm text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:px-3";
@@ -188,6 +194,8 @@ export default function BookingBar({
               today={today}
               unavailable={unavailable}
               onPickDay={onPickDay}
+              selecting={step}
+              checkoutMax={checkoutMax}
             />
 
             <div className="mt-4 flex items-center justify-between gap-3 border-t border-black/5 pt-4">

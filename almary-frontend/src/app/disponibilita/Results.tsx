@@ -168,6 +168,12 @@ function RoomResultCard({
   const free = fits && hasRange && !hasBookedNight(unavailable, ci, co);
   const nightsCount = nights(ci, co);
 
+  // In fase check-out: prima notte occupata dopo il check-in (limite di uscita).
+  const checkoutMax =
+    step === "checkout" && ci
+      ? Array.from(unavailable).filter((x) => x > ci).sort()[0]
+      : undefined;
+
   // Badge dinamico in base allo stato corrente della camera.
   const badge = !fits
     ? { text: "Capienza non sufficiente", cls: "bg-black/60 text-white" }
@@ -213,6 +219,8 @@ function RoomResultCard({
               today={today}
               unavailable={unavailable}
               onPickDay={onPickDay}
+              selecting={step}
+              checkoutMax={checkoutMax}
             />
           )}
           <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">

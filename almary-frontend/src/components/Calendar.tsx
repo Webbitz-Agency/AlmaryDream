@@ -22,9 +22,26 @@ type Props = {
   onPickDay: (dayIso: string) => void;
   /** Sola lettura: mostra occupato/range senza permettere la selezione. */
   readOnly?: boolean;
+  /** Fase di selezione corrente: "checkin" o "checkout". */
+  selecting?: "checkin" | "checkout";
+  /**
+   * In fase "checkout": prima notte occupata dopo il check-in. È l'ultima data
+   * selezionabile come uscita (ci si può "check-out" la mattina di quel giorno),
+   * mentre le date successive vengono disabilitate. undefined = nessun limite.
+   */
+  checkoutMax?: string;
 };
 
-export default function Calendar({ checkin, checkout, today, unavailable, onPickDay, readOnly = false }: Props) {
+export default function Calendar({
+  checkin,
+  checkout,
+  today,
+  unavailable,
+  onPickDay,
+  readOnly = false,
+  selecting = "checkin",
+  checkoutMax,
+}: Props) {
   // Mese mostrato: parte dal check-in se presente, altrimenti dal mese di oggi.
   const base = (checkin || today).split("-").map(Number);
   const [view, setView] = useState({ year: base[0], month: base[1] - 1 });
@@ -92,7 +109,18 @@ export default function Calendar({ checkin, checkout, today, unavailable, onPick
 
           const isPast = d < today;
           const isBooked = unavailable.has(d);
-          const disabled = isPast || isBooked;
+
+          // In fase check-out: la prima notte occupata è ammessa come uscita,
+          // le date oltre quel giorno sono disabilitate (no range a cavallo).
+          const selectingCheckout = !readOnly && selecting === "checkout" && Boolean(checkin);
+          const isCheckoutBound = selectingCheckout && !!checkoutMax && d === checkoutMax;
+          const beyondMax = selectingCheckout && !!checkoutMax && d > checkoutMax;
+          const blocked = isBooked && !isCheckoutBound; // notte occupata → barrata
+
+          let disabled: boolean;
+          if (readOnly) disabled = true;
+          else if (selectingCheckout) disabled = isPast || blocked || beyondMax;
+          else disabled = isPast || isBooked;
 
           const isCheckin = d === checkin;
           const isCheckout = d === checkout;
@@ -103,19 +131,21 @@ export default function Calendar({ checkin, checkout, today, unavailable, onPick
             <div key={d} className={`flex justify-center ${inRange ? "bg-primary/10" : ""} ${isCheckin && checkout ? "rounded-l-full bg-primary/10" : ""} ${isCheckout ? "rounded-r-full bg-primary/10" : ""}`}>
               <button
                 type="button"
-                disabled={disabled || readOnly}
+                disabled={disabled}
                 onClick={() => onPickDay(d)}
                 aria-label={d}
                 className={[
                   "flex h-10 w-10 items-center justify-center rounded-full text-sm transition-colors",
                   isEndpoint
                     ? "bg-primary font-semibold text-white"
-                    : disabled
+                    : blocked
                       ? "cursor-not-allowed text-black/20 line-through"
-                      : readOnly
-                        ? "cursor-default text-ink"
-                        : "text-ink hover:bg-primary/15",
-                  !isEndpoint || readOnly ? "" : "hover:bg-secondary",
+                      : disabled
+                        ? "cursor-not-allowed text-black/25"
+                        : readOnly
+                          ? "cursor-default text-ink"
+                          : "text-ink hover:bg-primary/15",
+                  isEndpoint && !readOnly ? "hover:bg-secondary" : "",
                 ].join(" ")}
               >
                 {day}
