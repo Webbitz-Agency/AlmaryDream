@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { ROOMS, bookingHref, type Room } from "@/lib/site";
+import { ROOMS, type Room } from "@/lib/site";
 import Calendar from "@/components/Calendar";
 import BookingBar from "@/components/BookingBar";
 import RoomCarousel from "@/components/RoomCarousel";
+import BookingRequestModal from "@/components/BookingRequestModal";
 
 /** "2026-07-12" → "ven 12 lug" */
 function fmt(isoDate: string) {
@@ -133,7 +133,6 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
             {available.map((e) => (
               <RoomCard
                 key={e.room.slug}
-                variant="full"
                 room={e.room}
                 unavailable={e.unavailable}
                 today={today}
@@ -164,11 +163,11 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
             </h2>
           </div>
           <p className="mb-5 text-sm text-muted">Cambia le date sul calendario di ogni camera per scoprire quando è libera.</p>
-          <div className="space-y-4">
+          <div className="space-y-5">
             {others.map((e) => (
               <RoomCard
                 key={e.room.slug}
-                variant="compact"
+                small
                 room={e.room}
                 unavailable={e.unavailable}
                 today={today}
@@ -187,7 +186,6 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
 }
 
 function RoomCard({
-  variant,
   room,
   unavailable,
   today,
@@ -196,8 +194,8 @@ function RoomCard({
   reason,
   initialCheckin,
   initialCheckout,
+  small = false,
 }: {
-  variant: "full" | "compact";
   room: Room;
   unavailable: Set<string>;
   today: string;
@@ -206,11 +204,14 @@ function RoomCard({
   reason?: string;
   initialCheckin: string;
   initialCheckout: string;
+  /** Versione più compatta (sezione "non disponibili"): foto più bassa. */
+  small?: boolean;
 }) {
   // Date modificabili per QUESTA camera (partono dalla ricerca globale).
   const [ci, setCi] = useState(initialCheckin);
   const [co, setCo] = useState(initialCheckout);
   const [step, setStep] = useState<"checkin" | "checkout">("checkin");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const onPickDay = (d: string) => {
     if (step === "checkin" || !ci) {
@@ -248,101 +249,40 @@ function RoomCard({
         ? { text: step === "checkout" && ci ? "Scegli il check-out" : "Scegli le date", cls: "bg-black/50 text-white" }
         : { text: reason ?? "Non disponibile", cls: "bg-black/60 text-white" };
 
-  const message = free
-    ? `Ciao Almary Dream! Vorrei prenotare la ${room.name} dal ${fmt(ci)} al ${fmt(co)} per ${guests} ${guests === 1 ? "ospite" : "ospiti"}.`
-    : `Ciao Almary Dream! Sono interessato/a alla ${room.name}, vorrei verificare le date disponibili.`;
-
-  const calendar = today && (
-    <Calendar
-      checkin={ci}
-      checkout={co}
-      today={today}
-      unavailable={unavailable}
-      onPickDay={onPickDay}
-      selecting={step}
-      minNights={2}
-    />
-  );
-
-  const cta = (
-    <a
-      href={bookingHref(message)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition-colors ${
-        free ? "bg-primary text-white hover:bg-secondary" : "border border-primary/30 text-primary hover:bg-primary/5"
-      } ${variant === "full" ? "h-12" : "h-11"}`}
-    >
-      {free ? "Prenota questa camera" : "Chiedi info su WhatsApp"}
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12h14M13 6l6 6-6 6" />
-      </svg>
-    </a>
-  );
-
-  // ── Variante COMPATTA (camere non disponibili) ──────────────────────────
-  if (variant === "compact") {
-    return (
-      <article className="grid gap-4 rounded-xl border border-black/10 bg-white p-3 sm:p-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        {/* Anteprima + info */}
-        <div className="flex gap-3">
-          <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-lg sm:h-28 sm:w-36">
-            <Image src={room.images[0]} alt={room.name} fill sizes="160px" className="object-cover opacity-90" />
-          </div>
-          <div className="min-w-0">
-            <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${badge.cls}`}>
-              {badge.text}
-            </span>
-            <h3 className="mt-1.5 font-serif text-xl font-normal leading-tight text-ink">{room.name}</h3>
-            <p className="mt-0.5 text-[11px] font-medium uppercase tracking-eyebrow text-secondary">
-              {room.size} · {room.guests}
-            </p>
-            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted">{room.description}</p>
-          </div>
-        </div>
-
-        {/* Calendario accanto */}
-        <div className="rounded-lg border border-black/5 bg-offwhite p-2.5">
-          {calendar}
-          <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">
-            <span>{hasRange ? `${fmt(ci)} → ${fmt(co)} · ${nightsCount} ${nightsCount === 1 ? "notte" : "notti"}` : "Scegli le date"}</span>
-            {(ci || co) && (
-              <button type="button" onClick={resetDates} className="font-medium text-primary hover:underline">
-                Cancella
-              </button>
-            )}
-          </div>
-          <div className="mt-3">{cta}</div>
-        </div>
-      </article>
-    );
-  }
-
-  // ── Variante PIENA (camere disponibili) ─────────────────────────────────
   return (
     <article className={`grid overflow-hidden rounded-2xl border md:grid-cols-2 ${free ? "border-primary/30 bg-white" : "border-black/10 bg-white"}`}>
       <div className="relative md:h-full">
         <RoomCarousel
           images={room.images}
           name={room.name}
-          className="group relative aspect-[4/3] w-full overflow-hidden bg-offwhite md:aspect-auto md:h-full md:min-h-[420px]"
+          className={`group relative aspect-[4/3] w-full overflow-hidden bg-offwhite md:aspect-auto md:h-full ${small ? "md:min-h-[300px]" : "md:min-h-[420px]"}`}
         />
         <span className={`pointer-events-none absolute left-4 top-4 z-20 rounded-full px-3 py-1 text-xs font-semibold ${badge.cls}`}>
           {badge.text}
         </span>
       </div>
 
-      <div className="flex flex-col p-5 lg:p-6">
+      <div className={`flex flex-col ${small ? "p-4 lg:p-5" : "p-5 lg:p-6"}`}>
         <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-eyebrow text-secondary">
           <span>{room.size}</span>
           <span className="h-1 w-1 rounded-full bg-accent" />
           <span>{room.guests}</span>
         </div>
-        <h3 className="mt-2 font-serif text-2xl font-normal leading-tight text-ink">{room.name}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted">{room.description}</p>
+        <h3 className={`mt-2 font-serif font-normal leading-tight text-ink ${small ? "text-xl" : "text-2xl"}`}>{room.name}</h3>
+        <p className={`mt-2 leading-relaxed text-muted ${small ? "text-xs" : "text-sm"}`}>{room.description}</p>
 
         <div className="mt-4 rounded-xl border border-black/5 bg-offwhite p-3">
-          {calendar}
+          {today && (
+            <Calendar
+              checkin={ci}
+              checkout={co}
+              today={today}
+              unavailable={unavailable}
+              onPickDay={onPickDay}
+              selecting={step}
+              minNights={2}
+            />
+          )}
           <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">
             <span>Soggiorno minimo 2 notti.</span>
             {(ci || co) && (
@@ -359,8 +299,28 @@ function RoomCard({
           {hasRange && <span className="text-muted"> · {nightsCount} {nightsCount === 1 ? "notte" : "notti"}</span>}
         </p>
 
-        <div className="mt-4">{cta}</div>
+        <button
+          type="button"
+          onClick={() => setModalOpen(true)}
+          className={`mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition-colors ${
+            free ? "bg-primary text-white hover:bg-secondary" : "border border-primary/30 text-primary hover:bg-primary/5"
+          } ${small ? "h-11" : "h-12"}`}
+        >
+          {free ? "Prenota questa camera" : "Richiedi questa camera"}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
       </div>
+
+      <BookingRequestModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        room={room.name}
+        checkin={ci}
+        checkout={co}
+        guests={guests}
+      />
     </article>
   );
 }
