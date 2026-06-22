@@ -1,12 +1,25 @@
+import nodemailer from "nodemailer";
+
 /**
  * POST /api/booking-request
- * Riceve una richiesta di prenotazione dal modal del sito e (in futuro) invia
- * una email alla struttura. Per ora valida i dati e risponde OK: l'invio email
- * è l'UNICO pezzo da collegare (vedi TODO sotto).
+ * Riceve una richiesta di prenotazione dal modal e la inoltra via email alla
+ * struttura tramite SMTP (Nodemailer).
  *
- * Body atteso (JSON):
- *   { name, email, phone, message?, room?, checkin?, checkout?, guests? }
+ * ── CONFIGURAZIONE (variabili d'ambiente su Vercel) ────────────────────────
+ *   SMTP_HOST      es. smtp.gmail.com
+ *   SMTP_PORT      es. 465  (SSL)  oppure 587 (STARTTLS)
+ *   SMTP_USER      indirizzo/utente SMTP (es. almarydream@gmail.com)
+ *   SMTP_PASS      password SMTP (per Gmail: "App Password" a 16 cifre)
+ *   SMTP_FROM      (opzionale) mittente mostrato; default = SMTP_USER
+ *   BOOKING_TO     (opzionale) destinatario richieste; default = SMTP_USER
+ *
+ * Finché SMTP_HOST/USER/PASS non sono impostate, la richiesta viene solo
+ * registrata nei log (non si rompe nulla) e l'API risponde comunque OK.
+ * ───────────────────────────────────────────────────────────────────────────
  */
+
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   let data: Record<string, unknown>;
   try {
@@ -27,41 +40,52 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Email non valida." }, { status: 422 });
   }
 
-  // Riepilogo richiesta (pronto per l'email).
-  const summary = {
-    name,
-    email,
-    phone,
-    room: data.room ?? "—",
-    checkin: data.checkin ?? "—",
-    checkout: data.checkout ?? "—",
-    guests: data.guests ?? "—",
-    message: String(data.message ?? "").trim() || "—",
-    receivedAt: new Date().toISOString(),
-  };
+  const room = String(data.room ?? "—");
+  const checkin = String(data.checkin ?? "—");
+  const checkout = String(data.checkout ?? "—");
+  const guests = String(data.guests ?? "—");
+  const message = String(data.message ?? "").trim() || "—";
 
-  // Log lato server (visibile nei log Vercel) finché l'email non è collegata.
-  console.log("[booking-request]", summary);
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // TODO: COLLEGARE L'INVIO EMAIL QUI.
-  // Esempio con Resend (consigliato, gratis fino a 3.000 email/mese):
-  //   1) npm i resend
-  //   2) imposta RESEND_API_KEY su Vercel (Settings → Environment Variables)
-  //   3) decommenta:
-  //
-  //   const { Resend } = await import("resend");
-  //   const resend = new Resend(process.env.RESEND_API_KEY);
-  //   await resend.emails.send({
-  //     from: "Almary Dream <prenotazioni@almarydream.it>",
-  //     to: "almarydream@gmail.com",
-  //     replyTo: email,
-  //     subject: `Nuova richiesta — ${summary.room} (${summary.checkin} → ${summary.checkout})`,
-  //     text: `Nome: ${name}\nEmail: ${email}\nTelefono: ${phone}\nCamera: ${summary.room}\n` +
-  //           `Check-in: ${summary.checkin}\nCheck-out: ${summary.checkout}\nOspiti: ${summary.guests}\n\n` +
-  //           `Messaggio:\n${summary.message}`,
-  //   });
-  // ─────────────────────────────────────────────────────────────────────────
+  const subject = `Nuova richiesta — ${room} (${checkin} → ${checkout})`;
+  const body =
+    `Nuova richiesta di prenotazione dal sito Almary Dream\n\n` +
+    `Camera:     ${room}\n` +
+    `Check-in:   ${checkin}\n` +
+    `Check-out:  ${checkout}\n` +
+    `Ospiti:     ${guests}\n\n` +
+    `Nome:       ${name}\n` +
+    `Email:      ${email}\n` +
+    `Telefono:   ${phone}\n\n` +
+    `Messaggio:\n${message}\n`;
 
-  return Response.json({ ok: true });
+  // Se l'SMTP non è configurato: log e OK (così il flusso funziona comunque).
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+    console.log("[booking-request] (SMTP non configurato)\n" + body);
+    return Response.json({ ok: true });
+  }
+
+  try {
+    const port = Number(SMTP_PORT ?? 465);
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port,
+      secure: port === 465, // 465 = SSL; 587 = STARTTLS
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    });
+
+    await transporter.sendMail({
+      from: SMTP_FROM || SMTP_USER,
+      to: BOOKING_TO || SMTP_USER,
+      replyTo: `${name} <${email}>`,
+      subject,
+      text: body,
+    });
+
+    return Response.json({ ok: true });
+  } catch (err) {
+    console.error("[booking-request] invio SMTP fallito:", err);
+    return Response.json({ ok: false, error: "Invio non riuscito, riprova più tardi." }, { status: 502 });
+  }
 }
