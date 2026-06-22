@@ -27,15 +27,15 @@ import { ROOMS } from "./site";
 const ROOM_FEEDS: Record<string, string[]> = {
   smeraldo: [
     "https://www.airbnb.it/calendar/ical/1453393213067555812.ics?t=2639bcbd6b014c199c30a88257633368",
-    // Booking: incolla qui il link .ics della camera Smeraldo
+    "https://ical.booking.com/v1/export?t=26c119a4-a568-4aab-b24f-ef6c08d43b3d",
   ],
   dream: [
     "https://www.airbnb.it/calendar/ical/1444804249115645265.ics?t=88c896d5e24d435fb38be3f2b5682b33",
-    // Booking: incolla qui il link .ics della camera Dream
+    "https://ical.booking.com/v1/export?t=fb5495a4-4365-4250-b10b-1b9e4259efb9",
   ],
   "blue-sky": [
     "https://www.airbnb.it/calendar/ical/1441101569343167994.ics?t=1b4d8a1cbcdb45f495300fa792e6f19b",
-    // Booking: incolla qui il link .ics della camera Blue Sky
+    "https://ical.booking.com/v1/export?t=4f10976c-dd74-42b7-bb00-f24ae18ed471",
   ],
 };
 
