@@ -302,14 +302,20 @@ function RoomCard({
         <button
           type="button"
           onClick={() => setModalOpen(true)}
+          disabled={!free}
+          aria-disabled={!free}
           className={`mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition-colors ${
-            free ? "bg-primary text-white hover:bg-secondary" : "border border-primary/30 text-primary hover:bg-primary/5"
+            free
+              ? "bg-primary text-white hover:bg-secondary"
+              : "cursor-not-allowed bg-black/5 text-muted"
           } ${small ? "h-11" : "h-12"}`}
         >
-          {free ? "Prenota questa camera" : "Richiedi questa camera"}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
+          {free ? "Prenota questa camera" : "Seleziona date disponibili"}
+          {free && (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          )}
         </button>
       </div>
 
