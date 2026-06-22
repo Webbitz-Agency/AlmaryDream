@@ -4,6 +4,7 @@ import BookingBar from "@/components/BookingBar";
 import Features from "@/components/Features";
 import Rooms from "@/components/Rooms";
 import Surroundings from "@/components/Surroundings";
+import Gallery from "@/components/Gallery";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
@@ -39,6 +40,7 @@ export default function Home() {
 
         <Rooms />
         <Features />
+        <Gallery />
         <Surroundings />
         <Testimonials />
 

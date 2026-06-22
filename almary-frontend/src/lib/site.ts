@@ -92,9 +92,11 @@ export const ROOMS: Room[] = [
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte"],
     images: [
       "/images/Smeraldo/smeraldo1.webp",
-      "/images/Smeraldo/smeraldo2.webp",
+      "/images/Smeraldo/smeraldo5.webp",
+      "/images/Smeraldo/smeraldo6.webp",
       "/images/Smeraldo/smeraldo3.webp",
-      "/images/Smeraldo/smeraldo4.webp",
+      "/images/Smeraldo/smeraldo7.webp",
+      "/images/Smeraldo/smeraldo8.webp",
     ],
   },
   {
@@ -108,13 +110,11 @@ export const ROOMS: Room[] = [
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Frigobar"],
     images: [
       "/images/Dream/dream1.webp",
-      "/images/Dream/dream2.webp",
-      "/images/Dream/dream3.webp",
-      "/images/Dream/dream4.webp",
-      "/images/Dream/dream5.webp",
-      "/images/Dream/dream6.webp",
-      "/images/Dream/dream7.webp",
       "/images/Dream/dream8.webp",
+      "/images/Dream/dream9.webp",
+      "/images/Dream/dream4.webp",
+      "/images/Dream/dream10.webp",
+      "/images/Dream/dream11.webp",
     ],
   },
   {
@@ -128,9 +128,11 @@ export const ROOMS: Room[] = [
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Piano terra"],
     images: [
       "/images/BlueSky/bs1.webp",
+      "/images/BlueSky/bs5.webp",
+      "/images/BlueSky/bs6.webp",
       "/images/BlueSky/bs2.webp",
+      "/images/BlueSky/bs7.webp",
       "/images/BlueSky/bs3.webp",
-      "/images/BlueSky/bs4.webp",
     ],
   },
 ];
@@ -180,6 +182,32 @@ export const ACTIVITIES: Activity[] = [
     description:
       "Sentieri panoramici tra macchia mediterranea, capo Ferro e il faro, alla scoperta di cale nascoste e viste sul mare.",
   },
+];
+
+export type GalleryPhoto = {
+  src: string;
+  /** Didascalia (mostrata in hover + lightbox) e alt SEO. */
+  caption: string;
+  /** Dimensioni reali del file → masonry senza layout shift. */
+  w: number;
+  h: number;
+};
+
+/** Galleria immersiva della struttura (foto reali ottimizzate WebP). */
+export const GALLERY: GalleryPhoto[] = [
+  { src: "/images/Gallery/mare1.webp", caption: "Le spiagge di Baja Sardinia", w: 1600, h: 1200 },
+  { src: "/images/Gallery/colazione1.webp", caption: "La colazione di Almary Dream", w: 1600, h: 1200 },
+  { src: "/images/Gallery/esterno2.webp", caption: "L'ingresso della struttura", w: 1512, h: 2016 },
+  { src: "/images/Gallery/gazebo.webp", caption: "Zona relax con gazebo", w: 1600, h: 1066 },
+  { src: "/images/Gallery/mare2.webp", caption: "Acque cristalline a pochi passi", w: 1600, h: 1200 },
+  { src: "/images/Gallery/ospiti.webp", caption: "Colazione vista mare", w: 1600, h: 1200 },
+  { src: "/images/Gallery/panorama.webp", caption: "Costa Smeralda", w: 1600, h: 1200 },
+  { src: "/images/Gallery/relax.webp", caption: "Area lounge", w: 1600, h: 1066 },
+  { src: "/images/Gallery/giardino.webp", caption: "Il giardino", w: 1600, h: 1200 },
+  { src: "/images/Gallery/esterno1.webp", caption: "La struttura, con energia green", w: 1600, h: 1200 },
+  { src: "/images/Gallery/colazione2.webp", caption: "La sala colazione", w: 1600, h: 1066 },
+  { src: "/images/Gallery/baja.webp", caption: "Nel cuore di Baja Sardinia", w: 1600, h: 1200 },
+  { src: "/images/Gallery/cucina.webp", caption: "Gli spazi comuni", w: 1600, h: 1066 },
 ];
 
 export type Testimonial = {
@@ -238,6 +266,7 @@ export const NAV_LINKS = [
   { label: "Struttura", href: "#struttura" },
   { label: "Camere", href: "#camere" },
   { label: "Servizi", href: "#servizi" },
+  { label: "Galleria", href: "#galleria" },
   { label: "Dintorni", href: "#dintorni" },
   { label: "Recensioni", href: "#recensioni" },
   { label: "Contatti", href: "#contatti" },
