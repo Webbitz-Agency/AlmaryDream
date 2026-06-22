@@ -2,33 +2,56 @@
  * Disponibilità sincronizzata via iCal (una sola direzione: il sito LEGGE i
  * calendari dei portali, non scrive nulla verso di essi).
  *
- * ── COME ATTIVARE LA SINCRONIZZAZIONE ──────────────────────────────────────
- * Servono i link di esportazione iCal (.ics) dei portali (Airbnb, Booking…),
- * uno per ogni calendario. Si possono fornire in due modi:
+ * ── ARCHITETTURA PER-CAMERA ────────────────────────────────────────────────
+ * Ogni camera (per `slug`, vedi ROOMS in site.ts) ha i propri feed iCal: una
+ * camera può essere presente su più portali (Airbnb, Booking…) → più .ics.
  *
- *   1) Variabile d'ambiente (consigliato — si configura su Vercel senza toccare
- *      il codice): impostare ICAL_FEEDS con gli URL separati da virgola.
- *      Es:  ICAL_FEEDS="https://…/airbnb.ics,https://…/booking.ics"
+ *   - Disponibilità PER CAMERA: unione delle date occupate dei suoi feed.
+ *   - Disponibilità GLOBALE (homepage): una data è "occupata" SOLO se TUTTE le
+ *     camere sono occupate quel giorno → intersezione degli insiemi per-camera.
+ *     (Se anche una sola camera è libera, la struttura non è al completo.)
  *
- *   2) In alternativa, incollarli qui sotto nell'array ICAL_FEEDS_FALLBACK.
+ * ── COME AGGIUNGERE / AGGIORNARE I FEED ────────────────────────────────────
+ * Incolla gli URL .ics nella mappa ROOM_FEEDS qui sotto, sotto lo slug giusto.
+ * In alternativa si possono passare da variabile d'ambiente su Vercel:
+ *   ICAL_FEEDS_SMERALDO, ICAL_FEEDS_DREAM, ICAL_FEEDS_BLUE_SKY
+ * (URL separati da virgola). Se presenti, hanno la precedenza sulla mappa.
  *
- * Finché non c'è nessun feed, la funzione restituisce un elenco vuoto → tutte
- * le date risultano disponibili e il calendario funziona comunque.
+ * Una camera senza feed risulta sempre disponibile (nessuna data occupata).
  * ───────────────────────────────────────────────────────────────────────────
  */
 
-// Incolla qui gli URL .ics se non usi la variabile d'ambiente ICAL_FEEDS.
-const ICAL_FEEDS_FALLBACK: string[] = [
-  // "https://www.airbnb.it/calendar/ical/XXXXXXXX.ics?s=...",
-  // "https://ical.booking.com/v1/export?t=...",
-];
+import { ROOMS } from "./site";
 
-function getFeeds(): string[] {
-  const fromEnv = (process.env.ICAL_FEEDS ?? "")
+/** Feed iCal per camera (slug → elenco URL .ics). */
+const ROOM_FEEDS: Record<string, string[]> = {
+  smeraldo: [
+    "https://www.airbnb.it/calendar/ical/1453393213067555812.ics?t=2639bcbd6b014c199c30a88257633368",
+    // Booking: incolla qui il link .ics della camera Smeraldo
+  ],
+  dream: [
+    "https://www.airbnb.it/calendar/ical/1444804249115645265.ics?t=88c896d5e24d435fb38be3f2b5682b33",
+    // Booking: incolla qui il link .ics della camera Dream
+  ],
+  "blue-sky": [
+    "https://www.airbnb.it/calendar/ical/1441101569343167994.ics?t=1b4d8a1cbcdb45f495300fa792e6f19b",
+    // Booking: incolla qui il link .ics della camera Blue Sky
+  ],
+};
+
+/** Legge gli eventuali feed da variabile d'ambiente per uno slug. */
+function feedsFromEnv(slug: string): string[] {
+  const key = `ICAL_FEEDS_${slug.toUpperCase().replace(/-/g, "_")}`;
+  return (process.env[key] ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  return fromEnv.length > 0 ? fromEnv : ICAL_FEEDS_FALLBACK;
+}
+
+/** Feed effettivi di una camera: env (se presente) altrimenti mappa statica. */
+function feedsForRoom(slug: string): string[] {
+  const fromEnv = feedsFromEnv(slug);
+  return fromEnv.length > 0 ? fromEnv : (ROOM_FEEDS[slug] ?? []);
 }
 
 /** "YYYYMMDD" → "YYYY-MM-DD" */
@@ -80,13 +103,9 @@ function parseIcs(ics: string): string[] {
   return days;
 }
 
-/**
- * Scarica e unisce tutti i feed iCal, restituendo l'elenco ordinato e senza
- * duplicati delle date NON disponibili ("YYYY-MM-DD").
- * Resiliente: se un feed fallisce, viene semplicemente ignorato.
- */
-export async function fetchUnavailableDates(): Promise<string[]> {
-  const feeds = getFeeds();
+/** Scarica e unisce i feed di UNA camera → date occupate ordinate e uniche. */
+async function fetchRoomUnavailable(slug: string): Promise<string[]> {
+  const feeds = feedsForRoom(slug);
   if (feeds.length === 0) return [];
 
   const results = await Promise.allSettled(
@@ -103,4 +122,46 @@ export async function fetchUnavailableDates(): Promise<string[]> {
     if (r.status === "fulfilled") r.value.forEach((d) => set.add(d));
   }
   return Array.from(set).sort();
+}
+
+export type AvailabilityData = {
+  /** Date occupate per camera: { slug: ["YYYY-MM-DD", ...] }. */
+  rooms: Record<string, string[]>;
+  /** Date occupate a livello struttura (tutte le camere piene quel giorno). */
+  unavailable: string[];
+};
+
+/**
+ * Disponibilità completa: per-camera + globale (intersezione).
+ * Resiliente: se un feed fallisce viene ignorato, le altre camere restano ok.
+ */
+export async function fetchAvailability(): Promise<AvailabilityData> {
+  const slugs = ROOMS.map((r) => r.slug);
+  const perRoom = await Promise.all(slugs.map((s) => fetchRoomUnavailable(s)));
+
+  const rooms: Record<string, string[]> = {};
+  slugs.forEach((slug, i) => (rooms[slug] = perRoom[i]));
+
+  // Globale = intersezione: una data conta solo se occupata in OGNI camera.
+  // (Se una camera non ha feed, il suo insieme è vuoto → niente è "globale".)
+  const sets = slugs.map((slug) => new Set(rooms[slug]));
+  const everyRoomHasData = sets.length > 0 && sets.every((s) => s.size > 0);
+  let unavailable: string[] = [];
+  if (everyRoomHasData) {
+    const [first, ...rest] = sets;
+    unavailable = Array.from(first)
+      .filter((d) => rest.every((s) => s.has(d)))
+      .sort();
+  }
+
+  return { rooms, unavailable };
+}
+
+/**
+ * Retrocompatibilità: solo le date globalmente non disponibili.
+ * Usata dalla BookingBar / API per il calendario unico della homepage.
+ */
+export async function fetchUnavailableDates(): Promise<string[]> {
+  const { unavailable } = await fetchAvailability();
+  return unavailable;
 }

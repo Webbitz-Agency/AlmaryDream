@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { bookingHref } from "@/lib/site";
+import { useRouter } from "next/navigation";
 import Calendar from "./Calendar";
 
 /**
  * Barra di conversione (Check-in / Check-out / Ospiti / Verifica Disponibilità).
  * I campi data aprono un calendario custom in stile col sito (niente datepicker
  * di sistema). Le date occupate arrivano da /api/availability (sync iCal,
- * unidirezionale): finché non ci sono feed configurati sono tutte disponibili.
- * Al submit reindirizza a WhatsApp con messaggio precompilato.
+ * unidirezionale): il calendario unico della homepage usa la disponibilità
+ * "globale" (struttura al completo).
+ * Al submit porta alla pagina /disponibilita con le camere libere per le date
+ * e gli ospiti scelti.
  */
 
 function todayIso() {
@@ -30,10 +32,21 @@ function fmt(isoDate: string) {
     .format(new Date(y, m - 1, d));
 }
 
-export default function BookingBar({ className = "" }: { className?: string }) {
-  const [checkin, setCheckin] = useState("");
-  const [checkout, setCheckout] = useState("");
-  const [guests, setGuests] = useState("2");
+export default function BookingBar({
+  className = "",
+  initialCheckin = "",
+  initialCheckout = "",
+  initialGuests = "2",
+}: {
+  className?: string;
+  initialCheckin?: string;
+  initialCheckout?: string;
+  initialGuests?: string;
+}) {
+  const router = useRouter();
+  const [checkin, setCheckin] = useState(initialCheckin);
+  const [checkout, setCheckout] = useState(initialCheckout);
+  const [guests, setGuests] = useState(initialGuests);
 
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"checkin" | "checkout">("checkin");
@@ -90,13 +103,11 @@ export default function BookingBar({ className = "" }: { className?: string }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const parts = [
-      "Ciao Almary Dream! Vorrei verificare la disponibilità.",
-      checkin && `Check-in: ${fmt(checkin)}`,
-      checkout && `Check-out: ${fmt(checkout)}`,
-      `Ospiti: ${guests}`,
-    ].filter(Boolean);
-    window.open(bookingHref(parts.join("\n")), "_blank", "noopener,noreferrer");
+    // Guida l'utente a completare le date prima di cercare.
+    if (!checkin) return openPicker("checkin");
+    if (!checkout) return openPicker("checkout");
+    const params = new URLSearchParams({ checkin, checkout, guests });
+    router.push(`/disponibilita?${params.toString()}`);
   };
 
   const labelCls = "text-[10px] font-medium uppercase tracking-wide text-muted sm:text-xs";

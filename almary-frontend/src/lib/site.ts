@@ -71,6 +71,8 @@ export type Room = {
   name: string;
   size: string;
   guests: string;
+  /** Capienza massima (numero) — usata per filtrare le camere in base agli ospiti. */
+  maxGuests: number;
   description: string;
   amenities: string[];
   /** Galleria foto reali — scorribili nel carosello (la prima è la copertina) */
@@ -84,6 +86,7 @@ export const ROOMS: Room[] = [
     name: "Camera Smeraldo",
     size: "30 m²",
     guests: "2 ospiti",
+    maxGuests: 2,
     description:
       "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany.",
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte"],
@@ -99,6 +102,7 @@ export const ROOMS: Room[] = [
     name: "Camera Dream",
     size: "32 m²",
     guests: "2 ospiti",
+    maxGuests: 2,
     description:
       "Un'oasi di comfort e calore con toni naturali, per un risveglio che profuma di mare.",
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Frigobar"],
@@ -118,6 +122,7 @@ export const ROOMS: Room[] = [
     name: "Camera Blue Sky",
     size: "30 m²",
     guests: "2 ospiti",
+    maxGuests: 2,
     description:
       "Luminosa camera al piano terra con parete color cielo, vicina alla sala colazione.",
     amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Piano terra"],
