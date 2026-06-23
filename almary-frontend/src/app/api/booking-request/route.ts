@@ -1,9 +1,13 @@
 import nodemailer from "nodemailer";
+import { guestEmail, hostEmail, type BookingData } from "@/lib/emailTemplates";
+import { SITE } from "@/lib/site";
 
 /**
  * POST /api/booking-request
- * Riceve una richiesta di prenotazione dal modal e la inoltra via email alla
- * struttura tramite SMTP Gmail (Nodemailer).
+ * Riceve una richiesta di prenotazione dal modal e invia DUE email:
+ *   1. all'host (struttura)  → avviso "nuova richiesta" + riepilogo + contatti ospite
+ *   2. all'ospite            → ringraziamento + riepilogo + "rispondiamo entro 24h"
+ * Invio via SMTP Gmail (Nodemailer).
  *
  * ── CONFIGURAZIONE (variabili d'ambiente su Vercel) ────────────────────────
  *   SMTP_HOST   smtp.gmail.com
@@ -12,9 +16,10 @@ import nodemailer from "nodemailer";
  *   SMTP_PASS   App Password a 16 cifre (SENZA spazi)
  *   SMTP_FROM   (opzionale) mittente mostrato; default = SMTP_USER
  *   BOOKING_TO  (opzionale) destinatario richieste; default = SMTP_USER
+ *   SITE_URL    (opzionale) base URL pubblico per il logo nelle email;
+ *               default = dominio di produzione Vercel, poi SITE.url
  *
- * NB: l'App Password si genera solo con la verifica in 2 passaggi attiva
- * sull'account Google. Il segreto vive SOLO nelle env di Vercel, mai nel repo.
+ * Il logo nelle email è caricato da {SITE_URL}/Logo/logoBianco.png (URL assoluto).
  *
  * Finché SMTP_HOST/USER/PASS non sono impostate, la richiesta viene solo
  * registrata nei log (non si rompe nulla) e l'API risponde comunque OK.
@@ -22,6 +27,13 @@ import nodemailer from "nodemailer";
  */
 
 export const runtime = "nodejs";
+
+/** Base URL pubblico per le immagini nelle email. */
+function siteBaseUrl(): string {
+  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, "");
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return SITE.url;
+}
 
 export async function POST(request: Request) {
   let data: Record<string, unknown>;
@@ -43,29 +55,26 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Email non valida." }, { status: 422 });
   }
 
-  const room = String(data.room ?? "—");
-  const checkin = String(data.checkin ?? "—");
-  const checkout = String(data.checkout ?? "—");
-  const guests = String(data.guests ?? "—");
-  const message = String(data.message ?? "").trim() || "—";
+  const booking: BookingData = {
+    name,
+    email,
+    phone,
+    room: String(data.room ?? "—"),
+    checkin: String(data.checkin ?? "—"),
+    checkout: String(data.checkout ?? "—"),
+    guests: String(data.guests ?? "—"),
+    message: String(data.message ?? "").trim() || "—",
+  };
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;
 
-  const subject = `Nuova richiesta — ${room} (${checkin} → ${checkout})`;
-  const body =
-    `Nuova richiesta di prenotazione dal sito Almary Dream\n\n` +
-    `Camera:     ${room}\n` +
-    `Check-in:   ${checkin}\n` +
-    `Check-out:  ${checkout}\n` +
-    `Ospiti:     ${guests}\n\n` +
-    `Nome:       ${name}\n` +
-    `Email:      ${email}\n` +
-    `Telefono:   ${phone}\n\n` +
-    `Messaggio:\n${message}\n`;
+  const logoUrl = `${siteBaseUrl()}/Logo/logoBianco.png`;
+  const host = hostEmail(booking, logoUrl);
+  const guest = guestEmail(booking, logoUrl);
 
   // Se l'SMTP non è configurato: log e OK (così il flusso funziona comunque).
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.log("[booking-request] (SMTP non configurato)\n" + body);
+    console.log("[booking-request] (SMTP non configurato)\n" + host.text);
     return Response.json({ ok: true });
   }
 
@@ -78,13 +87,32 @@ export async function POST(request: Request) {
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     });
 
+    const from = `"${SITE.name}" <${SMTP_FROM || SMTP_USER}>`;
+    const hostTo = BOOKING_TO || SMTP_USER;
+
+    // 1. Email all'host (critica): se fallisce, restituiamo errore.
     await transporter.sendMail({
-      from: SMTP_FROM || SMTP_USER,
-      to: BOOKING_TO || SMTP_USER,
+      from,
+      to: hostTo,
       replyTo: `${name} <${email}>`,
-      subject,
-      text: body,
+      subject: host.subject,
+      text: host.text,
+      html: host.html,
     });
+
+    // 2. Email di conferma all'ospite (best-effort): non blocca la risposta.
+    try {
+      await transporter.sendMail({
+        from,
+        to: email,
+        replyTo: `${SITE.name} <${hostTo}>`,
+        subject: guest.subject,
+        text: guest.text,
+        html: guest.html,
+      });
+    } catch (err) {
+      console.error("[booking-request] email di conferma all'ospite non inviata:", err);
+    }
 
     return Response.json({ ok: true });
   } catch (err) {
