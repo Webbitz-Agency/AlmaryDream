@@ -1,24 +1,31 @@
-import nodemailer from "nodemailer";
-
 /**
  * POST /api/booking-request
  * Riceve una richiesta di prenotazione dal modal e la inoltra via email alla
- * struttura tramite SMTP (Nodemailer).
+ * struttura usando l'API HTTP di Brevo (https://www.brevo.com) — niente SMTP.
  *
  * ── CONFIGURAZIONE (variabili d'ambiente su Vercel) ────────────────────────
- *   SMTP_HOST      es. smtp.gmail.com
- *   SMTP_PORT      es. 465  (SSL)  oppure 587 (STARTTLS)
- *   SMTP_USER      indirizzo/utente SMTP (es. almarydream@gmail.com)
- *   SMTP_PASS      password SMTP (per Gmail: "App Password" a 16 cifre)
- *   SMTP_FROM      (opzionale) mittente mostrato; default = SMTP_USER
- *   BOOKING_TO     (opzionale) destinatario richieste; default = SMTP_USER
+ *   BREVO_API_KEY   (obbligatoria)  API key transazionale di Brevo
+ *   BREVO_SENDER    (opzionale)     email mittente VALIDATA su Brevo
+ *                                   default: hello@andreapannocchia.com
+ *   BOOKING_TO      (opzionale)     destinatario delle richieste
+ *                                   default: alexvanitelli@gmail.com
  *
- * Finché SMTP_HOST/USER/PASS non sono impostate, la richiesta viene solo
- * registrata nei log (non si rompe nulla) e l'API risponde comunque OK.
+ * ── SETUP (una tantum) ─────────────────────────────────────────────────────
+ *   1. Crea un account gratuito su https://www.brevo.com con la mail mittente
+ *      (es. hello@andreapannocchia.com).
+ *   2. Valida quel mittente: Brevo invia un link di conferma in QUELLA casella.
+ *   3. Crea una API key in "SMTP & API" → "API Keys" e impostala come
+ *      BREVO_API_KEY su Vercel, poi fai Redeploy.
+ *
+ * Finché BREVO_API_KEY non è impostata, la richiesta viene solo registrata
+ * nei log (non si rompe nulla) e l'API risponde comunque OK.
  * ───────────────────────────────────────────────────────────────────────────
  */
 
 export const runtime = "nodejs";
+
+const DEFAULT_SENDER = "hello@andreapannocchia.com";
+const DEFAULT_TO = "alexvanitelli@gmail.com";
 
 export async function POST(request: Request) {
   let data: Record<string, unknown>;
@@ -46,7 +53,7 @@ export async function POST(request: Request) {
   const guests = String(data.guests ?? "—");
   const message = String(data.message ?? "").trim() || "—";
 
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;
+  const { BREVO_API_KEY, BREVO_SENDER, BOOKING_TO } = process.env;
 
   const subject = `Nuova richiesta — ${room} (${checkin} → ${checkout})`;
   const body =
@@ -60,32 +67,38 @@ export async function POST(request: Request) {
     `Telefono:   ${phone}\n\n` +
     `Messaggio:\n${message}\n`;
 
-  // Se l'SMTP non è configurato: log e OK (così il flusso funziona comunque).
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.log("[booking-request] (SMTP non configurato)\n" + body);
+  // Se Brevo non è configurato: log e OK (così il flusso funziona comunque).
+  if (!BREVO_API_KEY) {
+    console.log("[booking-request] (BREVO_API_KEY non configurata)\n" + body);
     return Response.json({ ok: true });
   }
 
   try {
-    const port = Number(SMTP_PORT ?? 465);
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port,
-      secure: port === 465, // 465 = SSL; 587 = STARTTLS
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: { name: "Almary Dream", email: BREVO_SENDER || DEFAULT_SENDER },
+        to: [{ email: BOOKING_TO || DEFAULT_TO }],
+        replyTo: { email, name },
+        subject,
+        textContent: body,
+      }),
     });
 
-    await transporter.sendMail({
-      from: SMTP_FROM || SMTP_USER,
-      to: BOOKING_TO || SMTP_USER,
-      replyTo: `${name} <${email}>`,
-      subject,
-      text: body,
-    });
+    if (!res.ok) {
+      const detail = await res.text();
+      console.error("[booking-request] invio Brevo fallito:", res.status, detail);
+      return Response.json({ ok: false, error: "Invio non riuscito, riprova più tardi." }, { status: 502 });
+    }
 
     return Response.json({ ok: true });
   } catch (err) {
-    console.error("[booking-request] invio SMTP fallito:", err);
+    console.error("[booking-request] invio Brevo fallito:", err);
     return Response.json({ ok: false, error: "Invio non riuscito, riprova più tardi." }, { status: 502 });
   }
 }
