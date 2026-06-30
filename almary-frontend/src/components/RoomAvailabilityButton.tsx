@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Calendar from "./Calendar";
 import { todayIso, addDaysIso, fmtShort } from "@/lib/dates";
@@ -86,7 +87,7 @@ export default function RoomAvailabilityButton({
         </svg>
       </button>
 
-      {open && today && (
+      {open && today && createPortal(
         <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -138,7 +139,8 @@ export default function RoomAvailabilityButton({
               Soggiorno minimo 2 notti{unavailable.size > 0 ? " · le date barrate non sono disponibili" : ""}.
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
