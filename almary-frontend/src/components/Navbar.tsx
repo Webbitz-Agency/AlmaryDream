@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { NAV_LINKS, SITE, bookingHref } from "@/lib/site";
+import { NAV_LINKS, SITE } from "@/lib/site";
+import BookingDateModal from "./BookingDateModal";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [datesOpen, setDatesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -86,14 +88,13 @@ export default function Navbar() {
         </ul>
 
         {/* CTA desktop */}
-        <a
-          href={bookingHref("Ciao Almary Dream! Vorrei prenotare un soggiorno.")}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          onClick={() => setDatesOpen(true)}
           className="hidden h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary lg:inline-flex"
         >
           Prenota Ora
-        </a>
+        </button>
 
         {/* Hamburger mobile */}
         <button
@@ -131,17 +132,21 @@ export default function Navbar() {
             </li>
           ))}
           <li className="pt-3">
-            <a
-              href={bookingHref("Ciao Almary Dream! Vorrei prenotare un soggiorno.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-white"
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setDatesOpen(true);
+              }}
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-sm font-semibold text-white"
             >
               Prenota Ora
-            </a>
+            </button>
           </li>
         </ul>
       </div>
+
+      <BookingDateModal open={datesOpen} onClose={() => setDatesOpen(false)} />
     </header>
   );
 }
