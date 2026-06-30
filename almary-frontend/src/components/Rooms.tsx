@@ -19,9 +19,11 @@ function AmenityIcon({ name }: { name: string }) {
             ? "fridge"
             : n.includes("cassaforte")
               ? "lock"
-              : n.includes("piano")
-                ? "house"
-                : "check";
+              : n.includes("trucco")
+                ? "mirror"
+                : n.includes("piano")
+                  ? "house"
+                  : "check";
 
   const common = {
     width: 18,
@@ -79,6 +81,13 @@ function AmenityIcon({ name }: { name: string }) {
           <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6" />
         </svg>
       );
+    case "mirror":
+      return (
+        <svg {...common}>
+          <ellipse cx="12" cy="9" rx="6" ry="7" />
+          <path d="M12 16v5M9 21h6" />
+        </svg>
+      );
     default:
       return (
         <svg {...common}>
@@ -102,7 +111,7 @@ export default function Rooms() {
             Tre rifugi di <em className="italic text-primary">charme</em>
           </h2>
           <p className="mt-5 max-w-2xl text-base text-muted">
-            Ogni camera con letto king size memory, doccia emozionale e colazione inclusa.
+            Ogni camera con letto King Size, doccia emozionale e finiture di design.
           </p>
         </Reveal>
       </div>

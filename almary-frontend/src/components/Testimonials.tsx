@@ -31,13 +31,15 @@ function TestimonialCard({ t }: { t: Testimonial }) {
     <figure className="flex h-full flex-col rounded-xl border border-black/5 bg-white p-6 shadow-soft">
       <Stars rating={t.rating} />
       <figcaption className="mt-3 font-serif text-xl font-normal text-ink">{t.title}</figcaption>
-      <blockquote
-        ref={quoteRef}
-        className={`mt-3 text-base leading-relaxed text-ink/85 ${expanded ? "" : "line-clamp-6"}`}
-      >
-        “{t.quote}”
-      </blockquote>
-      {(clamped || expanded) && (
+      {t.quote && (
+        <blockquote
+          ref={quoteRef}
+          className={`mt-3 text-base leading-relaxed text-ink/85 ${expanded ? "" : "line-clamp-6"}`}
+        >
+          “{t.quote}”
+        </blockquote>
+      )}
+      {t.quote && (clamped || expanded) && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
@@ -51,7 +53,10 @@ function TestimonialCard({ t }: { t: Testimonial }) {
           {t.name.charAt(0)}
         </span>
         <span className="text-sm">
-          <span className="block font-semibold text-ink">{t.name}</span>
+          <span className="block font-semibold text-ink">
+            {t.name}
+            {t.country && <span className="font-normal text-muted"> · {t.country}</span>}
+          </span>
           <span className="text-muted">{t.date}</span>
         </span>
       </div>

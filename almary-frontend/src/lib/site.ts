@@ -59,11 +59,27 @@ export const FEATURES: Feature[] = [
   { icon: "breakfast", title: "Colazione inclusa", description: "Specialità locali sarde o selezione internazionale, ogni mattina." },
   { icon: "wifi", title: "Wi-Fi alta velocità", description: "Connessione veloce in tutta la struttura." },
   { icon: "ac", title: "Aria climatizzata", description: "Climatizzazione autonoma in ogni camera." },
-  { icon: "sea", title: "A 100 m dal mare", description: "Le acque di Baja Sardinia a pochi passi." },
-  { icon: "relax", title: "Zona relax esterna", description: "Gazebo, lettini e doccia all'aperto." },
+  { icon: "sea", title: "A 100 m dal mare", description: "Spiagge ampissime e attrezzate con tutti i servizi, a pochi passi dalla struttura." },
+  { icon: "relax", title: "Zona relax esterna", description: "Gazebo, poltroncine e doccia all'aperto." },
   { icon: "green", title: "Energia green", description: "Impianto fotovoltaico con accumulo." },
   { icon: "shower", title: "Doccia emozionale", description: "Comfort premium in ogni bagno." },
-  { icon: "barbecue", title: "Esperienza gourmet", description: "Cena con barbecue all'aperto, su richiesta." },
+  { icon: "barbecue", title: "Esperienza gourmet", description: "Barbecue all'aperto e, su richiesta, cene romantiche o esclusive per le tue occasioni speciali." },
+];
+
+/** Servizi premium in evidenza — due card grandi sotto la griglia (su richiesta). */
+export const HIGHLIGHTS: Feature[] = [
+  {
+    icon: "wine",
+    title: "Cantina & bollicine",
+    description:
+      "Vini pregiati, birre speciali e champagne per brindare ai tuoi momenti più importanti. Disponibili su richiesta per festeggiamenti e occasioni speciali.",
+  },
+  {
+    icon: "boat",
+    title: "Mare & esperienze",
+    description:
+      "Giri in barca, tour guidati, noleggio barche e auto: organizziamo per te le esperienze più belle della Costa Smeralda.",
+  },
 ];
 
 export type Room = {
@@ -88,8 +104,8 @@ export const ROOMS: Room[] = [
     guests: "2 ospiti",
     maxGuests: 2,
     description:
-      "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany.",
-    amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte"],
+      "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany. Al piano terra, con guardaroba a vista.",
+    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte", "Toilette trucco"],
     images: [
       "/images/Smeraldo/smeraldo1.webp",
       "/images/Smeraldo/smeraldo5.webp",
@@ -107,7 +123,7 @@ export const ROOMS: Room[] = [
     maxGuests: 2,
     description:
       "Un'oasi di comfort e calore con toni naturali, per un risveglio che profuma di mare.",
-    amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Frigobar"],
+    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Frigobar", "Cassaforte", "Toilette trucco"],
     images: [
       "/images/Dream/dream1.webp",
       "/images/Dream/dream8.webp",
@@ -125,7 +141,7 @@ export const ROOMS: Room[] = [
     maxGuests: 2,
     description:
       "Luminosa camera al piano terra con parete color cielo, vicina alla sala colazione.",
-    amenities: ["Letto king memory", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Piano terra"],
+    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Piano terra", "Cassaforte", "Toilette trucco"],
     images: [
       "/images/BlueSky/bs1.webp",
       "/images/BlueSky/bs5.webp",
@@ -207,15 +223,17 @@ export const GALLERY: GalleryPhoto[] = [
   { src: "/images/Gallery/esterno1.webp", caption: "La struttura, con energia green", w: 1600, h: 1200 },
   { src: "/images/Gallery/colazione2.webp", caption: "La sala colazione", w: 1600, h: 1066 },
   { src: "/images/Gallery/baja.webp", caption: "Nel cuore di Baja Sardinia", w: 1600, h: 1200 },
-  { src: "/images/Gallery/cucina.webp", caption: "Gli spazi comuni", w: 1600, h: 1066 },
 ];
 
 export type Testimonial = {
   name: string;
+  /** Paese di provenienza dell'ospite (mostrato accanto al nome). */
+  country?: string;
   /** titolo della recensione (es. "Eccezionale") */
   title: string;
   date: string;
-  quote: string;
+  /** Testo della recensione (alcune recensioni Booking non hanno testo). */
+  quote?: string;
   rating: number;
 };
 
@@ -230,18 +248,28 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
   },
   {
-    name: "Giorgio",
-    title: "Consigliato!",
-    date: "21 settembre 2025",
+    name: "Marina",
+    country: "Germania",
+    title: "Assolutamente eccezionale",
+    date: "20 giugno 2026",
     quote:
-      "Struttura nuova, accogliente e pulita. Gentilissima e molto disponibile la signora Giusy.",
+      "Ci è piaciuto tutto :-) La struttura dista solo 3 minuti dalla spiaggia di Baja Sardinia. Posti auto gratuiti proprio fuori dalla porta. L'alloggio è arredato di recente, super moderno, pulito e il nostro ospite Aleks si assicura che non ci manchi nulla. Al mattino prepara la colazione con amore. Vi aspettano pasticcini freschi e una selezione di specialità italiane a base di salumi e formaggi, oltre a dolci e frutta. Qualunque sia la tua domanda, lui è sempre pronto ad aiutarti. Ci siamo sentiti completamente a casa e ci piacerebbe molto tornare.",
     rating: 5,
   },
   {
-    name: "Matteo",
+    name: "Patricia",
+    country: "Portogallo",
     title: "Eccezionale",
-    date: "16 agosto 2025",
-    quote: "Tutto semplicemente perfetto, torneremo sicuro.",
+    date: "3 giugno 2026",
+    quote:
+      "Un soggiorno imperdibile se vi trovate in zona! La camera da letto era splendida e confortevole, e pulitissima. Anche la colazione era ottima; il proprietario era presente e ha spiegato di cosa si trattava il tagliere di salumi, offrendo diverse e valide opzioni per entrambi i giorni. Il proprietario è stato davvero gentile e disponibile. Anche la posizione era ottima, a pochi passi da diversi ristoranti, da una piazza con alcuni negozi e dalla spiaggia. Lo consiglio al 100%!",
+    rating: 5,
+  },
+  {
+    name: "Miguel",
+    country: "Spagna",
+    title: "Eccellente",
+    date: "26 giugno 2026",
     rating: 5,
   },
   {

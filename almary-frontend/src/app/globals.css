@@ -20,9 +20,9 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Anchor offset sotto la navbar fixed */
+  /* Anchor offset sotto la navbar fixed (topbar + nav) */
   section[id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 116px;
   }
 
   ::selection {

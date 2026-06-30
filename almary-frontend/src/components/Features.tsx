@@ -1,4 +1,4 @@
-import { FEATURES } from "@/lib/site";
+import { FEATURES, HIGHLIGHTS } from "@/lib/site";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
@@ -47,6 +47,14 @@ function FeatureIcon({ name }: { name: string }) {
       return (
         <svg {...common}><path d="M4 7h16l-1.4 7a4 4 0 0 1-3.95 3.2H9.35A4 4 0 0 1 5.4 14L4 7Z" /><path d="M7.5 20.5 9 17M16.5 20.5 15 17" /><path d="M9 4s-1 1 0 2M12 3.5s-1 1 0 2M15 4s-1 1 0 2" /></svg>
       );
+    case "wine":
+      return (
+        <svg {...common}><path d="M6 3h12l-1 6a5 5 0 0 1-10 0L6 3Z" /><path d="M6.5 6h11" /><path d="M12 14v5M8 21h8" /></svg>
+      );
+    case "boat":
+      return (
+        <svg {...common}><path d="M3 14h18l-2.2 5.2A2 2 0 0 1 17 20.5H7a2 2 0 0 1-1.8-1.3L3 14Z" /><path d="M12 14V4l7 4-7 2Z" /><path d="M12 14V8" /></svg>
+      );
     default:
       return <svg {...common}><circle cx="12" cy="12" r="9" /></svg>;
   }
@@ -74,6 +82,27 @@ export default function Features() {
               </span>
               <h3 className="mt-4 text-base font-semibold text-ink">{feature.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-muted">{feature.description}</p>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Servizi premium in evidenza — due card grandi */}
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 sm:gap-6 lg:mt-14">
+          {HIGHLIGHTS.map((h, i) => (
+            <Reveal key={h.title} delay={i * 120} from={i === 0 ? "left" : "right"}>
+              <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-secondary p-7 text-white shadow-soft lg:p-9">
+                {/* Glow decorativo */}
+                <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl transition-opacity duration-500 group-hover:opacity-80" />
+                <span className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-white/15 text-white backdrop-blur-sm">
+                  <FeatureIcon name={h.icon} />
+                </span>
+                <h3 className="relative mt-5 font-serif text-2xl font-normal leading-tight sm:text-3xl">
+                  {h.title}
+                </h3>
+                <p className="relative mt-3 max-w-md text-sm leading-relaxed text-white/85">
+                  {h.description}
+                </p>
+              </div>
             </Reveal>
           ))}
         </div>

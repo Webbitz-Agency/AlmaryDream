@@ -31,7 +31,7 @@ export default function Hero() {
             </h1>
             <p className="mt-6 max-w-xl text-base text-white/85 sm:text-lg">
               Il tuo rifugio intimo a soli 100 metri dalle acque di Baja Sardinia.
-              Tre camere esclusive, colazione inclusa, dove ogni risveglio profuma di mare.
+              Tre camere esclusive di design, dove ogni risveglio profuma di mare.
             </p>
           </div>
         </div>

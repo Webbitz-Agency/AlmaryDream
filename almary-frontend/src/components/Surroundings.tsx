@@ -119,10 +119,10 @@ export default function Surroundings() {
                   alt={activity.title}
                   fill
                   sizes="(min-width: 1024px) 70vw, (min-width: 640px) 68vw, 88vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover brightness-110 saturate-[1.05] transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                {/* Sfumatura nero → trasparente dal basso */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                {/* Sfumatura nero → trasparente dal basso (più tenue per immagini luminose) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                 {/* Testo bianco in basso */}
                 <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
                   <h3 className="font-serif text-2xl font-normal text-white sm:text-3xl">{activity.title}</h3>
