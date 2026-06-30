@@ -90,7 +90,7 @@ export default function Features() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 sm:gap-6 lg:mt-14">
           {HIGHLIGHTS.map((h, i) => (
             <Reveal key={h.title} delay={i * 120} from={i === 0 ? "left" : "right"}>
-              <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-secondary p-7 text-white shadow-soft lg:p-9">
+              <div className="frame-glow group relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-secondary p-7 text-white shadow-soft transition-shadow duration-500 hover:shadow-[0_0_28px_2px_rgba(21,203,158,0.35)] lg:p-9">
                 {/* Glow decorativo */}
                 <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl transition-opacity duration-500 group-hover:opacity-80" />
                 <span className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-white/15 text-white backdrop-blur-sm">

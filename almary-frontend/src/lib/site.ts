@@ -98,24 +98,6 @@ export type Room = {
 /** Camere reali — colazione sempre inclusa */
 export const ROOMS: Room[] = [
   {
-    slug: "smeraldo",
-    name: "Camera Smeraldo",
-    size: "30 m²",
-    guests: "2 ospiti",
-    maxGuests: 2,
-    description:
-      "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany. Al piano terra, con guardaroba a vista.",
-    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte", "Toilette trucco"],
-    images: [
-      "/images/Smeraldo/smeraldo1.webp",
-      "/images/Smeraldo/smeraldo5.webp",
-      "/images/Smeraldo/smeraldo6.webp",
-      "/images/Smeraldo/smeraldo3.webp",
-      "/images/Smeraldo/smeraldo7.webp",
-      "/images/Smeraldo/smeraldo8.webp",
-    ],
-  },
-  {
     slug: "dream",
     name: "Camera Dream",
     size: "32 m²",
@@ -149,6 +131,24 @@ export const ROOMS: Room[] = [
       "/images/BlueSky/bs2.webp",
       "/images/BlueSky/bs7.webp",
       "/images/BlueSky/bs3.webp",
+    ],
+  },
+  {
+    slug: "smeraldo",
+    name: "Camera Smeraldo",
+    size: "30 m²",
+    guests: "2 ospiti",
+    maxGuests: 2,
+    description:
+      "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany. Al piano terra, con guardaroba a vista.",
+    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte", "Toilette trucco"],
+    images: [
+      "/images/Smeraldo/smeraldo1.webp",
+      "/images/Smeraldo/smeraldo5.webp",
+      "/images/Smeraldo/smeraldo6.webp",
+      "/images/Smeraldo/smeraldo3.webp",
+      "/images/Smeraldo/smeraldo7.webp",
+      "/images/Smeraldo/smeraldo8.webp",
     ],
   },
 ];
@@ -240,11 +240,10 @@ export type Testimonial = {
 /** Recensioni reali Booking.com — punteggio struttura 9.3/10 */
 export const TESTIMONIALS: Testimonial[] = [
   {
-    name: "Tomsed13",
-    title: "Eccezionale",
-    date: "17 agosto 2025",
-    quote:
-      "B&b di recentissima ristrutturazione. Situato nel pieno centro di Baja Sardinia risulta essere la soluzione migliore per chi vuole usare poco la macchina e divertirsi. Phi Beach e Ritual raggiungibili tranquillamente a piedi. Il titolare Alessandro ha saputo creare una struttura moderna e di design. Colazione con prodotti selezionati e di qualità. Camere confortevoli e complete di tutto il necessario. Consigliatissimo.",
+    name: "Miguel",
+    country: "Spagna",
+    title: "Eccellente",
+    date: "26 giugno 2026",
     rating: 5,
   },
   {
@@ -266,18 +265,11 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
   },
   {
-    name: "Miguel",
-    country: "Spagna",
-    title: "Eccellente",
-    date: "26 giugno 2026",
-    rating: 5,
-  },
-  {
-    name: "Silvia",
-    title: "Bellissimo",
-    date: "13 luglio 2025",
+    name: "Tomsed13",
+    title: "Eccezionale",
+    date: "17 agosto 2025",
     quote:
-      "Alessandro è stato molto gentile e attento, ci ha dato ottimi consigli su dove mangiare fuori e la colazione era meravigliosa.",
+      "B&b di recentissima ristrutturazione. Situato nel pieno centro di Baja Sardinia risulta essere la soluzione migliore per chi vuole usare poco la macchina e divertirsi. Phi Beach e Ritual raggiungibili tranquillamente a piedi. Il titolare Alessandro ha saputo creare una struttura moderna e di design. Colazione con prodotti selezionati e di qualità. Camere confortevoli e complete di tutto il necessario. Consigliatissimo.",
     rating: 5,
   },
   {
@@ -286,6 +278,14 @@ export const TESTIMONIALS: Testimonial[] = [
     date: "14 luglio 2025",
     quote:
       "Ottima posizione, colazione deliziosa e aria condizionata perfetta. L'host ci ha persino aiutato a trasportare i bagagli dalla macchina all'interno.",
+    rating: 5,
+  },
+  {
+    name: "Silvia",
+    title: "Bellissimo",
+    date: "13 luglio 2025",
+    quote:
+      "Alessandro è stato molto gentile e attento, ci ha dato ottimi consigli su dove mangiare fuori e la colazione era meravigliosa.",
     rating: 5,
   },
 ];

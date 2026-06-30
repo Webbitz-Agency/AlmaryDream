@@ -5,6 +5,23 @@ import { TESTIMONIALS, type Testimonial } from "@/lib/site";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
+/** Bandiera del paese di provenienza (default: Italia). */
+const FLAGS: Record<string, string> = {
+  Italia: "🇮🇹",
+  Germania: "🇩🇪",
+  Portogallo: "🇵🇹",
+  Spagna: "🇪🇸",
+  Francia: "🇫🇷",
+  "Regno Unito": "🇬🇧",
+  Svizzera: "🇨🇭",
+  Austria: "🇦🇹",
+  Olanda: "🇳🇱",
+  Belgio: "🇧🇪",
+};
+function flagFor(country?: string) {
+  return (country && FLAGS[country]) || FLAGS.Italia;
+}
+
 function Stars({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5 text-accent" aria-label={`${rating} su 5`}>
@@ -49,14 +66,16 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         </button>
       )}
       <div className="mt-auto flex items-center gap-3 border-t border-black/5 pt-4">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-serif text-sm font-medium text-primary">
-          {t.name.charAt(0)}
+        <span
+          className="text-2xl leading-none"
+          role="img"
+          aria-label={t.country ?? "Italia"}
+          title={t.country ?? "Italia"}
+        >
+          {flagFor(t.country)}
         </span>
         <span className="text-sm">
-          <span className="block font-semibold text-ink">
-            {t.name}
-            {t.country && <span className="font-normal text-muted"> · {t.country}</span>}
-          </span>
+          <span className="block font-semibold text-ink">{t.name}</span>
           <span className="text-muted">{t.date}</span>
         </span>
       </div>
