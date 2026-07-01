@@ -102,8 +102,8 @@ export default function Features() {
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 )}
-                {/* Overlay scuro per leggibilità del testo sopra la foto */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark via-dark/70 to-dark/25" />
+                {/* Overlay nero (più trasparente) per leggibilità del testo sopra la foto */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
                 {/* Cornice gold "staccata" — segnala il servizio premium */}
                 <span
                   aria-hidden="true"

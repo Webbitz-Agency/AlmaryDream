@@ -191,6 +191,12 @@ export const ACTIVITIES: Activity[] = [
       "Tramonti mozzafiato sugli scogli di Forte Cappellini, tra musica, cocktail e l'atmosfera glamour della Costa Smeralda.",
   },
   {
+    image: "/images/Dintorni/ritual.webp",
+    title: "Ritual Club",
+    description:
+      "La leggendaria discoteca scavata nella roccia di Baja Sardinia, dal 1970 simbolo della vita notturna della Costa Smeralda: musica, design e atmosfera esclusiva a pochi passi da Almary Dream.",
+  },
+  {
     image: "/images/Dintorni/portocervo.webp",
     title: "Porto Cervo",
     description:
