@@ -167,13 +167,13 @@ export type Activity = {
 /** Cosa fare nei dintorni di Baja Sardinia (Costa Smeralda) — anche per la SEO locale */
 export const ACTIVITIES: Activity[] = [
   {
-    image: "/images/Dintorni/beach.webp",
+    image: "/images/Dintorni/spiagge_sogno.webp",
     title: "Spiagge da sogno",
     description:
       "Cala Battistoni a 3 minuti a piedi, la spiaggia di Baja Sardinia e le calette di Cala Granu con acqua cristallina.",
   },
   {
-    image: "/images/Dintorni/arcipelago.webp",
+    image: "/images/Dintorni/arcipelago2.webp",
     title: "Arcipelago di La Maddalena",
     description:
       "Gite in barca tra Spargi, Budelli e la celebre Spiaggia Rosa, nel cuore del parco marino più bello del Mediterraneo.",
@@ -197,7 +197,7 @@ export const ACTIVITIES: Activity[] = [
       "La leggendaria discoteca scavata nella roccia di Baja Sardinia, dal 1970 simbolo della vita notturna della Costa Smeralda: musica, design e atmosfera esclusiva a pochi passi da Almary Dream.",
   },
   {
-    image: "/images/Dintorni/portocervo.webp",
+    image: "/images/Dintorni/portocervo2.webp",
     title: "Porto Cervo",
     description:
       "A soli 15 minuti, lo shopping di lusso, il porto e la vita mondana del borgo simbolo della Costa Smeralda.",
