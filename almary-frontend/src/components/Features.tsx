@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FEATURES, HIGHLIGHTS } from "@/lib/site";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
@@ -90,7 +91,19 @@ export default function Features() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16">
           {HIGHLIGHTS.map((h, i) => (
             <Reveal key={h.title} delay={i * 120} from={i === 0 ? "left" : "right"}>
-              <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-dark via-secondary to-dark p-9 text-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl lg:p-12">
+              <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-dark via-secondary to-dark p-9 text-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl lg:min-h-[26rem] lg:p-12">
+                {/* Foto di sfondo */}
+                {h.image && (
+                  <Image
+                    src={h.image}
+                    alt={h.title}
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                )}
+                {/* Overlay scuro per leggibilità del testo sopra la foto */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark via-dark/70 to-dark/25" />
                 {/* Cornice gold "staccata" — segnala il servizio premium */}
                 <span
                   aria-hidden="true"
@@ -102,7 +115,7 @@ export default function Features() {
                 <span className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-white/[0.06] text-[#e7d3a3] ring-1 ring-[#cbb074]/45 backdrop-blur-sm">
                   <FeatureIcon name={h.icon} />
                 </span>
-                <p className="relative mt-6 text-[11px] font-medium uppercase tracking-[0.25em] text-[#cbb074]">
+                <p className="relative mt-auto pt-8 text-[11px] font-medium uppercase tracking-[0.25em] text-[#cbb074]">
                   Su richiesta
                 </p>
                 <h3 className="relative mt-2 font-serif text-2xl font-normal leading-tight sm:text-3xl">

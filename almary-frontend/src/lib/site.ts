@@ -52,6 +52,8 @@ export type Feature = {
   description: string;
   /** chiave icona — vedi components/Features.tsx */
   icon: string;
+  /** Foto di sfondo (solo per le card premium in evidenza). */
+  image?: string;
 };
 
 /** Comfort & Servizi reali (8 item, come il riferimento) */
@@ -73,12 +75,14 @@ export const HIGHLIGHTS: Feature[] = [
     title: "Cantina & bollicine",
     description:
       "Vini pregiati, birre speciali e champagne per brindare ai tuoi momenti più importanti. Disponibili su richiesta per festeggiamenti e occasioni speciali.",
+    image: "/images/Dintorni/cardBollicine.webp",
   },
   {
     icon: "boat",
     title: "Mare & esperienze",
     description:
       "Giri in barca, tour guidati, noleggio barche e auto: organizziamo per te le esperienze più belle della Costa Smeralda.",
+    image: "/images/Dintorni/cardBarca.webp",
   },
 ];
 
@@ -173,6 +177,12 @@ export const ACTIVITIES: Activity[] = [
     title: "Arcipelago di La Maddalena",
     description:
       "Gite in barca tra Spargi, Budelli e la celebre Spiaggia Rosa, nel cuore del parco marino più bello del Mediterraneo.",
+  },
+  {
+    image: "/images/Dintorni/cardBarca.webp",
+    title: "In barca sulla Costa Smeralda",
+    description:
+      "Giri in barca, tour guidati e noleggio: naviga tra cale nascoste e acque turchesi. Organizziamo noi l'esperienza in mare più adatta a te.",
   },
   {
     image: "/images/Dintorni/phi.webp",
