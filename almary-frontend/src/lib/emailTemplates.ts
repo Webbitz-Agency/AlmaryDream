@@ -21,6 +21,8 @@ export type BookingData = {
   email: string;
   phone: string;
   message: string;
+  /** Totale stimato del soggiorno (numero come stringa, es. "990"); "" se su richiesta. */
+  priceTotal?: string;
 };
 
 /* ── Palette ──────────────────────────────────────────────────────────────── */
@@ -157,6 +159,8 @@ function layout(o: LayoutOpts): string {
 function summaryBox(d: BookingData): string {
   const n = nightsBetween(d.checkin, d.checkout);
   const nightsLabel = n > 0 ? `${n} ${n === 1 ? "notte" : "notti"}` : "—";
+  const total = d.priceTotal ? Number(d.priceTotal) : 0;
+  const totalRow = total > 0 ? summaryRow("Totale stimato", `€${total.toLocaleString("it-IT")}`, true) : "";
   return `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${C.offwhite};border:1px solid ${C.border};border-radius:14px;">
       <tr><td style="padding:6px 22px;">
@@ -165,7 +169,8 @@ function summaryBox(d: BookingData): string {
           ${summaryRow("Check-in", fmtDate(d.checkin))}
           ${summaryRow("Check-out", fmtDate(d.checkout))}
           ${summaryRow("Notti", nightsLabel)}
-          ${summaryRow("Ospiti", d.guests || "—", true)}
+          ${summaryRow("Ospiti", d.guests || "—", !totalRow)}
+          ${totalRow}
         </table>
       </td></tr>
     </table>`;
@@ -209,12 +214,14 @@ function button(label: string, href: string): string {
 
 function summaryText(d: BookingData): string {
   const n = nightsBetween(d.checkin, d.checkout);
+  const total = d.priceTotal ? Number(d.priceTotal) : 0;
   return (
     `Camera:    ${d.room || "—"}\n` +
     `Check-in:  ${fmtDate(d.checkin)}\n` +
     `Check-out: ${fmtDate(d.checkout)}\n` +
     `Notti:     ${n > 0 ? n : "—"}\n` +
-    `Ospiti:    ${d.guests || "—"}\n`
+    `Ospiti:    ${d.guests || "—"}\n` +
+    (total > 0 ? `Totale:    €${total.toLocaleString("it-IT")}\n` : "")
   );
 }
 

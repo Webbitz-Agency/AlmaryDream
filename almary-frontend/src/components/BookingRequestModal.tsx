@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { stayCost, formatEuro } from "@/lib/pricing";
 
 /** "2026-07-12" → "ven 12 lug" */
 function fmt(isoDate?: string) {
@@ -53,6 +54,8 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
   if (!open) return null;
 
   const nightsCount = nights(checkin, checkout);
+  const cost = checkin && checkout ? stayCost(checkin, checkout) : null;
+  const priceTotal = cost && cost.allPriced ? String(cost.total) : "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +65,7 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
       const res = await fetch("/api/booking-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, message, room, checkin, checkout, guests }),
+        body: JSON.stringify({ name, email, phone, message, room, checkin, checkout, guests, priceTotal }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || "Invio non riuscito.");
@@ -147,6 +150,18 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
               <p className="mt-1.5 text-center text-xs text-muted">
                 {nightsCount} {nightsCount === 1 ? "notte" : "notti"}
               </p>
+            )}
+            {cost && cost.nights > 0 && (
+              cost.allPriced ? (
+                <div className="mt-3 flex items-center justify-between rounded-xl bg-primary/5 px-4 py-3">
+                  <span className="text-sm text-muted">Totale stimato</span>
+                  <span className="font-serif text-xl text-ink">{formatEuro(cost.total)}</span>
+                </div>
+              ) : (
+                <p className="mt-3 rounded-xl bg-offwhite px-4 py-3 text-center text-sm text-muted">
+                  Tariffa su richiesta per queste date
+                </p>
+              )
             )}
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-3.5">

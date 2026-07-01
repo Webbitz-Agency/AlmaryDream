@@ -1,4 +1,5 @@
 import { ROOMS } from "@/lib/site";
+import { priceRange, formatEuro } from "@/lib/pricing";
 import RoomCarousel from "./RoomCarousel";
 import RoomAvailabilityButton from "./RoomAvailabilityButton";
 import Reveal from "./Reveal";
@@ -98,6 +99,7 @@ function AmenityIcon({ name }: { name: string }) {
 }
 
 export default function Rooms() {
+  const { min: minPrice } = priceRange();
   return (
     <section id="camere" className="overflow-hidden bg-white py-20 lg:py-28">
       {/* Intestazione sezione (con container) */}
@@ -158,6 +160,14 @@ export default function Rooms() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Tariffa — uguale per tutte le camere, variabile per periodo */}
+                  <div className="mt-8 flex items-baseline gap-2">
+                    <span className="text-sm text-muted">A partire da</span>
+                    <span className="font-serif text-3xl font-normal text-ink">{formatEuro(minPrice)}</span>
+                    <span className="text-sm text-muted">/ notte</span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted">Tariffa in base al periodo · colazione inclusa</p>
 
                   <RoomAvailabilityButton guests={room.guests.match(/\d+/)?.[0] ?? "2"} />
                 </Reveal>

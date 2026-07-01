@@ -64,6 +64,7 @@ export async function POST(request: Request) {
     checkout: String(data.checkout ?? "—"),
     guests: String(data.guests ?? "—"),
     message: String(data.message ?? "").trim() || "—",
+    priceTotal: /^\d+$/.test(String(data.priceTotal ?? "")) ? String(data.priceTotal) : "",
   };
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;

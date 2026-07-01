@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ROOMS, type Room } from "@/lib/site";
+import { stayCost, formatEuro } from "@/lib/pricing";
 import Calendar from "@/components/Calendar";
 import BookingBar from "@/components/BookingBar";
 import RoomCarousel from "@/components/RoomCarousel";
@@ -240,6 +241,7 @@ function RoomCard({
   const free =
     fits && hasRange && !hasBookedNight(unavailable, ci, co) && meetsMinNights(unavailable, today, ci, co);
   const nightsCount = nights(ci, co);
+  const cost = hasRange ? stayCost(ci, co) : null;
 
   const badge = !fits
     ? { text: "Capienza non sufficiente", cls: "bg-black/60 text-white" }
@@ -298,6 +300,20 @@ function RoomCard({
           <span className="font-semibold text-ink">{fmt(ci)} → {fmt(co)}</span>
           {hasRange && <span className="text-muted"> · {nightsCount} {nightsCount === 1 ? "notte" : "notti"}</span>}
         </p>
+
+        {/* Totale soggiorno (tariffe per periodo, uguali per tutte le camere) */}
+        {cost && cost.nights > 0 && (
+          cost.allPriced ? (
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-serif text-2xl font-normal text-ink">{formatEuro(cost.total)}</span>
+              <span className="text-sm text-muted">
+                totale · {formatEuro(cost.avg)}/notte
+              </span>
+            </div>
+          ) : (
+            <p className="mt-2 text-sm font-medium text-ink">Tariffa su richiesta per queste date</p>
+          )
+        )}
 
         <button
           type="button"

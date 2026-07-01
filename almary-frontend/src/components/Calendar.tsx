@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { priceForDate } from "@/lib/pricing";
 
 const WEEKDAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 const MONTHS = [
@@ -180,15 +181,24 @@ export default function Calendar({
           const inRange = checkin && checkout && d > checkin && d < checkout;
           const isEndpoint = isCheckin || isCheckout;
 
+          // Tariffa mostrata sotto il numero (stile Booking/Airbnb): solo per
+          // date valide (future, non occupate) con prezzo a listino.
+          const price = d >= today && !blocked ? priceForDate(d) : null;
+          const priceCls = isEndpoint
+            ? "text-white/85"
+            : inRange
+              ? "text-primary/70"
+              : "text-muted";
+
           return (
             <div key={d} className={`flex justify-center ${inRange ? "bg-primary/10" : ""} ${isCheckin && checkout ? "rounded-l-full bg-primary/10" : ""} ${isCheckout ? "rounded-r-full bg-primary/10" : ""}`}>
               <button
                 type="button"
                 disabled={disabled}
                 onClick={() => onPickDay(d)}
-                aria-label={d}
+                aria-label={price ? `${d} — €${price} a notte` : d}
                 className={[
-                  "flex h-10 w-10 items-center justify-center rounded-full text-sm transition-colors",
+                  "flex h-11 w-11 flex-col items-center justify-center gap-0.5 rounded-full text-sm leading-none transition-colors",
                   isEndpoint
                     ? "bg-primary font-semibold text-white"
                     : blocked
@@ -201,7 +211,10 @@ export default function Calendar({
                   isEndpoint && !readOnly ? "hover:bg-secondary" : "",
                 ].join(" ")}
               >
-                {day}
+                <span>{day}</span>
+                {price !== null && (
+                  <span className={`text-[9px] font-medium leading-none ${priceCls}`}>€{price}</span>
+                )}
               </button>
             </div>
           );
