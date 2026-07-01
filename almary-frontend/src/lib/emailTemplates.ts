@@ -242,7 +242,7 @@ export function guestEmail(d: BookingData, logoUrl: string) {
     logoUrl,
     preheader: "Abbiamo ricevuto la tua richiesta: ti rispondiamo entro 24 ore.",
     eyebrow: "Richiesta ricevuta",
-    title: "Grazie, ti ricontattiamo a breve",
+    title: "Grazie, sarai contattato a breve",
     intro,
     bodyHtml,
   });
