@@ -115,8 +115,10 @@ export default function Navbar() {
 
       {/* Menu mobile a tendina */}
       <div
-        className={`overflow-hidden bg-white transition-[max-height] duration-300 lg:hidden ${
-          open ? "max-h-96 border-t border-black/5" : "max-h-0"
+        className={`bg-white transition-[max-height] duration-300 lg:hidden ${
+          open
+            ? "max-h-[calc(100dvh-6.25rem)] overflow-y-auto border-t border-black/5"
+            : "max-h-0 overflow-hidden"
         }`}
       >
         <ul className="flex flex-col px-5 py-4">

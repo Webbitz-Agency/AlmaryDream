@@ -10,6 +10,9 @@
 
   html {
     scroll-behavior: smooth;
+    /* Evita lo scroll orizzontale fantasma (es. elementi che sforano di pochi px).
+       `clip` non crea un contenitore di scroll → non rompe gli header sticky. */
+    overflow-x: clip;
   }
 
   body {
@@ -18,6 +21,7 @@
     font-family: var(--font-sans), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
   }
 
   /* Anchor offset sotto la navbar fixed (topbar + nav) */
