@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { stayCost, formatEuro } from "@/lib/pricing";
+import { useI18n } from "@/i18n/DictionaryProvider";
+import { LOCALE_META } from "@/i18n/config";
 
-/** "2026-07-12" → "ven 12 lug" */
-function fmt(isoDate?: string) {
+/** "2026-07-12" → "ven 12 lug" (o equivalente nella lingua corrente). */
+function fmt(isoDate?: string, bcp47 = "it-IT") {
   if (!isoDate) return "—";
   const [y, m, d] = isoDate.split("-").map(Number);
-  return new Intl.DateTimeFormat("it-IT", { weekday: "short", day: "numeric", month: "short" })
+  return new Intl.DateTimeFormat(bcp47, { weekday: "short", day: "numeric", month: "short" })
     .format(new Date(y, m - 1, d));
 }
 
@@ -30,6 +32,8 @@ type Props = {
 type Status = "idle" | "sending" | "sent" | "error";
 
 export default function BookingRequestModal({ open, onClose, room, checkin, checkout, guests }: Props) {
+  const { dict, locale } = useI18n();
+  const bcp47 = LOCALE_META[locale].bcp47;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -65,14 +69,14 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
       const res = await fetch("/api/booking-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, message, room, checkin, checkout, guests, priceTotal }),
+        body: JSON.stringify({ name, email, phone, message, room, checkin, checkout, guests, priceTotal, lang: locale }),
       });
       const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error || "Invio non riuscito.");
+      if (!res.ok || !data.ok) throw new Error(data.error || dict.request.errorGeneric);
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Invio non riuscito. Riprova.");
+      setErrorMsg(err instanceof Error ? err.message : dict.request.errorGeneric);
     }
   };
 
@@ -86,7 +90,7 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Richiesta di prenotazione"
+      aria-label={dict.request.dialogAria}
     >
       <div
         className="relative max-h-[92vh] w-full overflow-y-auto rounded-2xl bg-white p-6 shadow-card sm:max-w-lg"
@@ -95,7 +99,7 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
         <button
           type="button"
           onClick={onClose}
-          aria-label="Chiudi"
+          aria-label={dict.request.close}
           className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors hover:bg-black/5"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -111,77 +115,76 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
                 <path d="M20 6 9 17l-5-5" />
               </svg>
             </div>
-            <h3 className="mt-4 font-serif text-2xl text-ink">Richiesta inviata!</h3>
+            <h3 className="mt-4 font-serif text-2xl text-ink">{dict.request.sentTitle}</h3>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
-              Grazie {name.split(" ")[0]}, abbiamo ricevuto la tua richiesta per la {room ?? "tua camera"}.
-              Ti risponderemo al più presto per confermare la disponibilità.
+              {dict.request.sentBody.replace("{name}", name.split(" ")[0])}
             </p>
             <button
               type="button"
               onClick={onClose}
               className="mt-6 inline-flex h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary"
             >
-              Chiudi
+              {dict.request.close}
             </button>
           </div>
         ) : (
           <>
-            <p className="eyebrow text-primary">Richiesta di prenotazione</p>
+            <p className="eyebrow text-primary">{dict.request.eyebrow}</p>
             <h3 className="mt-2 font-serif text-2xl font-normal text-ink">
-              {room ? room : "Il tuo soggiorno"}
+              {room ? room : dict.request.titleFallback}
             </h3>
 
             {/* Riepilogo precompilato */}
             <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-offwhite p-3 text-center text-sm">
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted">Check-in</p>
-                <p className="mt-0.5 font-semibold text-ink">{fmt(checkin)}</p>
+                <p className="text-[11px] uppercase tracking-wide text-muted">{dict.request.checkin}</p>
+                <p className="mt-0.5 font-semibold text-ink">{fmt(checkin, bcp47)}</p>
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted">Check-out</p>
-                <p className="mt-0.5 font-semibold text-ink">{fmt(checkout)}</p>
+                <p className="text-[11px] uppercase tracking-wide text-muted">{dict.request.checkout}</p>
+                <p className="mt-0.5 font-semibold text-ink">{fmt(checkout, bcp47)}</p>
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-muted">Ospiti</p>
+                <p className="text-[11px] uppercase tracking-wide text-muted">{dict.request.guests}</p>
                 <p className="mt-0.5 font-semibold text-ink">{guests ?? "—"}</p>
               </div>
             </div>
             {nightsCount > 0 && (
               <p className="mt-1.5 text-center text-xs text-muted">
-                {nightsCount} {nightsCount === 1 ? "notte" : "notti"}
+                {nightsCount} {nightsCount === 1 ? dict.units.night : dict.units.nights}
               </p>
             )}
             {cost && cost.nights > 0 && (
               cost.allPriced ? (
                 <div className="mt-3 flex items-center justify-between rounded-xl bg-primary/5 px-4 py-3">
-                  <span className="text-sm text-muted">Totale stimato</span>
+                  <span className="text-sm text-muted">{dict.request.estimatedTotal}</span>
                   <span className="font-serif text-xl text-ink">{formatEuro(cost.total)}</span>
                 </div>
               ) : (
                 <p className="mt-3 rounded-xl bg-offwhite px-4 py-3 text-center text-sm text-muted">
-                  Tariffa su richiesta per queste date
+                  {dict.request.rateOnRequest}
                 </p>
               )
             )}
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-3.5">
               <div>
-                <label htmlFor="br-name" className={labelCls}>Nome e cognome *</label>
-                <input id="br-name" required value={name} onChange={(e) => setName(e.target.value)} className={fieldCls} placeholder="Mario Rossi" />
+                <label htmlFor="br-name" className={labelCls}>{dict.request.nameLabel}</label>
+                <input id="br-name" required value={name} onChange={(e) => setName(e.target.value)} className={fieldCls} placeholder={dict.request.namePlaceholder} />
               </div>
               <div className="grid gap-3.5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="br-email" className={labelCls}>Email *</label>
-                  <input id="br-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={fieldCls} placeholder="mario@email.it" />
+                  <label htmlFor="br-email" className={labelCls}>{dict.request.emailLabel}</label>
+                  <input id="br-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={fieldCls} placeholder={dict.request.emailPlaceholder} />
                 </div>
                 <div>
-                  <label htmlFor="br-phone" className={labelCls}>Telefono *</label>
-                  <input id="br-phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} className={fieldCls} placeholder="+39 333 1234567" />
+                  <label htmlFor="br-phone" className={labelCls}>{dict.request.phoneLabel}</label>
+                  <input id="br-phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} className={fieldCls} placeholder={dict.request.phonePlaceholder} />
                 </div>
               </div>
               <div>
-                <label htmlFor="br-msg" className={labelCls}>Messaggio (facoltativo)</label>
-                <textarea id="br-msg" rows={3} value={message} onChange={(e) => setMessage(e.target.value)} className={`${fieldCls} resize-none`} placeholder="Richieste particolari, orario di arrivo…" />
+                <label htmlFor="br-msg" className={labelCls}>{dict.request.messageLabel}</label>
+                <textarea id="br-msg" rows={3} value={message} onChange={(e) => setMessage(e.target.value)} className={`${fieldCls} resize-none`} placeholder={dict.request.messagePlaceholder} />
               </div>
 
               {status === "error" && (
@@ -193,10 +196,10 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
                 disabled={status === "sending"}
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:opacity-60"
               >
-                {status === "sending" ? "Invio in corso…" : "Invia richiesta"}
+                {status === "sending" ? dict.request.submitting : dict.request.submit}
               </button>
               <p className="text-center text-[11px] text-muted">
-                Nessun pagamento ora: invii solo una richiesta, ti confermeremo la disponibilità.
+                {dict.request.noPayment}
               </p>
             </form>
           </>

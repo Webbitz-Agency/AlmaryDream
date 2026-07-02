@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Calendar from "./Calendar";
 import { todayIso, addDaysIso, fmtShort } from "@/lib/dates";
+import { useI18n } from "@/i18n/DictionaryProvider";
+import { LOCALE_META, localizedHref } from "@/i18n/config";
 
 /**
  * Modale calendario condiviso: scegli check-in/check-out e vieni portato alla
@@ -23,6 +25,8 @@ export default function BookingDateModal({
   guests?: string;
 }) {
   const router = useRouter();
+  const { dict, locale } = useI18n();
+  const fmt = (iso: string) => fmtShort(iso, LOCALE_META[locale].bcp47);
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [step, setStep] = useState<"checkin" | "checkout">("checkin");
@@ -88,7 +92,7 @@ export default function BookingDateModal({
   const goToResults = () => {
     if (!checkin || !checkout) return;
     const params = new URLSearchParams({ checkin, checkout, guests });
-    router.push(`/disponibilita?${params.toString()}`);
+    router.push(`${localizedHref("/disponibilita", locale)}?${params.toString()}`);
   };
 
   if (!open || !today) return null;
@@ -103,12 +107,12 @@ export default function BookingDateModal({
       <div className="relative max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-white p-5 shadow-card sm:w-auto sm:max-w-sm">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm font-semibold text-ink">
-            {step === "checkin" || !checkin ? "Seleziona il check-in" : "Seleziona il check-out"}
+            {step === "checkin" || !checkin ? dict.booking.selectCheckin : dict.booking.selectCheckout}
           </p>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Chiudi"
+            aria-label={dict.booking.close}
             className="flex h-8 w-8 items-center justify-center rounded-full text-ink transition-colors hover:bg-black/5"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -129,7 +133,7 @@ export default function BookingDateModal({
 
         <div className="mt-4 flex items-center justify-between gap-3 border-t border-black/5 pt-4">
           <span className="text-xs text-muted">
-            {checkin ? fmtShort(checkin) : "—"} → {checkout ? fmtShort(checkout) : "—"}
+            {checkin ? fmt(checkin) : "—"} → {checkout ? fmt(checkout) : "—"}
           </span>
           <button
             type="button"
@@ -137,12 +141,12 @@ export default function BookingDateModal({
             disabled={!checkin || !checkout}
             className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Verifica disponibilità
+            {dict.roomMeta.availabilityCta}
           </button>
         </div>
 
         <p className="mt-3 text-center text-[11px] text-muted">
-          Soggiorno minimo 2 notti{unavailable.size > 0 ? " · le date barrate non sono disponibili" : ""}.
+          {dict.booking.minStay}{unavailable.size > 0 ? dict.booking.minStayBarred : ""}.
         </p>
       </div>
     </div>,

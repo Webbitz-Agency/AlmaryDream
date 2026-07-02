@@ -2,12 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { priceForDate } from "@/lib/pricing";
-
-const WEEKDAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
-const MONTHS = [
-  "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-  "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre",
-];
+import { useI18n } from "@/i18n/DictionaryProvider";
+import { LOCALE_META } from "@/i18n/config";
 
 function iso(y: number, m: number, d: number) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -50,9 +46,23 @@ export default function Calendar({
   selecting = "checkin",
   minNights = 2,
 }: Props) {
+  const { dict, locale } = useI18n();
+  const bcp47 = LOCALE_META[locale].bcp47;
+  // Nomi giorni della settimana (lun-first) localizzati.
+  const weekdays = useMemo(() => {
+    const f = new Intl.DateTimeFormat(bcp47, { weekday: "short" });
+    // 2024-01-01 è un lunedì → sequenza lun…dom.
+    return Array.from({ length: 7 }, (_, i) => f.format(new Date(2024, 0, 1 + i)));
+  }, [bcp47]);
+
   // Mese mostrato: parte dal check-in se presente, altrimenti dal mese di oggi.
   const base = (checkin || today).split("-").map(Number);
   const [view, setView] = useState({ year: base[0], month: base[1] - 1 });
+
+  const monthName = new Intl.DateTimeFormat(bcp47, { month: "long" }).format(
+    new Date(view.year, view.month, 1)
+  );
+  const monthLabel = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
   // Date occupate ordinate → per trovare la prima notte occupata dopo una data.
   const occupied = useMemo(() => Array.from(unavailable).sort(), [unavailable]);
@@ -125,7 +135,7 @@ export default function Calendar({
           type="button"
           onClick={goPrev}
           disabled={monthIsPast}
-          aria-label="Mese precedente"
+          aria-label={dict.booking.monthPrev}
           className="flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-25"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -133,12 +143,12 @@ export default function Calendar({
           </svg>
         </button>
         <span className="font-serif text-lg text-ink">
-          {MONTHS[view.month]} {view.year}
+          {monthLabel} {view.year}
         </span>
         <button
           type="button"
           onClick={goNext}
-          aria-label="Mese successivo"
+          aria-label={dict.booking.monthNext}
           className="flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors hover:bg-primary/10"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -149,8 +159,8 @@ export default function Calendar({
 
       {/* Giorni della settimana */}
       <div className="grid grid-cols-7 text-center text-[11px] font-medium uppercase tracking-wide text-muted">
-        {WEEKDAYS.map((w) => (
-          <span key={w} className="py-1">{w}</span>
+        {weekdays.map((w, i) => (
+          <span key={i} className="py-1">{w}</span>
         ))}
       </div>
 
@@ -196,7 +206,7 @@ export default function Calendar({
                 type="button"
                 disabled={disabled}
                 onClick={() => onPickDay(d)}
-                aria-label={price ? `${d} — €${price} a notte` : d}
+                aria-label={price ? `${d} — €${price} ${dict.booking.perNightAria}` : d}
                 className={[
                   "flex h-11 w-11 flex-col items-center justify-center gap-0.5 rounded-full text-sm leading-none transition-colors",
                   isEndpoint

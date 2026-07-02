@@ -13,9 +13,9 @@ export function addDaysIso(isoDate: string, days: number) {
   return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
 }
 
-/** "2026-07-12" → "ven 12 lug" */
-export function fmtShort(isoDate: string) {
+/** "2026-07-12" → "ven 12 lug" (o equivalente nella lingua richiesta). */
+export function fmtShort(isoDate: string, locale = "it-IT") {
   const [y, m, d] = isoDate.split("-").map(Number);
-  return new Intl.DateTimeFormat("it-IT", { weekday: "short", day: "numeric", month: "short" })
+  return new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", month: "short" })
     .format(new Date(y, m - 1, d));
 }

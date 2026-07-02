@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { SITE, NAV_LINKS, bookingHref } from "@/lib/site";
+import { SITE, bookingHref } from "@/lib/site";
+import { NAV_ITEMS, localizedHref, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries/it";
 
 /** Icone social inline (no librerie). */
 function SocialIcon({ name }: { name: "facebook" | "instagram" | "whatsapp" }) {
@@ -27,7 +29,7 @@ function SocialIcon({ name }: { name: "facebook" | "instagram" | "whatsapp" }) {
   }
 }
 
-export default function Footer() {
+export default function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   return (
     <footer id="contatti" className="bg-dark text-white">
       {/* Divisore: separa la sezione sopra dal footer */}
@@ -44,7 +46,7 @@ export default function Footer() {
             className="h-48 w-48 object-contain"
           />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
-            Luxury B&amp;B a Baja Sardinia. Un respiro di eleganza sul mare, nel cuore della Costa Smeralda.
+            {dict.footer.claim}
           </p>
         </div>
 
@@ -52,12 +54,12 @@ export default function Footer() {
         <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1.2fr_1fr_1.4fr] lg:gap-12">
           {/* Menu */}
           <nav>
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">Menu</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">{dict.footer.menu}</h3>
             <ul className="mt-5 space-y-2.5 text-sm text-white/80">
-              {NAV_LINKS.map((l) => (
-                <li key={l.href}>
-                  <a href={l.href} className="transition-colors hover:text-accent">
-                    {l.label}
+              {NAV_ITEMS.map((item) => (
+                <li key={item.key}>
+                  <a href={localizedHref(item.href, locale)} className="transition-colors hover:text-accent">
+                    {dict.nav[item.key]}
                   </a>
                 </li>
               ))}
@@ -66,7 +68,7 @@ export default function Footer() {
 
           {/* Contatti */}
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">Contatti</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">{dict.footer.contact}</h3>
             <ul className="mt-5 space-y-3 text-sm text-white/80">
               <li>
                 {SITE.address}
@@ -97,7 +99,7 @@ export default function Footer() {
                   href={SITE.phoneHref}
                   className="inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-lg border border-white/20 px-3 text-sm font-semibold text-white transition-colors hover:border-accent hover:text-accent"
                 >
-                  Chiama ora
+                  {dict.footer.callNow}
                 </a>
               </li>
             </ul>
@@ -105,7 +107,7 @@ export default function Footer() {
 
           {/* Mappa */}
           <div className="col-span-2 lg:col-span-1">
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">Dove siamo</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-accent">{dict.footer.whereWeAre}</h3>
             <div className="mt-5 overflow-hidden rounded-xl border border-white/10">
               <iframe
                 title="Mappa Almary Dream — Baja Sardinia"
@@ -121,7 +123,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="mt-3 inline-block text-sm font-semibold text-accent hover:underline"
             >
-              Apri in Google Maps →
+              {dict.footer.openInMaps} →
             </a>
           </div>
         </div>
@@ -159,12 +161,12 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Almary Dream — Tutti i diritti riservati</p>
+          <p>© 2026 Almary Dream — {dict.footer.rights}</p>
           <p className="flex flex-wrap gap-x-4 gap-y-1">
             <span>CIR: {SITE.cir}</span>
             <span>CIN: {SITE.cin}</span>
-            <a href="/privacy" className="transition-colors hover:text-accent">
-              Privacy Policy
+            <a href={localizedHref("/privacy", locale)} className="transition-colors hover:text-accent">
+              {dict.footer.privacy}
             </a>
           </p>
         </div>

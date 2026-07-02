@@ -3,17 +3,18 @@
 import { useEffect, useState } from "react";
 import { ROOMS, type Room } from "@/lib/site";
 import { useI18n } from "@/i18n/DictionaryProvider";
+import { LOCALE_META } from "@/i18n/config";
 import { stayCost, formatEuro } from "@/lib/pricing";
 import Calendar from "@/components/Calendar";
 import BookingBar from "@/components/BookingBar";
 import RoomCarousel from "@/components/RoomCarousel";
 import BookingRequestModal from "@/components/BookingRequestModal";
 
-/** "2026-07-12" → "ven 12 lug" */
-function fmt(isoDate: string) {
+/** "2026-07-12" → "ven 12 lug" (o equivalente nella lingua corrente). */
+function fmt(isoDate: string, bcp47 = "it-IT") {
   if (!isoDate) return "—";
   const [y, m, d] = isoDate.split("-").map(Number);
-  return new Intl.DateTimeFormat("it-IT", { weekday: "short", day: "numeric", month: "short" })
+  return new Intl.DateTimeFormat(bcp47, { weekday: "short", day: "numeric", month: "short" })
     .format(new Date(y, m - 1, d));
 }
 
@@ -63,6 +64,8 @@ type Props = {
 };
 
 export default function Results({ checkin, checkout, guests, roomsAvailability }: Props) {
+  const { dict, locale } = useI18n();
+  const bcp47 = LOCALE_META[locale].bcp47;
   const [today, setToday] = useState("");
   useEffect(() => {
     const n = new Date();
@@ -81,7 +84,7 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
       validRange &&
       !hasBookedNight(unavailable, checkin, checkout) &&
       meetsMinNights(unavailable, today, checkin, checkout);
-    const reason = !fits ? "Capienza non sufficiente" : "Date occupate";
+    const reason = !fits ? dict.results.badgeCapacity : dict.results.reasonBooked;
     return { room, unavailable, fits, available: fits && free, reason };
   });
 
@@ -92,22 +95,24 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 lg:px-8 lg:py-16">
       {/* Intestazione + riepilogo ricerca */}
-      <p className="eyebrow text-primary">Disponibilità</p>
+      <p className="eyebrow text-primary">{dict.results.eyebrow}</p>
       <h1 className="mt-3 font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-        Le camere per il tuo <em className="italic text-primary">soggiorno</em>
+        {dict.results.titleA}<em className="italic text-primary">{dict.results.titleEm}</em>{dict.results.titleB}
       </h1>
       {validRange ? (
         <p className="mt-4 text-base text-muted">
-          <span className="font-semibold text-ink">{fmt(checkin)}</span> → <span className="font-semibold text-ink">{fmt(checkout)}</span>
-          {" · "}{nightsCount} {nightsCount === 1 ? "notte" : "notti"}
-          {" · "}{guestsNum} {guestsNum === 1 ? "ospite" : "ospiti"}
+          <span className="font-semibold text-ink">{fmt(checkin, bcp47)}</span> → <span className="font-semibold text-ink">{fmt(checkout, bcp47)}</span>
+          {" · "}{nightsCount} {nightsCount === 1 ? dict.units.night : dict.units.nights}
+          {" · "}{guestsNum} {guestsNum === 1 ? dict.units.guest : dict.units.guests}
           {" · "}
           <span className={available.length > 0 ? "font-semibold text-primary" : "font-semibold text-ink"}>
-            {available.length} {available.length === 1 ? "camera disponibile" : "camere disponibili"}
+            {available.length === 1
+              ? `1 ${dict.results.roomAvailableOne}`
+              : dict.results.roomsAvailableCount.replace("{n}", String(available.length))}
           </span>
         </p>
       ) : (
-        <p className="mt-4 text-base text-muted">Scegli le date per vedere le camere disponibili.</p>
+        <p className="mt-4 text-base text-muted">{dict.results.chooseDatesIntro}</p>
       )}
 
       {/* Modifica ricerca globale */}
@@ -117,8 +122,7 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
 
       {noneFitsGuests && (
         <div className="mt-8 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-ink">
-          Per <strong>{guestsNum} ospiti</strong> può servire più di una camera: scegli comunque una camera qui
-          sotto e scrivici, oppure contattaci per combinare più stanze.
+          {dict.results.multiRoomNote.replace("{n}", String(guestsNum))}
         </div>
       )}
 
@@ -128,7 +132,9 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
           <div className="mb-5 flex items-center gap-2.5">
             <span className="h-2.5 w-2.5 rounded-full bg-primary" />
             <h2 className="text-lg font-semibold text-ink">
-              {available.length === 1 ? "Disponibile per le tue date" : `${available.length} camere disponibili`}
+              {available.length === 1
+                ? dict.results.availableForDates
+                : dict.results.roomsAvailableCount.replace("{n}", String(available.length))}
             </h2>
           </div>
           <div className="space-y-6">
@@ -150,8 +156,7 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
 
       {available.length === 0 && validRange && (
         <p className="mt-12 text-base text-ink">
-          Nessuna camera disponibile per queste date. Modifica le date qui sopra o controlla qui sotto quando ogni
-          camera è libera.
+          {dict.results.noneForDates}
         </p>
       )}
 
@@ -161,10 +166,10 @@ export default function Results({ checkin, checkout, guests, roomsAvailability }
           <div className="mb-2 flex items-center gap-2.5">
             <span className="h-2.5 w-2.5 rounded-full bg-black/30" />
             <h2 className="text-lg font-semibold text-ink/80">
-              {validRange ? "Non disponibili per queste date" : "Le altre camere"}
+              {validRange ? dict.results.unavailableForDates : dict.results.otherRooms}
             </h2>
           </div>
-          <p className="mb-5 text-sm text-muted">Cambia le date sul calendario di ogni camera per scoprire quando è libera.</p>
+          <p className="mb-5 text-sm text-muted">{dict.results.changeDatesHint}</p>
           <div className="space-y-5">
             {others.map((e) => (
               <RoomCard
@@ -209,7 +214,8 @@ function RoomCard({
   /** Versione più compatta (sezione "non disponibili"): foto più bassa. */
   small?: boolean;
 }) {
-  const { dict } = useI18n();
+  const { dict, locale } = useI18n();
+  const bcp47 = LOCALE_META[locale].bcp47;
   const rd = dict.rooms[room.slug];
   const guestsLabel = dict.roomMeta.guests.replace("{n}", String(room.maxGuests));
 
@@ -249,12 +255,12 @@ function RoomCard({
   const cost = hasRange ? stayCost(ci, co) : null;
 
   const badge = !fits
-    ? { text: "Capienza non sufficiente", cls: "bg-black/60 text-white" }
+    ? { text: dict.results.badgeCapacity, cls: "bg-black/60 text-white" }
     : free
-      ? { text: "Disponibile", cls: "bg-primary text-white" }
+      ? { text: dict.results.badgeAvailable, cls: "bg-primary text-white" }
       : !hasRange
-        ? { text: step === "checkout" && ci ? "Scegli il check-out" : "Scegli le date", cls: "bg-black/50 text-white" }
-        : { text: reason ?? "Non disponibile", cls: "bg-black/60 text-white" };
+        ? { text: step === "checkout" && ci ? dict.results.badgeChooseCheckout : dict.results.badgeChooseDates, cls: "bg-black/50 text-white" }
+        : { text: reason ?? dict.results.badgeUnavailable, cls: "bg-black/60 text-white" };
 
   return (
     <article className={`grid overflow-hidden rounded-2xl border md:grid-cols-2 ${free ? "border-primary/30 bg-white" : "border-black/10 bg-white"}`}>
@@ -291,19 +297,19 @@ function RoomCard({
             />
           )}
           <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-muted">
-            <span>Soggiorno minimo 2 notti.</span>
+            <span>{dict.results.minStayNote}</span>
             {(ci || co) && (
               <button type="button" onClick={resetDates} className="font-medium text-primary hover:underline">
-                Cancella
+                {dict.results.clear}
               </button>
             )}
           </div>
         </div>
 
         <p className="mt-3 text-sm">
-          <span className="text-muted">Soggiorno: </span>
-          <span className="font-semibold text-ink">{fmt(ci)} → {fmt(co)}</span>
-          {hasRange && <span className="text-muted"> · {nightsCount} {nightsCount === 1 ? "notte" : "notti"}</span>}
+          <span className="text-muted">{dict.results.stayLabel} </span>
+          <span className="font-semibold text-ink">{fmt(ci, bcp47)} → {fmt(co, bcp47)}</span>
+          {hasRange && <span className="text-muted"> · {nightsCount} {nightsCount === 1 ? dict.units.night : dict.units.nights}</span>}
         </p>
 
         {/* Totale soggiorno (tariffe per periodo, uguali per tutte le camere) */}
@@ -312,11 +318,11 @@ function RoomCard({
             <div className="mt-2 flex items-baseline gap-2">
               <span className="font-serif text-2xl font-normal text-ink">{formatEuro(cost.total)}</span>
               <span className="text-sm text-muted">
-                totale · {formatEuro(cost.avg)}/notte
+                {dict.results.totalWord} · {formatEuro(cost.avg)}{dict.results.perNight}
               </span>
             </div>
           ) : (
-            <p className="mt-2 text-sm font-medium text-ink">Tariffa su richiesta per queste date</p>
+            <p className="mt-2 text-sm font-medium text-ink">{dict.results.rateOnRequest}</p>
           )
         )}
 
@@ -331,7 +337,7 @@ function RoomCard({
               : "cursor-not-allowed bg-black/5 text-muted"
           } ${small ? "h-11" : "h-12"}`}
         >
-          {free ? "Prenota questa camera" : "Seleziona date disponibili"}
+          {free ? dict.results.bookThisRoom : dict.results.selectAvailableDates}
           {free && (
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M13 6l6 6-6 6" />

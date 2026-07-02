@@ -15,7 +15,8 @@ import { getDictionary } from "@/i18n/dictionaries";
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
-  const dict = await getDictionary(isLocale(lang) ? lang : DEFAULT_LOCALE);
+  const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+  const dict = await getDictionary(locale);
 
   return (
     <>
@@ -90,7 +91,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </Reveal>
         </section>
       </main>
-      <Footer />
+      <Footer dict={dict} locale={locale} />
     </>
   );
 }
