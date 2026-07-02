@@ -3,7 +3,7 @@ import BookingBar from "./BookingBar";
 
 export default function Hero() {
   return (
-    <section id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden">
+    <section id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden bg-black">
       {/* Video emozionale full-screen */}
       <video
         className="absolute inset-0 h-full w-full object-cover"

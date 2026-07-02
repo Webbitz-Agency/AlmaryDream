@@ -49,6 +49,18 @@ export default function BookingDateModal({
     }
   }, [open]);
 
+  // Blocco scroll del body + chiusura con Esc mentre il modale è aperto.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+
   const hasBookedBetween = (start: string, end: string) => {
     for (let cur = addDaysIso(start, 1); cur < end; cur = addDaysIso(cur, 1)) {
       if (unavailable.has(cur)) return true;
@@ -82,13 +94,13 @@ export default function BookingDateModal({
   if (!open || !today) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative w-full rounded-t-2xl bg-white p-5 shadow-card sm:w-auto sm:max-w-sm sm:rounded-2xl">
+      <div className="relative max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-white p-5 shadow-card sm:w-auto sm:max-w-sm">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm font-semibold text-ink">
             {step === "checkin" || !checkin ? "Seleziona il check-in" : "Seleziona il check-out"}

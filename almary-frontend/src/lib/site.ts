@@ -35,9 +35,10 @@ export const SITE = {
   cir: "090006C200T5153",
   cin: "090006C2000T153",
 
-  // Hero: video di sfondo + poster (mostrato durante il caricamento del video)
+  // Hero: video di sfondo + poster (fotogramma reale del video, mostrato
+  // durante il caricamento — niente placeholder colorato).
   heroVideo: "/images/hero/videoHero.mp4",
-  heroPoster: "/images/hero/hero.svg",
+  heroPoster: "/images/hero/hero-poster.webp",
 } as const;
 
 /**

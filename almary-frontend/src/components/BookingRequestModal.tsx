@@ -82,14 +82,14 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label="Richiesta di prenotazione"
     >
       <div
-        className="relative max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white p-6 shadow-card sm:max-w-lg sm:rounded-2xl"
+        className="relative max-h-[92vh] w-full overflow-y-auto rounded-2xl bg-white p-6 shadow-card sm:max-w-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <button
