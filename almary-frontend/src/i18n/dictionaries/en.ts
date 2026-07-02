@@ -354,6 +354,25 @@ const en: Dictionary = {
       "This is a placeholder page. Insert here the full Almary Dream privacy policy (data controller, purposes, legal basis, cookies, data subject rights and contact details for exercising those rights).",
     contactLabel: "For information:",
   },
+
+  surround: {
+    experiences: "Experiences",
+    beaches: "The beaches",
+    beachesNote: "Iconic coves and beaches of the Costa Smeralda, all a short distance away.",
+    dining: "Where to eat",
+    diningNote: "Our hand-picked addresses, just minutes from the property.",
+    byCar: "by car",
+    archipelago: "Archipelago · by boat",
+    photoSoon: "Photo coming soon",
+  },
+
+  restaurants: {
+    phi: "Mediterranean cuisine",
+    cue: "Brazilian & Sardinian churrascaria",
+    zuma: "Japanese cuisine",
+    fingers: "Italian-Japanese cuisine",
+    mizuna: "Japanese cuisine",
+  },
 };
 
 export default en;

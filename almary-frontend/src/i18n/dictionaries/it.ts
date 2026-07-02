@@ -359,6 +359,25 @@ const it = {
       "Questa è una pagina segnaposto. Inserire qui l'informativa privacy completa di Almary Dream (titolare del trattamento, finalità, base giuridica, cookie, diritti dell'interessato e contatti per l'esercizio dei diritti).",
     contactLabel: "Per informazioni:",
   },
+
+  surround: {
+    experiences: "Esperienze",
+    beaches: "Le spiagge",
+    beachesNote: "Cale e spiagge iconiche della Costa Smeralda, tutte a breve distanza.",
+    dining: "Dove mangiare",
+    diningNote: "I nostri indirizzi selezionati, a pochi minuti dalla struttura.",
+    byCar: "in auto",
+    archipelago: "Arcipelago · in barca",
+    photoSoon: "Foto in arrivo",
+  },
+
+  restaurants: {
+    phi: "Cucina mediterranea",
+    cue: "Churrascaria brasiliana e sarda",
+    zuma: "Cucina giapponese",
+    fingers: "Cucina italo-giapponese",
+    mizuna: "Cucina giapponese",
+  },
 };
 
 export default it;

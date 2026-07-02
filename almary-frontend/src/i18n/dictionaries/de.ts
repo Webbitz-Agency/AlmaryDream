@@ -354,6 +354,25 @@ const de: Dictionary = {
       "Dies ist eine Platzhalterseite. Fügen Sie hier die vollständige Datenschutzerklärung von Almary Dream ein (Verantwortlicher für die Verarbeitung, Zwecke, Rechtsgrundlage, Cookies, Rechte der betroffenen Person und Kontakt zur Ausübung der Rechte).",
     contactLabel: "Für Informationen:",
   },
+
+  surround: {
+    experiences: "Erlebnisse",
+    beaches: "Die Strände",
+    beachesNote: "Ikonische Buchten und Strände der Costa Smeralda, alle in kurzer Entfernung.",
+    dining: "Wo man isst",
+    diningNote: "Unsere handverlesenen Adressen, nur wenige Minuten von der Unterkunft entfernt.",
+    byCar: "mit dem Auto",
+    archipelago: "Archipel · mit dem Boot",
+    photoSoon: "Foto folgt in Kürze",
+  },
+
+  restaurants: {
+    phi: "Mediterrane Küche",
+    cue: "Brasilianisch-sardische Churrascaria",
+    zuma: "Japanische Küche",
+    fingers: "Italienisch-japanische Küche",
+    mizuna: "Japanische Küche",
+  },
 };
 
 export default de;

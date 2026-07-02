@@ -142,7 +142,6 @@ export type Activity = {
 
 /** Cosa fare nei dintorni di Baja Sardinia (Costa Smeralda) — anche per la SEO locale */
 export const ACTIVITIES: Activity[] = [
-  { slug: "beaches", image: "/images/Dintorni/spiagge_sogno.webp" },
   { slug: "maddalena", image: "/images/Dintorni/arcipelago2.webp" },
   { slug: "boat", image: "/images/Dintorni/cardBarca.webp" },
   { slug: "phi", image: "/images/Dintorni/phi.webp" },
@@ -150,6 +149,43 @@ export const ACTIVITIES: Activity[] = [
   { slug: "portocervo", image: "/images/Dintorni/portocervo2.webp" },
   { slug: "snorkeling", image: "/images/Dintorni/snorkeling.webp" },
   { slug: "trekking", image: "/images/Dintorni/trekking.webp" },
+];
+
+/**
+ * Spiagge nei dintorni (blocco a griglia). Le foto arrivano dopo: finché
+ * `image` è assente si mostra un placeholder. `mode: "archipelago"` per le
+ * spiagge raggiungibili in barca (nessun tempo in auto).
+ */
+export type Beach = {
+  name: string;
+  /** Durata come stringa già pronta, es. "24 min" (vuoto se archipelago). */
+  duration: string;
+  mode: "car" | "archipelago";
+  image?: string;
+};
+
+export const BEACHES: Beach[] = [
+  { name: "Spiaggia del Principe", duration: "24 min", mode: "car" },
+  { name: "Spiaggia del Grande Pevero", duration: "13 min", mode: "car" },
+  { name: "Spiaggia di Capriccioli", duration: "20 min", mode: "car" },
+  { name: "Spiaggia delle Vacche", duration: "1h 10 min", mode: "car" },
+  { name: "Spiaggia Rosa", duration: "", mode: "archipelago" },
+  { name: "Spargi e Budelli", duration: "", mode: "archipelago" },
+];
+
+/** Ristoranti consigliati (lista concierge). Il tipo di cucina è in dict.restaurants[slug]. */
+export type Restaurant = {
+  slug: keyof Dictionary["restaurants"];
+  name: string;
+  duration: string; // es. "11 min"
+};
+
+export const RESTAURANTS: Restaurant[] = [
+  { slug: "phi", name: "Phi Beach", duration: "4 min" },
+  { slug: "cue", name: "CUE Churrascaria", duration: "6 min" },
+  { slug: "zuma", name: "Zuma Porto Cervo", duration: "11 min" },
+  { slug: "fingers", name: "Finger's Porto Cervo", duration: "11 min" },
+  { slug: "mizuna", name: "Mizuna", duration: "18 min" },
 ];
 
 export type GalleryPhoto = {
