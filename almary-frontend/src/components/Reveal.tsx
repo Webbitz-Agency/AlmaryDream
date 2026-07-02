@@ -36,6 +36,9 @@ export default function Reveal({ children, className = "", delay = 0, from = "up
       return;
     }
 
+    // Soglia 0: basta 1px visibile per far comparire il contenuto → molto più
+    // affidabile del vecchio 0.15 (che a volte non scattava, lasciando le foto
+    // della galleria invisibili nel layout a colonne).
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -43,10 +46,25 @@ export default function Reveal({ children, className = "", delay = 0, from = "up
           io.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    // Rete di sicurezza: se poco dopo il mount l'elemento è già dentro lo
+    // schermo ma l'observer non ha fatto comparire nulla, mostralo comunque.
+    // (Gli elementi ancora sotto la piega mantengono la loro animazione.)
+    const failSafe = window.setTimeout(() => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        setShown(true);
+        io.disconnect();
+      }
+    }, 600);
+
+    return () => {
+      io.disconnect();
+      clearTimeout(failSafe);
+    };
   }, []);
 
   return (
