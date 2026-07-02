@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Calendar from "./Calendar";
 import { todayIso, addDaysIso, fmtShort } from "@/lib/dates";
 import { useI18n } from "@/i18n/DictionaryProvider";
 import { LOCALE_META, localizedHref } from "@/i18n/config";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 /**
  * Barra di conversione (Check-in / Check-out / Ospiti / Verifica Disponibilità).
@@ -51,16 +53,15 @@ export default function BookingBar({
       .catch(() => {});
   }, []);
 
-  // Blocco scroll del body + Esc quando il pannello calendario è aperto.
+  // Blocca lo scroll della pagina mentre il pannello è aperto.
+  useScrollLock(open);
+
+  // Esc per chiudere il pannello calendario.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const openPicker = (which: "checkin" | "checkout") => {
@@ -157,8 +158,9 @@ export default function BookingBar({
         </button>
       </form>
 
-      {/* Pannello calendario: sempre centrato, overlay + scroll bloccato */}
-      {open && today && (
+      {/* Pannello calendario: portato su <body> (portal) così è centrato
+          sull'intera finestra e non viene intrappolato da antenati con transform. */}
+      {open && today && createPortal(
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -209,7 +211,8 @@ export default function BookingBar({
               {dict.booking.minStay}{unavailable.size > 0 ? dict.booking.minStayBarred : ""}.
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

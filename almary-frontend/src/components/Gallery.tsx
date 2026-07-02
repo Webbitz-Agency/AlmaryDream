@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { GALLERY } from "@/lib/site";
 import { useI18n } from "@/i18n/DictionaryProvider";
+import { useScrollLock } from "@/lib/useScrollLock";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
@@ -21,6 +22,8 @@ export default function Gallery() {
     []
   );
 
+  useScrollLock(open !== null);
+
   useEffect(() => {
     if (open === null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -29,11 +32,7 @@ export default function Gallery() {
       else if (e.key === "ArrowLeft") move(-1);
     };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open, close, move]);
 
   return (

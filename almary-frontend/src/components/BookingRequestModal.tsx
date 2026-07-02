@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { stayCost, formatEuro } from "@/lib/pricing";
 import { useI18n } from "@/i18n/DictionaryProvider";
 import { LOCALE_META } from "@/i18n/config";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 /** "2026-07-12" → "ven 12 lug" (o equivalente nella lingua corrente). */
 function fmt(isoDate?: string, bcp47 = "it-IT") {
@@ -41,18 +42,17 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Reset alla riapertura + Esc + blocco scroll del body.
+  // Blocca lo scroll della pagina mentre il modale è aperto.
+  useScrollLock(open);
+
+  // Reset alla riapertura + chiusura con Esc.
   useEffect(() => {
     if (!open) return;
     setStatus("idle");
     setErrorMsg("");
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   if (!open) return null;

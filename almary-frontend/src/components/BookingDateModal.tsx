@@ -7,6 +7,7 @@ import Calendar from "./Calendar";
 import { todayIso, addDaysIso, fmtShort } from "@/lib/dates";
 import { useI18n } from "@/i18n/DictionaryProvider";
 import { LOCALE_META, localizedHref } from "@/i18n/config";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 /**
  * Modale calendario condiviso: scegli check-in/check-out e vieni portato alla
@@ -53,16 +54,15 @@ export default function BookingDateModal({
     }
   }, [open]);
 
-  // Blocco scroll del body + chiusura con Esc mentre il modale è aperto.
+  // Blocca lo scroll della pagina mentre il modale è aperto.
+  useScrollLock(open);
+
+  // Chiusura con Esc.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   const hasBookedBetween = (start: string, end: string) => {
