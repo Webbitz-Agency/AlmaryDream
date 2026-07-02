@@ -165,12 +165,12 @@ export type Beach = {
 };
 
 export const BEACHES: Beach[] = [
-  { name: "Spiaggia del Principe", duration: "24 min", mode: "car" },
-  { name: "Spiaggia del Grande Pevero", duration: "13 min", mode: "car" },
-  { name: "Spiaggia di Capriccioli", duration: "20 min", mode: "car" },
-  { name: "Spiaggia delle Vacche", duration: "1h 10 min", mode: "car" },
-  { name: "Spiaggia Rosa", duration: "", mode: "archipelago" },
-  { name: "Spargi e Budelli", duration: "", mode: "archipelago" },
+  { name: "Spiaggia del Principe", duration: "24 min", mode: "car", image: "/images/Spiagge/principe.webp" },
+  { name: "Spiaggia del Grande Pevero", duration: "13 min", mode: "car", image: "/images/Spiagge/pevero.webp" },
+  { name: "Spiaggia di Capriccioli", duration: "20 min", mode: "car", image: "/images/Spiagge/capriccioli.webp" },
+  { name: "Spiaggia delle Vacche", duration: "1h 10 min", mode: "car", image: "/images/Spiagge/vacche.webp" },
+  { name: "Spiaggia Rosa", duration: "", mode: "archipelago", image: "/images/Spiagge/rosa.webp" },
+  { name: "Spargi e Budelli", duration: "", mode: "archipelago", image: "/images/Spiagge/spargi-budelli.webp" },
 ];
 
 /** Ristoranti consigliati (lista concierge). Il tipo di cucina è in dict.restaurants[slug]. */
