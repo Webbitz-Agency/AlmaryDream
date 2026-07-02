@@ -194,26 +194,28 @@ export default function Surroundings() {
       <div className="relative mx-auto mt-16 max-w-7xl px-5 lg:mt-24 lg:px-8">
         <Reveal>
           <BlockHeading label={dict.surround.dining} note={dict.surround.diningNote} />
-          <ul className="grid gap-3 sm:grid-cols-2 lg:gap-4">
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {RESTAURANTS.map((r) => (
-              <li
-                key={r.slug}
-                className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.06] p-3 pr-5 transition-colors hover:border-white/25"
-              >
-                <Image
-                  src={r.image}
-                  alt={r.name}
-                  width={120}
-                  height={120}
-                  className="h-16 w-16 shrink-0 rounded-lg object-cover"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="font-serif text-lg font-normal text-white">{r.name}</p>
-                  <p className="mt-0.5 text-sm text-white/65">{dict.restaurants[r.slug]}</p>
+              <li key={r.slug}>
+                <div className="group h-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] shadow-soft transition-all duration-500 hover:-translate-y-1 hover:border-white/25 hover:shadow-2xl">
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={r.image}
+                      alt={r.name}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                    <span className="absolute right-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                      {r.duration} {dict.surround.byCar}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-serif text-xl font-normal leading-tight text-white">{r.name}</h4>
+                    <p className="mt-1 text-sm text-white/70">{dict.restaurants[r.slug]}</p>
+                  </div>
                 </div>
-                <span className="shrink-0 whitespace-nowrap rounded-full border border-white/20 px-3 py-1 text-xs font-medium text-accent">
-                  {r.duration} {dict.surround.byCar}
-                </span>
               </li>
             ))}
           </ul>
