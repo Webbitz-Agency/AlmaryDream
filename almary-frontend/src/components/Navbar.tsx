@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { NAV_LINKS, SITE } from "@/lib/site";
+import { SITE } from "@/lib/site";
+import { NAV_ITEMS, localizedHref } from "@/i18n/config";
+import { useI18n } from "@/i18n/DictionaryProvider";
 import BookingDateModal from "./BookingDateModal";
 
 export default function Navbar() {
+  const { dict, locale } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [datesOpen, setDatesOpen] = useState(false);
@@ -73,15 +76,15 @@ export default function Navbar() {
 
         {/* Link desktop */}
         <ul className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.key}>
               <a
-                href={link.href}
+                href={localizedHref(item.href, locale)}
                 className={`text-sm font-medium transition-colors hover:text-accent ${
                   solid ? "text-ink" : "text-white/90"
                 }`}
               >
-                {link.label}
+                {dict.nav[item.key]}
               </a>
             </li>
           ))}
@@ -93,7 +96,7 @@ export default function Navbar() {
           onClick={() => setDatesOpen(true)}
           className="hidden h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary lg:inline-flex"
         >
-          Prenota Ora
+          {dict.cta.book}
         </button>
 
         {/* Hamburger mobile */}
@@ -122,14 +125,14 @@ export default function Navbar() {
         }`}
       >
         <ul className="flex flex-col px-5 py-4">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.key}>
               <a
-                href={link.href}
+                href={localizedHref(item.href, locale)}
                 onClick={() => setOpen(false)}
                 className="block py-3 text-base font-medium text-ink"
               >
-                {link.label}
+                {dict.nav[item.key]}
               </a>
             </li>
           ))}
@@ -142,7 +145,7 @@ export default function Navbar() {
               }}
               className="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-sm font-semibold text-white"
             >
-              Prenota Ora
+              {dict.cta.book}
             </button>
           </li>
         </ul>
