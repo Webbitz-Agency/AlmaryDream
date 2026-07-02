@@ -73,6 +73,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               </div>
 
               <p className="mt-7 text-sm text-white/70">
+                {dict.finalCta.orCall}{" "}
+                <a href={SITE.phoneHref} className="font-semibold text-accent hover:underline">
+                  {SITE.phone}
+                </a>{" "}
                 {dict.finalCta.orWrite}{" "}
                 <a
                   href={bookingHref("Ciao Almary Dream! Vorrei verificare la disponibilità e prenotare.")}
@@ -81,10 +85,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                   className="font-semibold text-accent hover:underline"
                 >
                   WhatsApp
-                </a>{" "}
-                {dict.finalCta.orCall}{" "}
-                <a href={SITE.phoneHref} className="font-semibold text-accent hover:underline">
-                  {SITE.phone}
                 </a>
               </p>
             </div>

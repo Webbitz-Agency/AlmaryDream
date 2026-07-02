@@ -132,7 +132,7 @@ const en: Dictionary = {
     smeraldo: {
       name: "Smeraldo Room",
       description:
-        "An elegant blend of freshness and comfort, enhanced by its Tiffany-toned wall. On the ground floor, with an open wardrobe.",
+        "An elegant blend of freshness and comfort, enhanced by its Tiffany-toned wall, with an open wardrobe.",
     },
   },
 
@@ -245,8 +245,8 @@ const en: Dictionary = {
       "* On arrival, guests will pay a €300 deposit, fully refunded at check-out barring any damage to the property.",
     note2:
       "** At check-out, on site, the tourist tax is due as required by current regulations.",
-    orWrite: "Or write to us on",
-    orCall: "· call",
+    orCall: "Call",
+    orWrite: "or write to us on",
   },
 
   common: {

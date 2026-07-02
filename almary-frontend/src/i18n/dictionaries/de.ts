@@ -70,7 +70,7 @@ const de: Dictionary = {
       eyebrow: "Bewertungen",
       titleA: "Was man ",
       titleEm: "über uns",
-      titleB: " denkt",
+      titleB: " sagt",
       badge: "Ausgezeichnet",
     },
   },
@@ -132,7 +132,7 @@ const de: Dictionary = {
     smeraldo: {
       name: "Zimmer Smeraldo",
       description:
-        "Eine elegante Verbindung aus Frische und Komfort, veredelt durch die Wand in Tiffany-Farbe. Im Erdgeschoss, mit offenem Kleiderschrank.",
+        "Eine elegante Verbindung aus Frische und Komfort, veredelt durch die Wand in Tiffany-Farbe, mit offenem Kleiderschrank.",
     },
   },
 
@@ -245,8 +245,8 @@ const de: Dictionary = {
       "* Bei der Ankunft hinterlegen die Gäste eine Kaution von 300 €, die beim Check-out vollständig zurückerstattet wird, sofern keine Schäden an der Unterkunft entstanden sind.",
     note2:
       "** Beim Check-out ist in der Unterkunft die Kurtaxe gemäß den geltenden Vorschriften zu entrichten.",
-    orWrite: "Oder schreiben Sie uns auf",
-    orCall: "· anrufen",
+    orCall: "Rufen Sie uns an unter",
+    orWrite: "oder schreiben Sie uns auf",
   },
 
   common: {

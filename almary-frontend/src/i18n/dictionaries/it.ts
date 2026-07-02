@@ -73,7 +73,7 @@ const it = {
     },
     reviews: {
       eyebrow: "Recensioni",
-      titleA: "Cosa pensano ",
+      titleA: "Cosa dicono ",
       titleEm: "di noi",
       titleB: "",
       badge: "Eccellente",
@@ -101,7 +101,7 @@ const it = {
     boat: {
       title: "Mare & esperienze",
       description:
-        "Giri in barca, tour guidati, noleggio barche e auto: organizziamo per te le esperienze più belle della Costa Smeralda.",
+        "Gite in barca, tour guidati, noleggio barche e auto: organizziamo per te le esperienze più belle della Costa Smeralda.",
     },
   },
 
@@ -137,7 +137,7 @@ const it = {
     smeraldo: {
       name: "Camera Smeraldo",
       description:
-        "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany. Al piano terra, con guardaroba a vista.",
+        "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany, con guardaroba a vista.",
     },
   },
 
@@ -152,7 +152,7 @@ const it = {
     },
     boat: {
       title: "In barca sulla Costa Smeralda",
-      description: "Giri in barca, tour guidati e noleggio: naviga tra cale nascoste e acque turchesi. Organizziamo noi l'esperienza in mare più adatta a te.",
+      description: "Gite in barca, tour guidati e noleggio: naviga tra cale nascoste e acque turchesi. Organizziamo noi l'esperienza in mare più adatta a te.",
     },
     phi: {
       title: "Phi Beach & aperitivi al tramonto",
@@ -250,8 +250,8 @@ const it = {
       "* All'arrivo gli ospiti verseranno una cauzione di €300, interamente restituita al check-out salvo eventuali danni alla struttura.",
     note2:
       "** Al check-out, in struttura, è dovuta la tassa di soggiorno come previsto dalle normative vigenti.",
-    orWrite: "Oppure scrivici su",
-    orCall: "· chiama",
+    orCall: "Chiama",
+    orWrite: "oppure scrivici su",
   },
 
   common: {
