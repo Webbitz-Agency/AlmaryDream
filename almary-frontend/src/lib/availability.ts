@@ -110,8 +110,8 @@ async function fetchRoomUnavailable(slug: string): Promise<string[]> {
 
   const results = await Promise.allSettled(
     feeds.map(async (url) => {
-      // Cache lato Next: ogni feed viene riletto al massimo ogni ora.
-      const res = await fetch(url, { next: { revalidate: 3600 } });
+      // Cache lato Next: ogni feed viene riletto al massimo ogni 15 minuti.
+      const res = await fetch(url, { next: { revalidate: 900 } });
       if (!res.ok) throw new Error(`Feed ${url} → HTTP ${res.status}`);
       return parseIcs(await res.text());
     })

@@ -9,15 +9,15 @@ import { fetchAvailability } from "@/lib/availability";
  *   }
  *
  * Le camere senza feed risultano sempre disponibili.
- * I singoli feed sono cache-ati 1h (vedi fetchAvailability).
+ * I singoli feed sono cache-ati 15 minuti (vedi fetchAvailability).
  */
 export async function GET() {
   try {
     const data = await fetchAvailability();
     return Response.json(data, {
       headers: {
-        // Cache CDN: 1h fresca + 1h stale-while-revalidate.
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=3600",
+        // Cache CDN: 15 min fresca + 15 min stale-while-revalidate.
+        "Cache-Control": "public, s-maxage=900, stale-while-revalidate=900",
       },
     });
   } catch {
