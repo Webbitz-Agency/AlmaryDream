@@ -11,6 +11,7 @@
  */
 
 import { SITE } from "./site";
+import type { Locale } from "@/i18n/config";
 
 export type BookingData = {
   room: string;
@@ -23,6 +24,110 @@ export type BookingData = {
   message: string;
   /** Totale stimato del soggiorno (numero come stringa, es. "990"); "" se su richiesta. */
   priceTotal?: string;
+  /** Lingua dell'ospite (per la mail di conferma). Default "it". */
+  lang?: Locale;
+};
+
+/* ── Traduzioni email (ospite + etichette riepilogo condivise) ────────────── */
+
+type EmailT = {
+  bcp47: string;
+  // riepilogo condiviso
+  room: string;
+  checkin: string;
+  checkout: string;
+  nights: string;
+  guests: string;
+  estimatedTotal: string;
+  night: string;
+  nightsWord: string;
+  rights: string;
+  // email ospite
+  subject: string; // {site}
+  preheader: string;
+  eyebrow: string;
+  title: string;
+  greeting: string; // {name}
+  introBody: string; // {site}
+  note: string;
+  whatsappBtn: string;
+  textSummaryHeading: string;
+  textNote: string;
+};
+
+const EMAIL_T: Record<Locale, EmailT> = {
+  it: {
+    bcp47: "it-IT",
+    room: "Camera",
+    checkin: "Check-in",
+    checkout: "Check-out",
+    nights: "Notti",
+    guests: "Ospiti",
+    estimatedTotal: "Totale stimato",
+    night: "notte",
+    nightsWord: "notti",
+    rights: "Tutti i diritti riservati",
+    subject: "Abbiamo ricevuto la tua richiesta — {site}",
+    preheader: "Abbiamo ricevuto la tua richiesta: ti rispondiamo entro 24 ore.",
+    eyebrow: "Richiesta ricevuta",
+    title: "Grazie, sarai contattato a breve",
+    greeting: "Ciao {name},",
+    introBody:
+      "grazie per aver scelto {site}. Abbiamo ricevuto la tua richiesta di prenotazione e ti risponderemo entro 24 ore per confermare la disponibilità e i dettagli del soggiorno.",
+    note:
+      "Nessun pagamento è richiesto ora: questa è solo una richiesta. Per qualsiasi necessità puoi rispondere direttamente a questa email o contattarci ai recapiti qui sotto.",
+    whatsappBtn: "Scrivici su WhatsApp",
+    textSummaryHeading: "RIEPILOGO RICHIESTA",
+    textNote: "Nessun pagamento è richiesto ora: questa è solo una richiesta.",
+  },
+  en: {
+    bcp47: "en-GB",
+    room: "Room",
+    checkin: "Check-in",
+    checkout: "Check-out",
+    nights: "Nights",
+    guests: "Guests",
+    estimatedTotal: "Estimated total",
+    night: "night",
+    nightsWord: "nights",
+    rights: "All rights reserved",
+    subject: "We have received your request — {site}",
+    preheader: "We have received your request: we'll reply within 24 hours.",
+    eyebrow: "Request received",
+    title: "Thank you, we'll be in touch shortly",
+    greeting: "Hi {name},",
+    introBody:
+      "thank you for choosing {site}. We have received your booking request and will reply within 24 hours to confirm availability and the details of your stay.",
+    note:
+      "No payment is required now: this is only a request. For anything you need, you can reply directly to this email or contact us using the details below.",
+    whatsappBtn: "Message us on WhatsApp",
+    textSummaryHeading: "REQUEST SUMMARY",
+    textNote: "No payment is required now: this is only a request.",
+  },
+  de: {
+    bcp47: "de-DE",
+    room: "Zimmer",
+    checkin: "Check-in",
+    checkout: "Check-out",
+    nights: "Nächte",
+    guests: "Gäste",
+    estimatedTotal: "Geschätzter Gesamtpreis",
+    night: "Nacht",
+    nightsWord: "Nächte",
+    rights: "Alle Rechte vorbehalten",
+    subject: "Wir haben Ihre Anfrage erhalten — {site}",
+    preheader: "Wir haben Ihre Anfrage erhalten: Wir antworten innerhalb von 24 Stunden.",
+    eyebrow: "Anfrage erhalten",
+    title: "Vielen Dank, wir melden uns in Kürze",
+    greeting: "Hallo {name},",
+    introBody:
+      "vielen Dank, dass Sie sich für {site} entschieden haben. Wir haben Ihre Buchungsanfrage erhalten und melden uns innerhalb von 24 Stunden, um die Verfügbarkeit und die Details Ihres Aufenthalts zu bestätigen.",
+    note:
+      "Es ist jetzt keine Zahlung erforderlich: Dies ist nur eine Anfrage. Bei Fragen können Sie direkt auf diese E-Mail antworten oder uns über die untenstehenden Kontaktdaten erreichen.",
+    whatsappBtn: "Schreiben Sie uns auf WhatsApp",
+    textSummaryHeading: "ANFRAGE-ÜBERSICHT",
+    textNote: "Es ist jetzt keine Zahlung erforderlich: Dies ist nur eine Anfrage.",
+  },
 };
 
 /* ── Palette ──────────────────────────────────────────────────────────────── */
@@ -43,11 +148,11 @@ const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 
-/** "2026-07-12" → "ven 12 lug 2026" */
-function fmtDate(iso?: string): string {
+/** "2026-07-12" → "ven 12 lug 2026" (o equivalente nella lingua richiesta). */
+function fmtDate(iso?: string, bcp47 = "it-IT"): string {
   if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "—";
   const [y, m, d] = iso.split("-").map(Number);
-  return new Intl.DateTimeFormat("it-IT", {
+  return new Intl.DateTimeFormat(bcp47, {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -89,6 +194,7 @@ type LayoutOpts = {
   title: string;
   intro: string; // HTML
   bodyHtml: string; // HTML aggiuntivo (box, bottoni…)
+  rights: string; // testo "diritti riservati" nel footer
 };
 
 function layout(o: LayoutOpts): string {
@@ -142,7 +248,7 @@ function layout(o: LayoutOpts): string {
               &nbsp;·&nbsp;
               <a href="mailto:${SITE.email}" style="color:#c9d6d0;text-decoration:none;">${esc(SITE.email)}</a>
             </p>
-            <p style="margin:18px 0 0;font-family:${SANS};font-size:11px;color:#7f998d;">© ${year} ${esc(SITE.name)}. Tutti i diritti riservati.</p>
+            <p style="margin:18px 0 0;font-family:${SANS};font-size:11px;color:#7f998d;">© ${year} ${esc(SITE.name)}. ${esc(o.rights)}.</p>
           </td>
         </tr>
 
@@ -156,20 +262,20 @@ function layout(o: LayoutOpts): string {
 
 /* ── Box riepilogo richiesta (condiviso) ──────────────────────────────────── */
 
-function summaryBox(d: BookingData): string {
+function summaryBox(d: BookingData, t: EmailT): string {
   const n = nightsBetween(d.checkin, d.checkout);
-  const nightsLabel = n > 0 ? `${n} ${n === 1 ? "notte" : "notti"}` : "—";
+  const nightsLabel = n > 0 ? `${n} ${n === 1 ? t.night : t.nightsWord}` : "—";
   const total = d.priceTotal ? Number(d.priceTotal) : 0;
-  const totalRow = total > 0 ? summaryRow("Totale stimato", `€${total.toLocaleString("it-IT")}`, true) : "";
+  const totalRow = total > 0 ? summaryRow(t.estimatedTotal, `€${total.toLocaleString(t.bcp47)}`, true) : "";
   return `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${C.offwhite};border:1px solid ${C.border};border-radius:14px;">
       <tr><td style="padding:6px 22px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${summaryRow("Camera", d.room || "—")}
-          ${summaryRow("Check-in", fmtDate(d.checkin))}
-          ${summaryRow("Check-out", fmtDate(d.checkout))}
-          ${summaryRow("Notti", nightsLabel)}
-          ${summaryRow("Ospiti", d.guests || "—", !totalRow)}
+          ${summaryRow(t.room, d.room || "—")}
+          ${summaryRow(t.checkin, fmtDate(d.checkin, t.bcp47))}
+          ${summaryRow(t.checkout, fmtDate(d.checkout, t.bcp47))}
+          ${summaryRow(t.nights, nightsLabel)}
+          ${summaryRow(t.guests, d.guests || "—", !totalRow)}
           ${totalRow}
         </table>
       </td></tr>
@@ -212,46 +318,48 @@ function button(label: string, href: string): string {
 
 /* ── Versioni testo (fallback) ────────────────────────────────────────────── */
 
-function summaryText(d: BookingData): string {
+function summaryText(d: BookingData, t: EmailT): string {
   const n = nightsBetween(d.checkin, d.checkout);
   const total = d.priceTotal ? Number(d.priceTotal) : 0;
   return (
-    `Camera:    ${d.room || "—"}\n` +
-    `Check-in:  ${fmtDate(d.checkin)}\n` +
-    `Check-out: ${fmtDate(d.checkout)}\n` +
-    `Notti:     ${n > 0 ? n : "—"}\n` +
-    `Ospiti:    ${d.guests || "—"}\n` +
-    (total > 0 ? `Totale:    €${total.toLocaleString("it-IT")}\n` : "")
+    `${t.room}: ${d.room || "—"}\n` +
+    `${t.checkin}: ${fmtDate(d.checkin, t.bcp47)}\n` +
+    `${t.checkout}: ${fmtDate(d.checkout, t.bcp47)}\n` +
+    `${t.nights}: ${n > 0 ? n : "—"}\n` +
+    `${t.guests}: ${d.guests || "—"}\n` +
+    (total > 0 ? `${t.estimatedTotal}: €${total.toLocaleString(t.bcp47)}\n` : "")
   );
 }
 
 /* ── Template 1 — email all'OSPITE (ringraziamento) ───────────────────────── */
 
 export function guestEmail(d: BookingData, logoUrl: string) {
+  const t = EMAIL_T[d.lang ?? "it"] ?? EMAIL_T.it;
   const firstName = (d.name || "").split(" ")[0] || "";
-  const subject = `Abbiamo ricevuto la tua richiesta — ${SITE.name}`;
+  const subject = t.subject.replace("{site}", SITE.name);
   const intro =
-    `<p style="margin:0 0 14px;">Ciao ${esc(firstName)},</p>` +
-    `<p style="margin:0;">grazie per aver scelto <strong>${esc(SITE.name)}</strong>. Abbiamo ricevuto la tua richiesta di prenotazione e ti risponderemo <strong>entro 24 ore</strong> per confermare la disponibilità e i dettagli del soggiorno.</p>`;
+    `<p style="margin:0 0 14px;">${esc(t.greeting.replace("{name}", firstName))}</p>` +
+    `<p style="margin:0;">${t.introBody.replace("{site}", `<strong>${esc(SITE.name)}</strong>`)}</p>`;
   const bodyHtml =
-    summaryBox(d) +
-    `<p style="margin:20px 0 0;font-family:${SANS};font-size:14px;line-height:1.6;color:${C.muted};">Nessun pagamento è richiesto ora: questa è solo una richiesta. Per qualsiasi necessità puoi rispondere direttamente a questa email o contattarci ai recapiti qui sotto.</p>` +
-    button("Scrivici su WhatsApp", SITE.whatsapp);
+    summaryBox(d, t) +
+    `<p style="margin:20px 0 0;font-family:${SANS};font-size:14px;line-height:1.6;color:${C.muted};">${esc(t.note)}</p>` +
+    button(t.whatsappBtn, SITE.whatsapp);
 
   const html = layout({
     logoUrl,
-    preheader: "Abbiamo ricevuto la tua richiesta: ti rispondiamo entro 24 ore.",
-    eyebrow: "Richiesta ricevuta",
-    title: "Grazie, sarai contattato a breve",
+    preheader: t.preheader,
+    eyebrow: t.eyebrow,
+    title: esc(t.title),
     intro,
     bodyHtml,
+    rights: t.rights,
   });
 
   const text =
-    `Ciao ${firstName},\n\n` +
-    `grazie per aver scelto ${SITE.name}. Abbiamo ricevuto la tua richiesta di prenotazione e ti risponderemo entro 24 ore.\n\n` +
-    `RIEPILOGO RICHIESTA\n${summaryText(d)}\n` +
-    `Nessun pagamento è richiesto ora: questa è solo una richiesta.\n\n` +
+    `${t.greeting.replace("{name}", firstName)}\n\n` +
+    `${t.introBody.replace("{site}", SITE.name)}\n\n` +
+    `${t.textSummaryHeading}\n${summaryText(d, t)}\n` +
+    `${t.textNote}\n\n` +
     `${SITE.name} · ${SITE.tagline} · ${SITE.location}\n` +
     `${SITE.phone} · ${SITE.email}\n`;
 
@@ -265,7 +373,7 @@ export function hostEmail(d: BookingData, logoUrl: string) {
   const intro =
     `<p style="margin:0;">È arrivata una <strong>nuova richiesta di prenotazione</strong> dal sito. Di seguito tutti i dettagli. Rispondi all'ospite entro 24 ore.</p>`;
   const bodyHtml =
-    summaryBox(d) +
+    summaryBox(d, EMAIL_T.it) +
     guestContactBox(d) +
     button("Rispondi all'ospite", `mailto:${d.email}?subject=${encodeURIComponent("Re: la tua richiesta — " + SITE.name)}`);
 
@@ -276,11 +384,12 @@ export function hostEmail(d: BookingData, logoUrl: string) {
     title: "Hai una nuova richiesta di prenotazione",
     intro,
     bodyHtml,
+    rights: EMAIL_T.it.rights,
   });
 
   const text =
     `NUOVA RICHIESTA DI PRENOTAZIONE\n\n` +
-    `RIEPILOGO\n${summaryText(d)}\n` +
+    `RIEPILOGO\n${summaryText(d, EMAIL_T.it)}\n` +
     `CONTATTI OSPITE\n` +
     `Nome:     ${d.name}\n` +
     `Email:    ${d.email}\n` +

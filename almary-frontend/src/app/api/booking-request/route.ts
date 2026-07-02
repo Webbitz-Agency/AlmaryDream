@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { guestEmail, hostEmail, type BookingData } from "@/lib/emailTemplates";
 import { SITE } from "@/lib/site";
+import { isLocale } from "@/i18n/config";
 
 /**
  * POST /api/booking-request
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
     guests: String(data.guests ?? "—"),
     message: String(data.message ?? "").trim() || "—",
     priceTotal: /^\d+$/.test(String(data.priceTotal ?? "")) ? String(data.priceTotal) : "",
+    lang: isLocale(String(data.lang ?? "")) ? (String(data.lang) as BookingData["lang"]) : "it",
   };
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;
