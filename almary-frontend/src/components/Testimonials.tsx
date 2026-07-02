@@ -52,8 +52,21 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 
   useEffect(() => {
     const el = quoteRef.current;
-    if (el) setClamped(el.scrollHeight > el.clientHeight + 1);
-  }, []);
+    if (!el || expanded) return; // misura solo con line-clamp attivo
+    const measure = () => setClamped(el.scrollHeight > el.clientHeight + 1);
+    measure();
+    const raf = requestAnimationFrame(measure);
+    // I font caricano dopo il primo render e cambiano il numero di righe → rimisura.
+    if (typeof document !== "undefined" && "fonts" in document) {
+      document.fonts.ready.then(measure).catch(() => {});
+    }
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, [expanded]);
 
   return (
     <figure className="flex h-full flex-col rounded-xl border border-black/5 bg-white p-6 shadow-soft">
