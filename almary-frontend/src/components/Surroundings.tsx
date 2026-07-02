@@ -3,10 +3,12 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { ACTIVITIES } from "@/lib/site";
+import { useI18n } from "@/i18n/DictionaryProvider";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
 export default function Surroundings() {
+  const { dict } = useI18n();
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const total = ACTIVITIES.length;
@@ -55,15 +57,14 @@ export default function Surroundings() {
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <p className="eyebrow shrink-0 !text-white">Nei dintorni</p>
+            <p className="eyebrow shrink-0 !text-white">{dict.sections.surroundings.eyebrow}</p>
             <HeaderLine className="from-white/60 via-white/30 to-transparent" />
           </div>
           <h2 className="mt-3 max-w-2xl font-serif text-4xl font-normal leading-tight tracking-tightest text-white sm:text-5xl">
-            Cosa fare a <em className="italic text-accent">Baja Sardinia</em>
+            {dict.sections.surroundings.titleA}<em className="italic text-accent">{dict.sections.surroundings.titleEm}</em>{dict.sections.surroundings.titleB}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/80">
-            Nel cuore della Costa Smeralda, Almary Dream è il punto di partenza ideale per spiagge
-            paradisiache, gite in barca e serate indimenticabili sul mare.
+            {dict.sections.surroundings.subtitle}
           </p>
         </Reveal>
       </div>
@@ -107,7 +108,7 @@ export default function Surroundings() {
           className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-[6%] pb-2 sm:gap-6 sm:px-[16%] lg:px-[15%] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {ACTIVITIES.map((activity, i) => (
-            <div key={activity.title} className="w-[88%] shrink-0 snap-center sm:w-[68%] lg:w-[70%]">
+            <div key={activity.slug} className="w-[88%] shrink-0 snap-center sm:w-[68%] lg:w-[70%]">
               <div
                 className={`group relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/15 shadow-soft transition-all duration-500 ${
                   i === index ? "scale-100 opacity-100" : "scale-[0.92] opacity-60"
@@ -116,7 +117,7 @@ export default function Surroundings() {
                 {/* Foto a tutta card */}
                 <Image
                   src={activity.image}
-                  alt={activity.title}
+                  alt={dict.activities[activity.slug].title}
                   fill
                   sizes="(min-width: 1024px) 70vw, (min-width: 640px) 68vw, 88vw"
                   className="object-cover brightness-110 saturate-[1.05] transition-transform duration-700 ease-out group-hover:scale-105"
@@ -125,8 +126,8 @@ export default function Surroundings() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                 {/* Testo bianco in basso */}
                 <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
-                  <h3 className="font-serif text-2xl font-normal text-white sm:text-3xl">{activity.title}</h3>
-                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">{activity.description}</p>
+                  <h3 className="font-serif text-2xl font-normal text-white sm:text-3xl">{dict.activities[activity.slug].title}</h3>
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">{dict.activities[activity.slug].description}</p>
                 </div>
               </div>
             </div>

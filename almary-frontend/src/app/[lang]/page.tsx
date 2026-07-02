@@ -10,13 +10,18 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SardiniaShape from "@/components/SardiniaShape";
 import { bookingHref, SITE } from "@/lib/site";
+import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const dict = await getDictionary(isLocale(lang) ? lang : DEFAULT_LOCALE);
+
   return (
     <>
       <Navbar />
       <main>
-        <Hero />
+        <Hero dict={dict} />
 
         {/* Intro / descrizione struttura */}
         <section id="struttura" className="relative overflow-hidden bg-white py-24 lg:py-40">
@@ -24,22 +29,18 @@ export default function Home() {
           <SardiniaShape className="pointer-events-none absolute left-1/2 top-1/2 h-[28rem] -translate-x-1/2 -translate-y-1/2 text-primary/15 lg:h-[36rem]" />
 
           <Reveal className="relative mx-auto max-w-2xl px-5 text-center lg:px-8">
-            <p className="eyebrow">Il B&amp;B</p>
+            <p className="eyebrow">{dict.intro.eyebrow}</p>
             <h2 className="mt-3 font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-              Rilassati nel cuore della <em className="italic text-primary">Costa Smeralda</em>
+              {dict.intro.titleA}<em className="italic text-primary">{dict.intro.titleEm}</em>{dict.intro.titleB}
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-muted">
-              Almary Dream è un boutique B&amp;B di lusso a soli 100 metri da Baja Sardinia,
-              a tre minuti a piedi da Cala Battistoni. Tre camere esclusive, una luminosa
-              area colazione e una zona relax esterna con gazebo: ogni dettaglio è pensato
-              per regalarti freschezza, comfort ed eleganza, alimentato da energia
-              interamente green.
+              {dict.intro.body}
             </p>
           </Reveal>
         </section>
 
-        <Rooms />
-        <Features />
+        <Rooms dict={dict} />
+        <Features dict={dict} />
         <Gallery />
         <Surroundings />
         <Testimonials />
@@ -51,13 +52,12 @@ export default function Home() {
             <div className="pointer-events-none absolute -top-12 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
 
             <div className="relative mx-auto max-w-3xl">
-              <p className="eyebrow !text-white">Almary Dream</p>
+              <p className="eyebrow !text-white">{dict.finalCta.eyebrow}</p>
               <h2 className="mx-auto mt-4 font-serif text-4xl font-normal leading-tight tracking-tightest text-white sm:text-5xl lg:text-6xl">
-                Il tuo risveglio sul mare ti <em className="italic text-accent">aspetta</em>
+                {dict.finalCta.titleA}<em className="italic text-accent">{dict.finalCta.titleEm}</em>{dict.finalCta.titleB}
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-white/80">
-                Prenotazione diretta, semplice e sicura: scegli le date e verifica subito la
-                disponibilità del tuo soggiorno in Costa Smeralda.
+                {dict.finalCta.subtitle}
               </p>
 
               {/* Verifica disponibilità — come la sezione di prenotazione */}
@@ -67,18 +67,12 @@ export default function Home() {
 
               {/* Note cauzione / tassa di soggiorno */}
               <div className="mx-auto mt-5 max-w-2xl space-y-1.5 text-left text-xs leading-relaxed text-white/65">
-                <p>
-                  * All&apos;arrivo gli ospiti verseranno una cauzione di €300, interamente
-                  restituita al check-out salvo eventuali danni alla struttura.
-                </p>
-                <p>
-                  ** Al check-out, in struttura, è dovuta la tassa di soggiorno come previsto
-                  dalle normative vigenti.
-                </p>
+                <p>{dict.finalCta.note1}</p>
+                <p>{dict.finalCta.note2}</p>
               </div>
 
               <p className="mt-7 text-sm text-white/70">
-                Oppure scrivici su{" "}
+                {dict.finalCta.orWrite}{" "}
                 <a
                   href={bookingHref("Ciao Almary Dream! Vorrei verificare la disponibilità e prenotare.")}
                   target="_blank"
@@ -87,7 +81,7 @@ export default function Home() {
                 >
                   WhatsApp
                 </a>{" "}
-                · chiama{" "}
+                {dict.finalCta.orCall}{" "}
                 <a href={SITE.phoneHref} className="font-semibold text-accent hover:underline">
                   {SITE.phone}
                 </a>

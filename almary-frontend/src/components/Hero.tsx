@@ -1,7 +1,8 @@
 import { SITE } from "@/lib/site";
+import type { Dictionary } from "@/i18n/dictionaries/it";
 import BookingBar from "./BookingBar";
 
-export default function Hero() {
+export default function Hero({ dict }: { dict: Dictionary }) {
   return (
     <section id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden bg-black">
       {/* Video emozionale full-screen */}
@@ -25,13 +26,12 @@ export default function Hero() {
       <div className="relative z-10 flex flex-1 flex-col">
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 pt-28 lg:px-8 lg:pt-32">
           <div className="max-w-2xl animate-fade-up">
-            <p className="eyebrow !text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">Almary Dream · Luxury B&B · Costa Smeralda</p>
+            <p className="eyebrow !text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">{dict.hero.eyebrow}</p>
             <h1 className="mt-4 font-serif text-[2.75rem] font-normal leading-[1.05] tracking-tightest text-white sm:text-6xl lg:text-7xl">
-              Un respiro di <em className="italic text-accent">eleganza</em> sul mare
+              {dict.hero.titleA}<em className="italic text-accent">{dict.hero.titleEm}</em>{dict.hero.titleB}
             </h1>
             <p className="mt-6 max-w-xl text-base text-white/85 sm:text-lg">
-              Il tuo rifugio intimo a soli 100 metri dalle acque di Baja Sardinia.
-              Tre camere esclusive di design, dove ogni risveglio profuma di mare.
+              {dict.hero.subtitle}
             </p>
           </div>
         </div>

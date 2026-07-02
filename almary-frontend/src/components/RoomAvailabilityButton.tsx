@@ -10,9 +10,11 @@ import BookingDateModal from "./BookingDateModal";
 export default function RoomAvailabilityButton({
   guests = "2",
   className = "",
+  label = "Verifica disponibilità",
 }: {
   guests?: string;
   className?: string;
+  label?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -23,7 +25,7 @@ export default function RoomAvailabilityButton({
         onClick={() => setOpen(true)}
         className={`mt-8 inline-flex h-12 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary ${className}`}
       >
-        Verifica disponibilità
+        {label}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>

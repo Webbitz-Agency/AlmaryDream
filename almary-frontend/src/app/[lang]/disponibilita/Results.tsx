@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ROOMS, type Room } from "@/lib/site";
+import { useI18n } from "@/i18n/DictionaryProvider";
 import { stayCost, formatEuro } from "@/lib/pricing";
 import Calendar from "@/components/Calendar";
 import BookingBar from "@/components/BookingBar";
@@ -208,6 +209,10 @@ function RoomCard({
   /** Versione più compatta (sezione "non disponibili"): foto più bassa. */
   small?: boolean;
 }) {
+  const { dict } = useI18n();
+  const rd = dict.rooms[room.slug];
+  const guestsLabel = dict.roomMeta.guests.replace("{n}", String(room.maxGuests));
+
   // Date modificabili per QUESTA camera (partono dalla ricerca globale).
   const [ci, setCi] = useState(initialCheckin);
   const [co, setCo] = useState(initialCheckout);
@@ -256,7 +261,7 @@ function RoomCard({
       <div className="relative md:h-full">
         <RoomCarousel
           images={room.images}
-          name={room.name}
+          name={rd.name}
           className={`group relative aspect-[4/3] w-full overflow-hidden bg-offwhite md:aspect-auto md:h-full ${small ? "md:min-h-[300px]" : "md:min-h-[420px]"}`}
         />
         <span className={`pointer-events-none absolute left-4 top-4 z-20 rounded-full px-3 py-1 text-xs font-semibold ${badge.cls}`}>
@@ -268,10 +273,10 @@ function RoomCard({
         <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-eyebrow text-secondary">
           <span>{room.size}</span>
           <span className="h-1 w-1 rounded-full bg-accent" />
-          <span>{room.guests}</span>
+          <span>{guestsLabel}</span>
         </div>
-        <h3 className={`mt-2 font-serif font-normal leading-tight text-ink ${small ? "text-xl" : "text-2xl"}`}>{room.name}</h3>
-        <p className={`mt-2 leading-relaxed text-muted ${small ? "text-xs" : "text-sm"}`}>{room.description}</p>
+        <h3 className={`mt-2 font-serif font-normal leading-tight text-ink ${small ? "text-xl" : "text-2xl"}`}>{rd.name}</h3>
+        <p className={`mt-2 leading-relaxed text-muted ${small ? "text-xs" : "text-sm"}`}>{rd.description}</p>
 
         <div className="mt-4 rounded-xl border border-black/5 bg-offwhite p-3">
           {today && (
@@ -338,7 +343,7 @@ function RoomCard({
       <BookingRequestModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        room={room.name}
+        room={rd.name}
         checkin={ci}
         checkout={co}
         guests={guests}

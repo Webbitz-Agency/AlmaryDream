@@ -2,24 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import { TESTIMONIALS, type Testimonial } from "@/lib/site";
+import { useI18n } from "@/i18n/DictionaryProvider";
+import { LOCALE_META } from "@/i18n/config";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
-/** Bandiera del paese di provenienza (default: Italia). */
+/** Bandiera per chiave paese (indipendente dalla lingua; default: italia). */
 const FLAGS: Record<string, string> = {
-  Italia: "🇮🇹",
-  Germania: "🇩🇪",
-  Portogallo: "🇵🇹",
-  Spagna: "🇪🇸",
-  Francia: "🇫🇷",
-  "Regno Unito": "🇬🇧",
-  Svizzera: "🇨🇭",
-  Austria: "🇦🇹",
-  Olanda: "🇳🇱",
-  Belgio: "🇧🇪",
+  italia: "🇮🇹",
+  germania: "🇩🇪",
+  portogallo: "🇵🇹",
+  spagna: "🇪🇸",
+  francia: "🇫🇷",
+  regnounito: "🇬🇧",
+  svizzera: "🇨🇭",
+  austria: "🇦🇹",
+  olanda: "🇳🇱",
+  belgio: "🇧🇪",
 };
-function flagFor(country?: string) {
-  return (country && FLAGS[country]) || FLAGS.Italia;
+function flagFor(countryKey?: string) {
+  return (countryKey && FLAGS[countryKey]) || FLAGS.italia;
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -35,6 +37,15 @@ function Stars({ rating }: { rating: number }) {
 }
 
 function TestimonialCard({ t }: { t: Testimonial }) {
+  const { dict, locale } = useI18n();
+  const td = dict.testimonials[t.key];
+  const countryLabel = dict.countries[t.countryKey ?? "italia"];
+  const dateLabel = new Intl.DateTimeFormat(LOCALE_META[locale].bcp47, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(t.dateIso));
+
   const quoteRef = useRef<HTMLQuoteElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [clamped, setClamped] = useState(false);
@@ -47,36 +58,36 @@ function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <figure className="flex h-full flex-col rounded-xl border border-black/5 bg-white p-6 shadow-soft">
       <Stars rating={t.rating} />
-      <figcaption className="mt-3 font-serif text-xl font-normal text-ink">{t.title}</figcaption>
-      {t.quote && (
+      <figcaption className="mt-3 font-serif text-xl font-normal text-ink">{td.title}</figcaption>
+      {td.quote && (
         <blockquote
           ref={quoteRef}
           className={`mt-3 text-base leading-relaxed text-ink/85 ${expanded ? "" : "line-clamp-6"}`}
         >
-          “{t.quote}”
+          “{td.quote}”
         </blockquote>
       )}
-      {t.quote && (clamped || expanded) && (
+      {td.quote && (clamped || expanded) && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
           className="mt-2 self-start text-sm font-semibold text-primary transition-colors hover:text-secondary"
         >
-          {expanded ? "Mostra meno" : "Leggi tutto"}
+          {expanded ? dict.common.readLess : dict.common.readMore}
         </button>
       )}
       <div className="mt-auto flex items-center gap-3 border-t border-black/5 pt-4">
         <span
           className="text-2xl leading-none"
           role="img"
-          aria-label={t.country ?? "Italia"}
-          title={t.country ?? "Italia"}
+          aria-label={countryLabel}
+          title={countryLabel}
         >
-          {flagFor(t.country)}
+          {flagFor(t.countryKey)}
         </span>
         <span className="text-sm">
           <span className="block font-semibold text-ink">{t.name}</span>
-          <span className="text-muted">{t.date}</span>
+          <span className="text-muted">{dateLabel}</span>
         </span>
       </div>
     </figure>
@@ -84,6 +95,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 }
 
 export default function Testimonials() {
+  const { dict } = useI18n();
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const total = TESTIMONIALS.length;
@@ -124,11 +136,11 @@ export default function Testimonials() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Reveal className="grow">
             <div className="flex items-center gap-3">
-              <p className="eyebrow shrink-0">Recensioni</p>
+              <p className="eyebrow shrink-0">{dict.sections.reviews.eyebrow}</p>
               <HeaderLine bleed={false} />
             </div>
             <h2 className="mt-3 font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-              Cosa pensano <em className="italic text-primary">di noi</em>
+              {dict.sections.reviews.titleA}<em className="italic text-primary">{dict.sections.reviews.titleEm}</em>{dict.sections.reviews.titleB}
             </h2>
           </Reveal>
 
@@ -140,8 +152,8 @@ export default function Testimonials() {
               </span>
               <span className="text-sm leading-tight">
                 <span className="block font-bold text-[#003b95]">Booking.com</span>
-                <span className="font-semibold text-ink">Eccellente</span>
-                <span className="text-muted"> · 9.3/10</span>
+                <span className="font-semibold text-ink">{dict.reviewsBadge.label}</span>
+                <span className="text-muted"> · {dict.reviewsBadge.scale}</span>
               </span>
             </div>
           </Reveal>

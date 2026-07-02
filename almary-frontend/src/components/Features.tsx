@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { FEATURES, HIGHLIGHTS } from "@/lib/site";
+import { FEATURE_ICONS, HIGHLIGHTS } from "@/lib/site";
+import type { Dictionary } from "@/i18n/dictionaries/it";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
@@ -61,28 +62,28 @@ function FeatureIcon({ name }: { name: string }) {
   }
 }
 
-export default function Features() {
+export default function Features({ dict }: { dict: Dictionary }) {
   return (
     <section id="servizi" className="bg-offwhite py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <p className="eyebrow shrink-0">Comfort &amp; Servizi</p>
+            <p className="eyebrow shrink-0">{dict.sections.services.eyebrow}</p>
             <HeaderLine />
           </div>
           <h2 className="mt-3 max-w-2xl font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-            Tutto ciò che rende speciale il tuo <em className="italic text-primary">soggiorno</em>
+            {dict.sections.services.titleA}<em className="italic text-primary">{dict.sections.services.titleEm}</em>{dict.sections.services.titleB}
           </h2>
         </Reveal>
 
         <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-16 lg:grid-cols-4">
-          {FEATURES.map((feature, i) => (
-            <Reveal key={feature.title} delay={i * 70} className="flex flex-col">
+          {FEATURE_ICONS.map((icon, i) => (
+            <Reveal key={icon} delay={i * 70} className="flex flex-col">
               <span className="text-primary">
-                <FeatureIcon name={feature.icon} />
+                <FeatureIcon name={icon} />
               </span>
-              <h3 className="mt-4 text-base font-semibold text-ink">{feature.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{feature.description}</p>
+              <h3 className="mt-4 text-base font-semibold text-ink">{dict.features[icon].title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">{dict.features[icon].description}</p>
             </Reveal>
           ))}
         </div>
@@ -90,13 +91,13 @@ export default function Features() {
         {/* Servizi premium in evidenza — due card "chic" con cornice gold staccata */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16">
           {HIGHLIGHTS.map((h, i) => (
-            <Reveal key={h.title} delay={i * 120} from={i === 0 ? "left" : "right"}>
+            <Reveal key={h.icon} delay={i * 120} from={i === 0 ? "left" : "right"}>
               <div className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-dark via-secondary to-dark p-9 text-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl lg:min-h-[26rem] lg:p-12">
                 {/* Foto di sfondo */}
                 {h.image && (
                   <Image
                     src={h.image}
-                    alt={h.title}
+                    alt={dict.highlights[h.icon].title}
                     fill
                     sizes="(min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -116,13 +117,13 @@ export default function Features() {
                   <FeatureIcon name={h.icon} />
                 </span>
                 <p className="relative mt-auto pt-8 text-[11px] font-medium uppercase tracking-[0.25em] text-[#cbb074]">
-                  Su richiesta
+                  {dict.highlights.badge}
                 </p>
                 <h3 className="relative mt-2 font-serif text-2xl font-normal leading-tight sm:text-3xl">
-                  {h.title}
+                  {dict.highlights[h.icon].title}
                 </h3>
                 <p className="relative mt-3 max-w-md text-sm leading-relaxed text-white/80">
-                  {h.description}
+                  {dict.highlights[h.icon].description}
                 </p>
               </div>
             </Reveal>

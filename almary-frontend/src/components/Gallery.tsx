@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { GALLERY } from "@/lib/site";
+import { useI18n } from "@/i18n/DictionaryProvider";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
@@ -12,6 +13,7 @@ import HeaderLine from "./HeaderLine";
  * dimensioni note → nessun layout shift.
  */
 export default function Gallery() {
+  const { dict } = useI18n();
   const [open, setOpen] = useState<number | null>(null);
   const close = useCallback(() => setOpen(null), []);
   const move = useCallback(
@@ -39,14 +41,14 @@ export default function Gallery() {
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <p className="eyebrow shrink-0">Galleria</p>
+            <p className="eyebrow shrink-0">{dict.sections.gallery.eyebrow}</p>
             <HeaderLine />
           </div>
           <h2 className="mt-3 max-w-2xl font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-            Vivi <em className="italic text-primary">Almary Dream</em>
+            {dict.sections.gallery.titleA}<em className="italic text-primary">{dict.sections.gallery.titleEm}</em>{dict.sections.gallery.titleB}
           </h2>
           <p className="mt-5 max-w-2xl text-base text-muted">
-            Dagli interni di design al mare cristallino della Costa Smeralda: uno sguardo a ciò che ti aspetta.
+            {dict.sections.gallery.subtitle}
           </p>
         </Reveal>
 
@@ -57,19 +59,19 @@ export default function Gallery() {
               <button
                 type="button"
                 onClick={() => setOpen(i)}
-                aria-label={`Apri: ${p.caption}`}
+                aria-label={`Apri: ${dict.gallery[p.id]}`}
                 className="group relative block w-full break-inside-avoid overflow-hidden rounded-xl shadow-soft"
               >
                 <Image
                   src={p.src}
                   width={p.w}
                   height={p.h}
-                  alt={p.caption}
+                  alt={dict.gallery[p.id]}
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
                   className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                 />
                 <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-black/65 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="p-4 text-sm font-medium text-white">{p.caption}</span>
+                  <span className="p-4 text-sm font-medium text-white">{dict.gallery[p.id]}</span>
                 </div>
               </button>
             </Reveal>
@@ -122,13 +124,13 @@ export default function Gallery() {
               src={GALLERY[open].src}
               width={GALLERY[open].w}
               height={GALLERY[open].h}
-              alt={GALLERY[open].caption}
+              alt={dict.gallery[GALLERY[open].id]}
               sizes="100vw"
               priority
               className="max-h-[82vh] w-auto rounded-lg object-contain"
             />
             <figcaption className="mt-4 text-center text-sm text-white/80">
-              {GALLERY[open].caption}
+              {dict.gallery[GALLERY[open].id]}
               <span className="ml-2 text-white/40">{open + 1} / {GALLERY.length}</span>
             </figcaption>
           </figure>

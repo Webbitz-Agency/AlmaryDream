@@ -1,30 +1,27 @@
-import { ROOMS } from "@/lib/site";
+import { ROOMS, type AmenityKey } from "@/lib/site";
 import { priceRange, formatEuro } from "@/lib/pricing";
+import type { Dictionary } from "@/i18n/dictionaries/it";
 import RoomCarousel from "./RoomCarousel";
 import RoomAvailabilityButton from "./RoomAvailabilityButton";
 import Reveal from "./Reveal";
 import HeaderLine from "./HeaderLine";
 
+/** Icona SVG per ciascuna chiave comfort camera. */
+const AMENITY_ICON: Record<AmenityKey, string> = {
+  kingBed: "bed",
+  emotionalShower: "shower",
+  wifi: "wifi",
+  ac: "ac",
+  fridge: "fridge",
+  minibar: "fridge",
+  groundFloor: "house",
+  safe: "lock",
+  makeupVanity: "mirror",
+};
+
 /** Icona coerente con la caratteristica della camera (SVG inline, bundle leggero). */
-function AmenityIcon({ name }: { name: string }) {
-  const n = name.toLowerCase();
-  const key = n.includes("letto")
-    ? "bed"
-    : n.includes("doccia")
-      ? "shower"
-      : n.includes("wi-fi") || n.includes("wifi")
-        ? "wifi"
-        : n.includes("aria") || n.includes("condizion")
-          ? "ac"
-          : n.includes("minibar") || n.includes("frigo")
-            ? "fridge"
-            : n.includes("cassaforte")
-              ? "lock"
-              : n.includes("trucco")
-                ? "mirror"
-                : n.includes("piano")
-                  ? "house"
-                  : "check";
+function AmenityIcon({ amenity }: { amenity: AmenityKey }) {
+  const key = AMENITY_ICON[amenity];
 
   const common = {
     width: 18,
@@ -98,7 +95,7 @@ function AmenityIcon({ name }: { name: string }) {
   }
 }
 
-export default function Rooms() {
+export default function Rooms({ dict }: { dict: Dictionary }) {
   const { min: minPrice } = priceRange();
   return (
     <section id="camere" className="overflow-hidden bg-white py-20 lg:py-28">
@@ -106,14 +103,14 @@ export default function Rooms() {
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <p className="eyebrow shrink-0">Le nostre camere</p>
+            <p className="eyebrow shrink-0">{dict.sections.rooms.eyebrow}</p>
             <HeaderLine />
           </div>
           <h2 className="mt-3 max-w-2xl font-serif text-4xl font-normal leading-tight tracking-tightest text-ink sm:text-5xl">
-            Tre rifugi di <em className="italic text-primary">charme</em>
+            {dict.sections.rooms.titleA}<em className="italic text-primary">{dict.sections.rooms.titleEm}</em>{dict.sections.rooms.titleB}
           </h2>
           <p className="mt-5 max-w-2xl text-base text-muted">
-            Ogni camera con letto King Size, doccia emozionale e finiture di design.
+            {dict.sections.rooms.subtitle}
           </p>
         </Reveal>
       </div>
@@ -122,6 +119,8 @@ export default function Rooms() {
       <div className="mt-14 flex flex-col lg:mt-20">
         {ROOMS.map((room, i) => {
           const photoRight = i % 2 === 1;
+          const rd = dict.rooms[room.slug];
+          const guestsLabel = dict.roomMeta.guests.replace("{n}", String(room.maxGuests));
           return (
             <article
               key={room.slug}
@@ -129,7 +128,7 @@ export default function Rooms() {
             >
               {/* Foto — tocca il bordo dello schermo */}
               <Reveal from={photoRight ? "right" : "left"} className="w-full lg:w-1/2">
-                <RoomCarousel images={room.images} name={room.name} priority={i === 0} />
+                <RoomCarousel images={room.images} name={rd.name} priority={i === 0} />
               </Reveal>
 
               {/* Testo */}
@@ -142,34 +141,34 @@ export default function Rooms() {
                   <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-eyebrow text-secondary">
                     <span>{room.size}</span>
                     <span className="h-1 w-1 rounded-full bg-accent" />
-                    <span>{room.guests}</span>
+                    <span>{guestsLabel}</span>
                   </div>
 
                   <h3 className="mt-4 font-serif text-3xl font-normal leading-tight tracking-tight text-ink sm:text-4xl">
-                    {room.name}
+                    {rd.name}
                   </h3>
-                  <p className="mt-4 text-base leading-relaxed text-muted">{room.description}</p>
+                  <p className="mt-4 text-base leading-relaxed text-muted">{rd.description}</p>
 
                   <ul className="mt-7 grid grid-cols-2 gap-x-4 gap-y-3.5 sm:gap-x-8">
                     {room.amenities.map((a) => (
                       <li key={a} className="flex items-center gap-3 text-sm text-ink/80">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-secondary">
-                          <AmenityIcon name={a} />
+                          <AmenityIcon amenity={a} />
                         </span>
-                        {a}
+                        {dict.amenities[a]}
                       </li>
                     ))}
                   </ul>
 
                   {/* Tariffa — uguale per tutte le camere, variabile per periodo */}
                   <div className="mt-8 flex items-baseline gap-2">
-                    <span className="text-sm text-muted">A partire da</span>
+                    <span className="text-sm text-muted">{dict.roomMeta.from}</span>
                     <span className="font-serif text-3xl font-normal text-ink">{formatEuro(minPrice)}</span>
-                    <span className="text-sm text-muted">/ notte</span>
+                    <span className="text-sm text-muted">{dict.roomMeta.perNight}</span>
                   </div>
-                  <p className="mt-1 text-xs text-muted">Tariffa in base al periodo · colazione inclusa</p>
+                  <p className="mt-1 text-xs text-muted">{dict.roomMeta.priceNote}</p>
 
-                  <RoomAvailabilityButton guests={room.guests.match(/\d+/)?.[0] ?? "2"} />
+                  <RoomAvailabilityButton guests={String(room.maxGuests)} label={dict.roomMeta.availabilityCta} />
                 </Reveal>
               </div>
             </article>

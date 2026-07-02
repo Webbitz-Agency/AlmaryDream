@@ -7,6 +7,8 @@
  * Le dimensioni del contenitore sono fisse nei componenti → nessun layout shift.
  */
 
+import type { Dictionary } from "@/i18n/dictionaries/it";
+
 export const SITE = {
   name: "Almary Dream",
   tagline: "Luxury B&B",
@@ -48,54 +50,40 @@ export function bookingHref(message: string): string {
   return `${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
-export type Feature = {
-  title: string;
-  description: string;
-  /** chiave icona — vedi components/Features.tsx */
-  icon: string;
-  /** Foto di sfondo (solo per le card premium in evidenza). */
-  image?: string;
-};
+/**
+ * Comfort & Servizi — solo le chiavi icona (l'ordine è quello mostrato).
+ * Titoli e descrizioni vivono in `dict.features[icon]`.
+ */
+export const FEATURE_ICONS = [
+  "breakfast",
+  "wifi",
+  "ac",
+  "sea",
+  "relax",
+  "green",
+  "shower",
+  "barbecue",
+] as const;
+export type FeatureIconKey = (typeof FEATURE_ICONS)[number];
 
-/** Comfort & Servizi reali (8 item, come il riferimento) */
-export const FEATURES: Feature[] = [
-  { icon: "breakfast", title: "Colazione inclusa", description: "Specialità locali sarde o selezione internazionale, ogni mattina." },
-  { icon: "wifi", title: "Wi-Fi alta velocità", description: "Connessione veloce in tutta la struttura." },
-  { icon: "ac", title: "Aria climatizzata", description: "Climatizzazione autonoma in ogni camera." },
-  { icon: "sea", title: "A 100 m dal mare", description: "Spiagge ampissime e attrezzate con tutti i servizi, a pochi passi dalla struttura." },
-  { icon: "relax", title: "Zona relax esterna", description: "Gazebo, poltroncine e doccia all'aperto." },
-  { icon: "green", title: "Energia green", description: "Impianto fotovoltaico con accumulo." },
-  { icon: "shower", title: "Doccia emozionale", description: "Comfort premium in ogni bagno." },
-  { icon: "barbecue", title: "Esperienza gourmet", description: "Barbecue all'aperto e, su richiesta, cene romantiche o esclusive per le tue occasioni speciali." },
-];
+/**
+ * Servizi premium in evidenza — icona + foto di sfondo.
+ * Testo in `dict.highlights[icon]`.
+ */
+export const HIGHLIGHTS = [
+  { icon: "wine", image: "/images/Dintorni/cardBollicine.webp" },
+  { icon: "boat", image: "/images/Dintorni/cardBarca.webp" },
+] as const;
 
-/** Servizi premium in evidenza — due card grandi sotto la griglia (su richiesta). */
-export const HIGHLIGHTS: Feature[] = [
-  {
-    icon: "wine",
-    title: "Cantina & bollicine",
-    description:
-      "Vini pregiati, birre speciali e champagne per brindare ai tuoi momenti più importanti. Disponibili su richiesta per festeggiamenti e occasioni speciali.",
-    image: "/images/Dintorni/cardBollicine.webp",
-  },
-  {
-    icon: "boat",
-    title: "Mare & esperienze",
-    description:
-      "Giri in barca, tour guidati, noleggio barche e auto: organizziamo per te le esperienze più belle della Costa Smeralda.",
-    image: "/images/Dintorni/cardBarca.webp",
-  },
-];
+/** Chiavi comfort camera → testo in dict.amenities[key] (e icona in Rooms.tsx). */
+export type AmenityKey = keyof Dictionary["amenities"];
 
 export type Room = {
-  slug: string;
-  name: string;
-  size: string;
-  guests: string;
-  /** Capienza massima (numero) — usata per filtrare le camere in base agli ospiti. */
+  slug: keyof Dictionary["rooms"]; // → nome e descrizione in dict.rooms[slug]
+  size: string; // es. "32 m²" (non traducibile)
+  /** Capienza massima (numero) — usata per filtrare le camere e mostrare "N ospiti". */
   maxGuests: number;
-  description: string;
-  amenities: string[];
+  amenities: AmenityKey[];
   /** Galleria foto reali — scorribili nel carosello (la prima è la copertina) */
   images: string[];
 };
@@ -104,13 +92,9 @@ export type Room = {
 export const ROOMS: Room[] = [
   {
     slug: "dream",
-    name: "Camera Dream",
     size: "32 m²",
-    guests: "2 ospiti",
     maxGuests: 2,
-    description:
-      "Un'oasi di comfort e calore con toni naturali, per un risveglio che profuma di mare.",
-    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Frigobar", "Cassaforte", "Toilette trucco"],
+    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "fridge", "safe", "makeupVanity"],
     images: [
       "/images/Dream/dream1.webp",
       "/images/Dream/dream8.webp",
@@ -122,13 +106,9 @@ export const ROOMS: Room[] = [
   },
   {
     slug: "blue-sky",
-    name: "Camera Blue Sky",
     size: "30 m²",
-    guests: "2 ospiti",
     maxGuests: 2,
-    description:
-      "Luminosa camera al piano terra con parete color cielo, vicina alla sala colazione.",
-    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Piano terra", "Cassaforte", "Toilette trucco"],
+    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "groundFloor", "safe", "makeupVanity"],
     images: [
       "/images/BlueSky/bs1.webp",
       "/images/BlueSky/bs5.webp",
@@ -140,13 +120,9 @@ export const ROOMS: Room[] = [
   },
   {
     slug: "smeraldo",
-    name: "Camera Smeraldo",
     size: "30 m²",
-    guests: "2 ospiti",
     maxGuests: 2,
-    description:
-      "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany. Al piano terra, con guardaroba a vista.",
-    amenities: ["Letto King Size", "Doccia emozionale", "Wi-Fi", "Aria condizionata", "Minibar", "Cassaforte", "Toilette trucco"],
+    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "minibar", "safe", "makeupVanity"],
     images: [
       "/images/Smeraldo/smeraldo1.webp",
       "/images/Smeraldo/smeraldo5.webp",
@@ -159,68 +135,26 @@ export const ROOMS: Room[] = [
 ];
 
 export type Activity = {
-  title: string;
-  description: string;
+  slug: keyof Dictionary["activities"]; // → titolo e descrizione in dict.activities[slug]
   /** foto reale (WebP ottimizzato) mostrata nella parte alta della card */
   image: string;
 };
 
 /** Cosa fare nei dintorni di Baja Sardinia (Costa Smeralda) — anche per la SEO locale */
 export const ACTIVITIES: Activity[] = [
-  {
-    image: "/images/Dintorni/spiagge_sogno.webp",
-    title: "Spiagge da sogno",
-    description:
-      "Cala Battistoni a 3 minuti a piedi, la spiaggia di Baja Sardinia e le calette di Cala Granu con acqua cristallina.",
-  },
-  {
-    image: "/images/Dintorni/arcipelago2.webp",
-    title: "Arcipelago di La Maddalena",
-    description:
-      "Gite in barca tra Spargi, Budelli e la celebre Spiaggia Rosa, nel cuore del parco marino più bello del Mediterraneo.",
-  },
-  {
-    image: "/images/Dintorni/cardBarca.webp",
-    title: "In barca sulla Costa Smeralda",
-    description:
-      "Giri in barca, tour guidati e noleggio: naviga tra cale nascoste e acque turchesi. Organizziamo noi l'esperienza in mare più adatta a te.",
-  },
-  {
-    image: "/images/Dintorni/phi.webp",
-    title: "Phi Beach & aperitivi al tramonto",
-    description:
-      "Tramonti mozzafiato sugli scogli di Forte Cappellini, tra musica, cocktail e l'atmosfera glamour della Costa Smeralda.",
-  },
-  {
-    image: "/images/Dintorni/ritual.webp",
-    title: "Ritual Club",
-    description:
-      "La leggendaria discoteca scavata nella roccia di Baja Sardinia, dal 1970 simbolo della vita notturna della Costa Smeralda: musica, design e atmosfera esclusiva a pochi passi da Almary Dream.",
-  },
-  {
-    image: "/images/Dintorni/portocervo2.webp",
-    title: "Porto Cervo",
-    description:
-      "A soli 15 minuti, lo shopping di lusso, il porto e la vita mondana del borgo simbolo della Costa Smeralda.",
-  },
-  {
-    image: "/images/Dintorni/snorkeling.webp",
-    title: "Snorkeling & diving",
-    description:
-      "Fondali di granito e acque trasparenti: immersioni e snorkeling tra le insenature più suggestive della costa.",
-  },
-  {
-    image: "/images/Dintorni/trekking.webp",
-    title: "Trekking & natura",
-    description:
-      "Sentieri panoramici tra macchia mediterranea, capo Ferro e il faro, alla scoperta di cale nascoste e viste sul mare.",
-  },
+  { slug: "beaches", image: "/images/Dintorni/spiagge_sogno.webp" },
+  { slug: "maddalena", image: "/images/Dintorni/arcipelago2.webp" },
+  { slug: "boat", image: "/images/Dintorni/cardBarca.webp" },
+  { slug: "phi", image: "/images/Dintorni/phi.webp" },
+  { slug: "ritual", image: "/images/Dintorni/ritual.webp" },
+  { slug: "portocervo", image: "/images/Dintorni/portocervo2.webp" },
+  { slug: "snorkeling", image: "/images/Dintorni/snorkeling.webp" },
+  { slug: "trekking", image: "/images/Dintorni/trekking.webp" },
 ];
 
 export type GalleryPhoto = {
+  id: keyof Dictionary["gallery"]; // → didascalia in dict.gallery[id]
   src: string;
-  /** Didascalia (mostrata in hover + lightbox) e alt SEO. */
-  caption: string;
   /** Dimensioni reali del file → masonry senza layout shift. */
   w: number;
   h: number;
@@ -228,83 +162,38 @@ export type GalleryPhoto = {
 
 /** Galleria immersiva della struttura (foto reali ottimizzate WebP). */
 export const GALLERY: GalleryPhoto[] = [
-  { src: "/images/Gallery/mare1.webp", caption: "Le spiagge di Baja Sardinia", w: 1600, h: 1200 },
-  { src: "/images/Gallery/colazione1.webp", caption: "La colazione di Almary Dream", w: 1600, h: 1200 },
-  { src: "/images/Gallery/esterno2.webp", caption: "L'ingresso della struttura", w: 1512, h: 2016 },
-  { src: "/images/Gallery/gazebo.webp", caption: "Zona relax con gazebo", w: 1600, h: 1066 },
-  { src: "/images/Gallery/mare2.webp", caption: "Acque cristalline a pochi passi", w: 1600, h: 1200 },
-  { src: "/images/Gallery/ospiti.webp", caption: "Colazione vista mare", w: 1600, h: 1200 },
-  { src: "/images/Gallery/panorama.webp", caption: "Costa Smeralda", w: 1600, h: 1200 },
-  { src: "/images/Gallery/relax.webp", caption: "Area lounge", w: 1600, h: 1066 },
-  { src: "/images/Gallery/giardino.webp", caption: "Il giardino", w: 1600, h: 1200 },
-  { src: "/images/Gallery/esterno1.webp", caption: "La struttura, con energia green", w: 1600, h: 1200 },
-  { src: "/images/Gallery/colazione2.webp", caption: "La sala colazione", w: 1600, h: 1066 },
-  { src: "/images/Gallery/baja.webp", caption: "Nel cuore di Baja Sardinia", w: 1600, h: 1200 },
+  { id: "mare1", src: "/images/Gallery/mare1.webp", w: 1600, h: 1200 },
+  { id: "colazione1", src: "/images/Gallery/colazione1.webp", w: 1600, h: 1200 },
+  { id: "esterno2", src: "/images/Gallery/esterno2.webp", w: 1512, h: 2016 },
+  { id: "gazebo", src: "/images/Gallery/gazebo.webp", w: 1600, h: 1066 },
+  { id: "mare2", src: "/images/Gallery/mare2.webp", w: 1600, h: 1200 },
+  { id: "ospiti", src: "/images/Gallery/ospiti.webp", w: 1600, h: 1200 },
+  { id: "panorama", src: "/images/Gallery/panorama.webp", w: 1600, h: 1200 },
+  { id: "relax", src: "/images/Gallery/relax.webp", w: 1600, h: 1066 },
+  { id: "giardino", src: "/images/Gallery/giardino.webp", w: 1600, h: 1200 },
+  { id: "esterno1", src: "/images/Gallery/esterno1.webp", w: 1600, h: 1200 },
+  { id: "colazione2", src: "/images/Gallery/colazione2.webp", w: 1600, h: 1066 },
+  { id: "baja", src: "/images/Gallery/baja.webp", w: 1600, h: 1200 },
 ];
 
 export type Testimonial = {
+  key: keyof Dictionary["testimonials"]; // → titolo e testo in dict.testimonials[key]
   name: string;
-  /** Paese di provenienza dell'ospite (mostrato accanto al nome). */
-  country?: string;
-  /** titolo della recensione (es. "Eccezionale") */
-  title: string;
-  date: string;
-  /** Testo della recensione (alcune recensioni Booking non hanno testo). */
-  quote?: string;
+  /** Paese di provenienza → dict.countries[countryKey] + bandiera (default: italia). */
+  countryKey?: keyof Dictionary["countries"];
+  /** Data in ISO — formattata per lingua via Intl.DateTimeFormat. */
+  dateIso: string;
   rating: number;
 };
 
 /** Recensioni reali Booking.com — punteggio struttura 9.3/10 */
 export const TESTIMONIALS: Testimonial[] = [
-  {
-    name: "Miguel",
-    country: "Spagna",
-    title: "Eccellente",
-    date: "26 giugno 2026",
-    rating: 5,
-  },
-  {
-    name: "Marina",
-    country: "Germania",
-    title: "Assolutamente eccezionale",
-    date: "20 giugno 2026",
-    quote:
-      "Ci è piaciuto tutto :-) La struttura dista solo 3 minuti dalla spiaggia di Baja Sardinia. Posti auto gratuiti proprio fuori dalla porta. L'alloggio è arredato di recente, super moderno, pulito e il nostro ospite Aleks si assicura che non ci manchi nulla. Al mattino prepara la colazione con amore. Vi aspettano pasticcini freschi e una selezione di specialità italiane a base di salumi e formaggi, oltre a dolci e frutta. Qualunque sia la tua domanda, lui è sempre pronto ad aiutarti. Ci siamo sentiti completamente a casa e ci piacerebbe molto tornare.",
-    rating: 5,
-  },
-  {
-    name: "Patricia",
-    country: "Portogallo",
-    title: "Eccezionale",
-    date: "3 giugno 2026",
-    quote:
-      "Un soggiorno imperdibile se vi trovate in zona! La camera da letto era splendida e confortevole, e pulitissima. Anche la colazione era ottima; il proprietario era presente e ha spiegato di cosa si trattava il tagliere di salumi, offrendo diverse e valide opzioni per entrambi i giorni. Il proprietario è stato davvero gentile e disponibile. Anche la posizione era ottima, a pochi passi da diversi ristoranti, da una piazza con alcuni negozi e dalla spiaggia. Lo consiglio al 100%!",
-    rating: 5,
-  },
-  {
-    name: "Tomsed13",
-    title: "Eccezionale",
-    date: "17 agosto 2025",
-    quote:
-      "B&b di recentissima ristrutturazione. Situato nel pieno centro di Baja Sardinia risulta essere la soluzione migliore per chi vuole usare poco la macchina e divertirsi. Phi Beach e Ritual raggiungibili tranquillamente a piedi. Il titolare Alessandro ha saputo creare una struttura moderna e di design. Colazione con prodotti selezionati e di qualità. Camere confortevoli e complete di tutto il necessario. Consigliatissimo.",
-    rating: 5,
-  },
-  {
-    name: "Macen",
-    title: "Eccezionale",
-    date: "14 luglio 2025",
-    quote:
-      "Ottima posizione, colazione deliziosa e aria condizionata perfetta. L'host ci ha persino aiutato a trasportare i bagagli dalla macchina all'interno.",
-    rating: 5,
-  },
-  {
-    name: "Silvia",
-    title: "Bellissimo",
-    date: "13 luglio 2025",
-    quote:
-      "Alessandro è stato molto gentile e attento, ci ha dato ottimi consigli su dove mangiare fuori e la colazione era meravigliosa.",
-    rating: 5,
-  },
+  { key: "miguel", name: "Miguel", countryKey: "spagna", dateIso: "2026-06-26", rating: 5 },
+  { key: "marina", name: "Marina", countryKey: "germania", dateIso: "2026-06-20", rating: 5 },
+  { key: "patricia", name: "Patricia", countryKey: "portogallo", dateIso: "2026-06-03", rating: 5 },
+  { key: "tomsed13", name: "Tomsed13", dateIso: "2025-08-17", rating: 5 },
+  { key: "macen", name: "Macen", dateIso: "2025-07-14", rating: 5 },
+  { key: "silvia", name: "Silvia", dateIso: "2025-07-13", rating: 5 },
 ];
 
 export const NAV_LINKS = [
