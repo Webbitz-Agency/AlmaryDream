@@ -198,9 +198,16 @@ export default function Surroundings() {
             {RESTAURANTS.map((r) => (
               <li
                 key={r.slug}
-                className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.06] px-5 py-4 transition-colors hover:border-white/25"
+                className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.06] p-3 pr-5 transition-colors hover:border-white/25"
               >
-                <div className="min-w-0">
+                <Image
+                  src={r.image}
+                  alt={r.name}
+                  width={120}
+                  height={120}
+                  className="h-16 w-16 shrink-0 rounded-lg object-cover"
+                />
+                <div className="min-w-0 flex-1">
                   <p className="font-serif text-lg font-normal text-white">{r.name}</p>
                   <p className="mt-0.5 text-sm text-white/65">{dict.restaurants[r.slug]}</p>
                 </div>

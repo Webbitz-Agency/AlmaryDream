@@ -178,14 +178,15 @@ export type Restaurant = {
   slug: keyof Dictionary["restaurants"];
   name: string;
   duration: string; // es. "11 min"
+  image: string;
 };
 
 export const RESTAURANTS: Restaurant[] = [
-  { slug: "phi", name: "Phi Beach", duration: "4 min" },
-  { slug: "cue", name: "CUE Churrascaria", duration: "6 min" },
-  { slug: "zuma", name: "Zuma Porto Cervo", duration: "11 min" },
-  { slug: "fingers", name: "Finger's Porto Cervo", duration: "11 min" },
-  { slug: "mizuna", name: "Mizuna", duration: "18 min" },
+  { slug: "phi", name: "Phi Beach", duration: "4 min", image: "/images/Ristoranti/phi.webp" },
+  { slug: "cue", name: "CUE Churrascaria", duration: "6 min", image: "/images/Ristoranti/cue.webp" },
+  { slug: "zuma", name: "Zuma Porto Cervo", duration: "11 min", image: "/images/Ristoranti/zuma.webp" },
+  { slug: "fingers", name: "Finger's Porto Cervo", duration: "11 min", image: "/images/Ristoranti/fingers.webp" },
+  { slug: "mizuna", name: "Mizuna", duration: "18 min", image: "/images/Ristoranti/mizuna.webp" },
 ];
 
 export type GalleryPhoto = {
