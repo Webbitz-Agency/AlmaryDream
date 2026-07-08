@@ -132,12 +132,12 @@ const it = {
     },
     "blue-sky": {
       name: "Camera Blue Sky",
-      description: "Luminosa camera al piano terra con parete color cielo, vicina alla sala colazione.",
+      description: "Luminosa camera con parete color cielo, vicina alla sala colazione.",
     },
     smeraldo: {
       name: "Camera Smeraldo",
       description:
-        "Un'elegante fusione di freschezza e comfort, impreziosita dalla parete color Tiffany, con guardaroba a vista.",
+        "Un'elegante fusione di freschezza e comfort al piano terra, impreziosita dalla parete color Tiffany, con guardaroba a vista.",
     },
   },
 

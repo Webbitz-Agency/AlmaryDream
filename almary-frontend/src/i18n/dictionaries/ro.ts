@@ -127,12 +127,12 @@ const ro: Dictionary = {
     },
     "blue-sky": {
       name: "Camera Blue Sky",
-      description: "Cameră luminoasă la parter, cu un perete de culoarea cerului, aproape de sala de mic dejun.",
+      description: "Cameră luminoasă cu un perete de culoarea cerului, aproape de sala de mic dejun.",
     },
     smeraldo: {
       name: "Camera Smeraldo",
       description:
-        "O fuziune elegantă de prospețime și confort, înfrumusețată de peretele în nuanță Tiffany, cu garderobă la vedere.",
+        "O fuziune elegantă de prospețime și confort la parter, înfrumusețată de peretele în nuanță Tiffany, cu garderobă la vedere.",
     },
   },
 

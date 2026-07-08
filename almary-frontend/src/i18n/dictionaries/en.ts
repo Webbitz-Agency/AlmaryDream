@@ -127,12 +127,12 @@ const en: Dictionary = {
     },
     "blue-sky": {
       name: "Blue Sky Room",
-      description: "A bright ground-floor room with a sky-blue wall, close to the breakfast room.",
+      description: "A bright room with a sky-blue wall, close to the breakfast room.",
     },
     smeraldo: {
       name: "Smeraldo Room",
       description:
-        "An elegant blend of freshness and comfort, enhanced by its Tiffany-toned wall, with an open wardrobe.",
+        "An elegant blend of freshness and comfort on the ground floor, enhanced by its Tiffany-toned wall, with an open wardrobe.",
     },
   },
 

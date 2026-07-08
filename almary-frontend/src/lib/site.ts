@@ -108,7 +108,7 @@ export const ROOMS: Room[] = [
     slug: "blue-sky",
     size: "30 m²",
     maxGuests: 2,
-    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "groundFloor", "safe", "makeupVanity"],
+    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "safe", "makeupVanity"],
     images: [
       "/images/BlueSky/bs1.webp",
       "/images/BlueSky/bs5.webp",
@@ -122,7 +122,7 @@ export const ROOMS: Room[] = [
     slug: "smeraldo",
     size: "30 m²",
     maxGuests: 2,
-    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "minibar", "safe", "makeupVanity"],
+    amenities: ["kingBed", "emotionalShower", "wifi", "ac", "minibar", "groundFloor", "safe", "makeupVanity"],
     images: [
       "/images/Smeraldo/smeraldo1.webp",
       "/images/Smeraldo/smeraldo5.webp",

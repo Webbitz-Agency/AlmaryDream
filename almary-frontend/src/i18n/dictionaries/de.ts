@@ -127,12 +127,12 @@ const de: Dictionary = {
     },
     "blue-sky": {
       name: "Zimmer Blue Sky",
-      description: "Lichtdurchflutetes Zimmer im Erdgeschoss mit himmelblauer Wand, nahe am Frühstücksraum.",
+      description: "Lichtdurchflutetes Zimmer mit himmelblauer Wand, nahe am Frühstücksraum.",
     },
     smeraldo: {
       name: "Zimmer Smeraldo",
       description:
-        "Eine elegante Verbindung aus Frische und Komfort, veredelt durch die Wand in Tiffany-Farbe, mit offenem Kleiderschrank.",
+        "Eine elegante Verbindung aus Frische und Komfort im Erdgeschoss, veredelt durch die Wand in Tiffany-Farbe, mit offenem Kleiderschrank.",
     },
   },
 
