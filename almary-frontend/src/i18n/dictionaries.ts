@@ -10,6 +10,7 @@ const loaders: Record<Locale, () => Promise<Dictionary>> = {
   it: () => import("./dictionaries/it").then((m) => m.default),
   en: () => import("./dictionaries/en").then((m) => m.default),
   de: () => import("./dictionaries/de").then((m) => m.default),
+  ro: () => import("./dictionaries/ro").then((m) => m.default),
 };
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {

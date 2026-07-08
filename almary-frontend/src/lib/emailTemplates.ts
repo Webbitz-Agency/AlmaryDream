@@ -128,6 +128,30 @@ const EMAIL_T: Record<Locale, EmailT> = {
     textSummaryHeading: "ANFRAGE-ÜBERSICHT",
     textNote: "Es ist jetzt keine Zahlung erforderlich: Dies ist nur eine Anfrage.",
   },
+  ro: {
+    bcp47: "ro-RO",
+    room: "Cameră",
+    checkin: "Check-in",
+    checkout: "Check-out",
+    nights: "Nopți",
+    guests: "Oaspeți",
+    estimatedTotal: "Total estimat",
+    night: "noapte",
+    nightsWord: "nopți",
+    rights: "Toate drepturile rezervate",
+    subject: "Am primit cererea ta — {site}",
+    preheader: "Am primit cererea ta: îți răspundem în 24 de ore.",
+    eyebrow: "Cerere primită",
+    title: "Mulțumim, te vom contacta în curând",
+    greeting: "Bună {name},",
+    introBody:
+      "îți mulțumim că ai ales {site}. Am primit cererea ta de rezervare și îți vom răspunde în 24 de ore pentru a confirma disponibilitatea și detaliile sejurului.",
+    note:
+      "Nu este necesară nicio plată acum: aceasta este doar o cerere. Pentru orice ai nevoie, poți răspunde direct la acest e-mail sau ne poți contacta la datele de mai jos.",
+    whatsappBtn: "Scrie-ne pe WhatsApp",
+    textSummaryHeading: "REZUMATUL CERERII",
+    textNote: "Nu este necesară nicio plată acum: aceasta este doar o cerere.",
+  },
 };
 
 /* ── Palette ──────────────────────────────────────────────────────────────── */

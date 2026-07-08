@@ -6,7 +6,7 @@
  * `src/proxy.ts` (il "middleware" di Next 16).
  */
 
-export const LOCALES = ["it", "en", "de"] as const;
+export const LOCALES = ["it", "en", "de", "ro"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = "it";
@@ -19,6 +19,7 @@ export const LOCALE_META: Record<Locale, { label: string; bcp47: string; flag: s
   it: { label: "Italiano", bcp47: "it-IT", flag: "🇮🇹" },
   en: { label: "English", bcp47: "en-GB", flag: "🇬🇧" },
   de: { label: "Deutsch", bcp47: "de-DE", flag: "🇩🇪" },
+  ro: { label: "Română", bcp47: "ro-RO", flag: "🇷🇴" },
 };
 
 /** Type guard: restringe una stringa qualsiasi a Locale. */
