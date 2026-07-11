@@ -20,9 +20,8 @@ export const SITE = {
   phoneHref: "tel:+393884773330",
   whatsapp: "https://wa.me/393884773330",
   email: "almarydream@gmail.com",
-  // Social — TODO: confermare gli URL esatti (dominio almarydream.it momentaneamente sospeso)
-  facebook: "https://www.facebook.com/almarydream",
-  instagram: "https://www.instagram.com/almarydream",
+  // Social — Instagram ufficiale della struttura (Facebook inesistente → non mostrato)
+  instagram: "https://www.instagram.com/almary_dream_bajasardinia/",
 
   // Posizione
   address: "Via della Pineta 1",

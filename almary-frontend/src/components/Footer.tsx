@@ -131,15 +131,6 @@ export default function Footer({ dict, locale }: { dict: Dictionary; locale: Loc
         {/* Social sotto le colonne */}
         <div className="mt-12 flex gap-3">
           <a
-            href={SITE.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-accent hover:text-dark"
-          >
-            <SocialIcon name="facebook" />
-          </a>
-          <a
             href={SITE.instagram}
             target="_blank"
             rel="noopener noreferrer"
