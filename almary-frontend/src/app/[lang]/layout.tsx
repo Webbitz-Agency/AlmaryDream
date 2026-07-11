@@ -59,6 +59,13 @@ export async function generateMetadata({
         "Il tuo rifugio di lusso a 100 metri da Baja Sardinia. Tre camere esclusive, colazione inclusa, eleganza sul mare.",
       images: [{ url: "/images/og-image.jpg", width: 1200, height: 630, alt: "Almary Dream Luxury B&B" }],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: "Almary Dream — Luxury B&B in Costa Smeralda",
+      description:
+        "Il tuo rifugio di lusso a 100 metri da Baja Sardinia. Tre camere esclusive, colazione inclusa, eleganza sul mare.",
+      images: ["/images/og-image.jpg"],
+    },
     robots: { index: true, follow: true },
   };
 
