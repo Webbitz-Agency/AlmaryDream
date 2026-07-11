@@ -13,7 +13,8 @@ export const SITE = {
   name: "Almary Dream",
   tagline: "Luxury B&B",
   location: "Baja Sardinia · Costa Smeralda",
-  url: "https://almarydream.it",
+  // Dominio canonico reale: www.almarydream.com (l'apex .com fa 308 → www).
+  url: "https://www.almarydream.com",
 
   // Contatti reali
   phone: "+39 388 4773330",

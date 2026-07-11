@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SardiniaShape from "@/components/SardiniaShape";
 import { bookingHref, SITE } from "@/lib/site";
+import { bedAndBreakfastJsonLd } from "@/lib/jsonLd";
 import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
@@ -17,9 +18,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const { lang } = await params;
   const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const dict = await getDictionary(locale);
+  const jsonLd = bedAndBreakfastJsonLd(dict, locale);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main>
         <Hero dict={dict} />
