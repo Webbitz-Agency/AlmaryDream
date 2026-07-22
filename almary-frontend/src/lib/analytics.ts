@@ -64,3 +64,15 @@ export function trackLead(params?: { value?: number; room?: string }): void {
     ...(params?.room ? { room: params.room } : {}),
   });
 }
+
+/**
+ * Traccia un contatto diretto (click su telefono o WhatsApp) come evento GA4.
+ * Eventi `contact_phone` / `contact_whatsapp`: da poter contrassegnare come
+ * eventi chiave e importare in Ads come conversioni secondarie (per un B&B molti
+ * ospiti prenotano chiamando o via WhatsApp, non solo dal modulo).
+ */
+export function trackContact(method: "phone" | "whatsapp"): void {
+  window.gtag?.("event", method === "phone" ? "contact_phone" : "contact_whatsapp", {
+    method,
+  });
+}

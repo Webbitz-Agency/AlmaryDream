@@ -9,6 +9,7 @@ import { DictionaryProvider } from "@/i18n/DictionaryProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Analytics from "@/components/Analytics";
 import CookieBanner from "@/components/CookieBanner";
+import ContactTracker from "@/components/ContactTracker";
 
 /* Serif display per i titoli — stesso font del riferimento (napolintocore.it) */
 const fraunces = Fraunces({
@@ -100,6 +101,7 @@ export default async function RootLayout({
           <CookieBanner />
         </DictionaryProvider>
         <Analytics />
+        <ContactTracker />
       </body>
     </html>
   );
