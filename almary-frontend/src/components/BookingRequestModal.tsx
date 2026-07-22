@@ -5,6 +5,7 @@ import { stayCost, formatEuro } from "@/lib/pricing";
 import { useI18n } from "@/i18n/DictionaryProvider";
 import { LOCALE_META } from "@/i18n/config";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { trackLead } from "@/lib/analytics";
 
 /** "2026-07-12" → "ven 12 lug" (o equivalente nella lingua corrente). */
 function fmt(isoDate?: string, bcp47 = "it-IT") {
@@ -74,6 +75,8 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || dict.request.errorGeneric);
       setStatus("sent");
+      // Conversione: richiesta di prenotazione inviata con successo.
+      trackLead({ value: cost && cost.allPriced ? cost.total : undefined, room });
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : dict.request.errorGeneric);

@@ -49,3 +49,18 @@ export function setConsent(granted: boolean): void {
     /* localStorage non disponibile (private mode): la scelta vale per la sessione */
   }
 }
+
+/**
+ * Traccia una richiesta di prenotazione andata a buon fine come evento GA4
+ * `generate_lead` (evento consigliato per la lead generation). Questo è
+ * l'evento da contrassegnare come "evento chiave" in GA4 e importare in Google
+ * Ads come conversione primaria. In assenza di consenso, il Consent Mode lo
+ * invia in forma anonima/modellata.
+ */
+export function trackLead(params?: { value?: number; room?: string }): void {
+  window.gtag?.("event", "generate_lead", {
+    currency: "EUR",
+    value: params?.value ?? 0,
+    ...(params?.room ? { room: params.room } : {}),
+  });
+}
