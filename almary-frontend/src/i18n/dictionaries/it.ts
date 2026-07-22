@@ -360,6 +360,15 @@ const it = {
     contactLabel: "Per informazioni:",
   },
 
+  cookie: {
+    title: "Rispettiamo la tua privacy",
+    message:
+      "Usiamo cookie di analisi (Google Analytics) per capire come viene usato il sito e migliorarlo. Puoi accettarli o rifiutarli: la tua scelta non influisce sulla navigazione.",
+    accept: "Accetta",
+    reject: "Rifiuta",
+    more: "Privacy Policy",
+  },
+
   surround: {
     experiences: "Esperienze",
     beaches: "Le spiagge",

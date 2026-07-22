@@ -355,6 +355,15 @@ const ro: Dictionary = {
     contactLabel: "Pentru informații:",
   },
 
+  cookie: {
+    title: "Îți respectăm confidențialitatea",
+    message:
+      "Folosim cookie-uri de analiză (Google Analytics) pentru a înțelege cum este utilizat site-ul și a-l îmbunătăți. Poți accepta sau refuza — alegerea ta nu afectează navigarea.",
+    accept: "Accept",
+    reject: "Refuz",
+    more: "Politica de confidențialitate",
+  },
+
   surround: {
     experiences: "Experiențe",
     beaches: "Plajele",

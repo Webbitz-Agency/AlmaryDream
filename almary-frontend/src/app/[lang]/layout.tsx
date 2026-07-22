@@ -7,6 +7,8 @@ import { LOCALES, LOCALE_META, DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { DictionaryProvider } from "@/i18n/DictionaryProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Analytics from "@/components/Analytics";
+import CookieBanner from "@/components/CookieBanner";
 
 /* Serif display per i titoli — stesso font del riferimento (napolintocore.it) */
 const fraunces = Fraunces({
@@ -95,7 +97,9 @@ export default async function RootLayout({
         <DictionaryProvider dict={dict} locale={lang}>
           {children}
           <LanguageSwitcher />
+          <CookieBanner />
         </DictionaryProvider>
+        <Analytics />
       </body>
     </html>
   );

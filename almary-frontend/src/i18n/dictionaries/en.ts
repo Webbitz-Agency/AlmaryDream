@@ -355,6 +355,15 @@ const en: Dictionary = {
     contactLabel: "For information:",
   },
 
+  cookie: {
+    title: "We respect your privacy",
+    message:
+      "We use analytics cookies (Google Analytics) to understand how the site is used and improve it. You can accept or decline — your choice won't affect browsing.",
+    accept: "Accept",
+    reject: "Decline",
+    more: "Privacy Policy",
+  },
+
   surround: {
     experiences: "Experiences",
     beaches: "The beaches",

@@ -355,6 +355,15 @@ const de: Dictionary = {
     contactLabel: "Für Informationen:",
   },
 
+  cookie: {
+    title: "Wir respektieren Ihre Privatsphäre",
+    message:
+      "Wir verwenden Analyse-Cookies (Google Analytics), um zu verstehen, wie die Website genutzt wird, und sie zu verbessern. Sie können zustimmen oder ablehnen — Ihre Wahl beeinflusst das Surfen nicht.",
+    accept: "Akzeptieren",
+    reject: "Ablehnen",
+    more: "Datenschutz",
+  },
+
   surround: {
     experiences: "Erlebnisse",
     beaches: "Die Strände",
