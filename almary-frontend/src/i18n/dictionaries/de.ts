@@ -349,10 +349,43 @@ const de: Dictionary = {
 
   privacy: {
     back: "Zurück zur Startseite",
-    title: "Datenschutzerklärung",
-    body:
-      "Dies ist eine Platzhalterseite. Fügen Sie hier die vollständige Datenschutzerklärung von Almary Dream ein (Verantwortlicher für die Verarbeitung, Zwecke, Rechtsgrundlage, Cookies, Rechte der betroffenen Person und Kontakt zur Ausübung der Rechte).",
-    contactLabel: "Für Informationen:",
+    title: "Datenschutz & Cookie-Richtlinie",
+    updated: "Zuletzt aktualisiert: Juli 2026",
+    intro:
+      "Diese Erklärung beschreibt, wie Almary Dream die personenbezogenen Daten der Besucher dieser Website gemäß der Verordnung (EU) 2016/679 (DSGVO) verarbeitet.",
+    controllerTitle: "Verantwortlicher",
+    controllerBody:
+      "Verantwortlicher für die Verarbeitung ist Almary Dream, mit Sitz in Via della Pineta 1, 07021 Baja Sardinia (SS), Italien. Bei Fragen erreichen Sie uns über die am Ende dieser Seite angegebenen Kontaktdaten.",
+    dataTitle: "Welche Daten wir erheben",
+    dataBrowsingTitle: "Navigationsdaten",
+    dataBrowsingBody:
+      "Während des Besuchs erheben wir über Cookies und ähnliche Technologien statistische Daten zur Nutzung der Website (aufgerufene Seiten, Besuchsdauer, Gerätetyp, Herkunftsland, verweisende Seite). Bei Analyse-Cookies werden diese Daten nur mit Ihrer vorherigen Einwilligung verarbeitet.",
+    dataFormTitle: "Freiwillig bereitgestellte Daten",
+    dataFormBody:
+      "Wenn Sie über das Formular eine Buchungsanfrage senden, erheben wir die von Ihnen angegebenen Daten: Name, E-Mail, Telefon, gewünschte Daten und Zimmer sowie eventuelle Nachrichten. Wir verwenden sie ausschließlich, um Ihre Anfrage zu beantworten; die Anfrage ist unverbindlich und ohne Zahlung.",
+    purposesTitle: "Zwecke und Rechtsgrundlage",
+    purposesBody:
+      "Die Formulardaten werden verarbeitet, um Ihre Anfragen zu beantworten (Rechtsgrundlage: vorvertragliche Maßnahmen auf Ihre Anfrage). Die Analysedaten werden auf Grundlage Ihrer Einwilligung verarbeitet, die Sie jederzeit widerrufen können.",
+    cookieTitle: "Cookies",
+    cookieBody: "Wir verwenden zwei Kategorien von Cookies:",
+    cookieTechnical:
+      "Technische/notwendige Cookies — unerlässlich für den Betrieb der Website (z. B. das Speichern Ihrer Cookie-Auswahl). Sie erfordern keine Einwilligung.",
+    cookieAnalytics:
+      "Analyse-Cookies — Google Analytics 4, um zu verstehen, wie die Website genutzt wird. Sie werden nur aktiviert, wenn Sie über das Banner zustimmen. Ohne Einwilligung läuft Google Analytics im anonymen Modus (Consent Mode), ohne identifizierende Cookies.",
+    analyticsTitle: "Google Analytics",
+    analyticsBody:
+      "Diese Website nutzt Google Analytics 4 von Google Ireland Ltd., das die Daten als Auftragsverarbeiter in unserem Auftrag verarbeitet. Die IP-Adresse wird anonymisiert verarbeitet. Einige Daten können unter Einhaltung der in der DSGVO vorgesehenen Garantien in Nicht-EU-Länder übermittelt werden. Weitere Informationen: policies.google.com/privacy.",
+    retentionTitle: "Speicherdauer",
+    retentionBody:
+      "Die Daten aus Buchungsanfragen werden so lange gespeichert, wie es zur Bearbeitung der Anfrage und der damit verbundenen Pflichten erforderlich ist. Die Analysedaten werden gemäß den Einstellungen von Google Analytics gespeichert (bis zu 14 Monate).",
+    rightsTitle: "Ihre Rechte",
+    rightsBody:
+      "Sie können jederzeit Auskunft, Berichtigung, Löschung oder Einschränkung Ihrer Daten verlangen, der Verarbeitung widersprechen und Ihre Einwilligung widerrufen. Zudem haben Sie das Recht, Beschwerde bei der Datenschutzaufsichtsbehörde einzulegen.",
+    changesTitle: "Änderungen",
+    changesBody:
+      "Wir behalten uns vor, diese Erklärung zu aktualisieren. Etwaige Änderungen werden auf dieser Seite mit dem jeweiligen Aktualisierungsdatum veröffentlicht.",
+    contactTitle: "Kontakt",
+    contactLabel: "Um Ihre Rechte auszuüben oder bei Fragen schreiben Sie an:",
   },
 
   cookie: {

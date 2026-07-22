@@ -349,10 +349,43 @@ const en: Dictionary = {
 
   privacy: {
     back: "Back to home",
-    title: "Privacy Policy",
-    body:
-      "This is a placeholder page. Insert here the full Almary Dream privacy policy (data controller, purposes, legal basis, cookies, data subject rights and contact details for exercising those rights).",
-    contactLabel: "For information:",
+    title: "Privacy & Cookie Policy",
+    updated: "Last updated: July 2026",
+    intro:
+      "This notice describes how Almary Dream processes the personal data of users who visit this website, in compliance with Regulation (EU) 2016/679 (GDPR).",
+    controllerTitle: "Data controller",
+    controllerBody:
+      "The data controller is Almary Dream, located at Via della Pineta 1, 07021 Baja Sardinia (SS), Italy. For any request you can reach us at the contact details at the bottom of this page.",
+    dataTitle: "Data we collect",
+    dataBrowsingTitle: "Browsing data",
+    dataBrowsingBody:
+      "While you browse, we collect statistical data about the use of the site through cookies and similar tools (pages viewed, visit duration, device type, country, referring page). For analytics cookies, this data is processed only with your prior consent.",
+    dataFormTitle: "Data you provide voluntarily",
+    dataFormBody:
+      "If you send a booking request through the site's form, we collect the data you provide: name, email, phone, dates and room of interest and any messages. We use it solely to reply to your request, which is not binding and involves no payment.",
+    purposesTitle: "Purposes and legal basis",
+    purposesBody:
+      "Form data is processed to respond to your requests (legal basis: pre-contractual measures taken at your request). Analytics data is processed to improve the site on the basis of your consent, which you can withdraw at any time.",
+    cookieTitle: "Cookies",
+    cookieBody: "We use two categories of cookies:",
+    cookieTechnical:
+      "Technical/necessary cookies — essential to the operation of the site (for example, remembering your cookie choice). They do not require consent.",
+    cookieAnalytics:
+      "Analytics cookies — Google Analytics 4, to understand how the site is used. They are enabled only if you consent via the banner. Without consent, Google Analytics runs in anonymous mode (Consent Mode), with no identifying cookies.",
+    analyticsTitle: "Google Analytics",
+    analyticsBody:
+      "This site uses Google Analytics 4, provided by Google Ireland Ltd., which processes data as a data processor on our behalf. The IP address is processed in anonymised form. Some data may be transferred to non-EU countries under the safeguards provided by the GDPR. More information: policies.google.com/privacy.",
+    retentionTitle: "Data retention",
+    retentionBody:
+      "Booking request data is kept for as long as needed to handle the request and any related obligations. Analytics data is retained according to Google Analytics settings (up to 14 months).",
+    rightsTitle: "Your rights",
+    rightsBody:
+      "At any time you can request access to, rectification, erasure or restriction of your data, object to processing and withdraw consent. You also have the right to lodge a complaint with the data protection supervisory authority.",
+    changesTitle: "Changes",
+    changesBody:
+      "We may update this notice. Any changes will be published on this page together with the relevant update date.",
+    contactTitle: "Contact",
+    contactLabel: "To exercise your rights or for any question, write to:",
   },
 
   cookie: {

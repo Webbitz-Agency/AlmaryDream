@@ -349,10 +349,43 @@ const ro: Dictionary = {
 
   privacy: {
     back: "Înapoi la pagina principală",
-    title: "Politica de Confidențialitate",
-    body:
-      "Aceasta este o pagină provizorie. Inserați aici politica de confidențialitate completă a Almary Dream (operatorul de date, scopurile, temeiul juridic, cookie-urile, drepturile persoanei vizate și datele de contact pentru exercitarea drepturilor).",
-    contactLabel: "Pentru informații:",
+    title: "Politica de Confidențialitate și Cookie-uri",
+    updated: "Ultima actualizare: iulie 2026",
+    intro:
+      "Această notă descrie modul în care Almary Dream prelucrează datele personale ale utilizatorilor care vizitează acest site, în conformitate cu Regulamentul (UE) 2016/679 (GDPR).",
+    controllerTitle: "Operatorul de date",
+    controllerBody:
+      "Operatorul de date este Almary Dream, cu sediul în Via della Pineta 1, 07021 Baja Sardinia (SS), Italia. Pentru orice solicitare ne poți contacta la datele de contact indicate la finalul acestei pagini.",
+    dataTitle: "Datele pe care le colectăm",
+    dataBrowsingTitle: "Date de navigare",
+    dataBrowsingBody:
+      "În timpul vizitei colectăm, prin cookie-uri și instrumente similare, date statistice despre utilizarea site-ului (pagini vizualizate, durata vizitei, tipul dispozitivului, țara de proveniență, pagina de proveniență). Pentru cookie-urile de analiză, aceste date sunt prelucrate doar cu consimțământul tău prealabil.",
+    dataFormTitle: "Date furnizate voluntar",
+    dataFormBody:
+      "Dacă trimiți o cerere de rezervare prin formularul site-ului, colectăm datele pe care le furnizezi: nume, e-mail, telefon, datele și camera de interes și eventualele mesaje. Le folosim exclusiv pentru a răspunde cererii tale, care nu este obligatorie și nu implică nicio plată.",
+    purposesTitle: "Scopuri și temei juridic",
+    purposesBody:
+      "Datele din formular sunt prelucrate pentru a răspunde cererilor tale (temei juridic: măsuri precontractuale luate la cererea ta). Datele de analiză sunt prelucrate pentru a îmbunătăți site-ul pe baza consimțământului tău, pe care îl poți retrage oricând.",
+    cookieTitle: "Cookie-uri",
+    cookieBody: "Folosim două categorii de cookie-uri:",
+    cookieTechnical:
+      "Cookie-uri tehnice/necesare — indispensabile funcționării site-ului (de exemplu, memorarea alegerii tale privind cookie-urile). Nu necesită consimțământ.",
+    cookieAnalytics:
+      "Cookie-uri de analiză — Google Analytics 4, pentru a înțelege cum este utilizat site-ul. Se activează doar dacă îți dai consimțământul din banner. În lipsa consimțământului, Google Analytics funcționează în mod anonim (Consent Mode), fără cookie-uri de identificare.",
+    analyticsTitle: "Google Analytics",
+    analyticsBody:
+      "Acest site utilizează Google Analytics 4, furnizat de Google Ireland Ltd., care prelucrează datele ca persoană împuternicită în numele nostru. Adresa IP este prelucrată în formă anonimizată. Unele date pot fi transferate către țări din afara UE, cu respectarea garanțiilor prevăzute de GDPR. Mai multe informații: policies.google.com/privacy.",
+    retentionTitle: "Păstrarea datelor",
+    retentionBody:
+      "Datele din cererile de rezervare sunt păstrate atât timp cât este necesar pentru gestionarea cererii și a obligațiilor aferente. Datele de analiză sunt păstrate conform setărilor Google Analytics (până la 14 luni).",
+    rightsTitle: "Drepturile tale",
+    rightsBody:
+      "În orice moment poți solicita accesul, rectificarea, ștergerea sau restricționarea datelor tale, te poți opune prelucrării și îți poți retrage consimțământul. Ai, de asemenea, dreptul de a depune o plângere la autoritatea de supraveghere pentru protecția datelor.",
+    changesTitle: "Modificări",
+    changesBody:
+      "Ne rezervăm dreptul de a actualiza această notă. Eventualele modificări vor fi publicate pe această pagină împreună cu data actualizării.",
+    contactTitle: "Contact",
+    contactLabel: "Pentru a-ți exercita drepturile sau pentru orice întrebare, scrie la:",
   },
 
   cookie: {

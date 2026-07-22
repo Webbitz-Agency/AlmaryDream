@@ -354,10 +354,43 @@ const it = {
 
   privacy: {
     back: "Torna alla home",
-    title: "Privacy Policy",
-    body:
-      "Questa è una pagina segnaposto. Inserire qui l'informativa privacy completa di Almary Dream (titolare del trattamento, finalità, base giuridica, cookie, diritti dell'interessato e contatti per l'esercizio dei diritti).",
-    contactLabel: "Per informazioni:",
+    title: "Privacy & Cookie Policy",
+    updated: "Ultimo aggiornamento: luglio 2026",
+    intro:
+      "La presente informativa descrive come Almary Dream tratta i dati personali degli utenti che visitano questo sito, in conformità al Regolamento (UE) 2016/679 (GDPR).",
+    controllerTitle: "Titolare del trattamento",
+    controllerBody:
+      "Il titolare del trattamento è Almary Dream, con sede in Via della Pineta 1, 07021 Baja Sardinia (SS), Italia. Per qualsiasi richiesta puoi contattarci ai recapiti indicati in fondo a questa pagina.",
+    dataTitle: "Dati che raccogliamo",
+    dataBrowsingTitle: "Dati di navigazione",
+    dataBrowsingBody:
+      "Durante la visita raccogliamo, tramite cookie e strumenti analoghi, dati statistici sull'uso del sito (pagine viste, durata della visita, tipo di dispositivo, paese di provenienza, pagina di provenienza). Per i cookie analitici questi dati sono trattati solo previo tuo consenso.",
+    dataFormTitle: "Dati forniti volontariamente",
+    dataFormBody:
+      "Se invii una richiesta di prenotazione tramite il modulo del sito, raccogliamo i dati che ci fornisci: nome, email, telefono, date e camera di interesse ed eventuali messaggi. Li usiamo esclusivamente per rispondere alla tua richiesta, che non è vincolante e non comporta alcun pagamento.",
+    purposesTitle: "Finalità e base giuridica",
+    purposesBody:
+      "I dati del modulo sono trattati per rispondere alle tue richieste (base giuridica: misure precontrattuali adottate su tua richiesta). I dati analitici sono trattati per migliorare il sito sulla base del tuo consenso, che puoi revocare in qualsiasi momento.",
+    cookieTitle: "Cookie",
+    cookieBody: "Utilizziamo due categorie di cookie:",
+    cookieTechnical:
+      "Cookie tecnici/necessari — indispensabili al funzionamento del sito (ad esempio la memorizzazione della tua scelta sui cookie). Non richiedono consenso.",
+    cookieAnalytics:
+      "Cookie analitici — Google Analytics 4, per capire come viene usato il sito. Si attivano solo se acconsenti dal banner. In assenza di consenso Google Analytics opera in modalità anonima (Consent Mode), senza cookie identificativi.",
+    analyticsTitle: "Google Analytics",
+    analyticsBody:
+      "Questo sito utilizza Google Analytics 4, fornito da Google Ireland Ltd., che tratta i dati come responsabile del trattamento per nostro conto. L'indirizzo IP è trattato in forma anonimizzata. Alcuni dati possono essere trasferiti verso Paesi extra-UE nel rispetto delle garanzie previste dal GDPR. Maggiori informazioni: policies.google.com/privacy.",
+    retentionTitle: "Conservazione dei dati",
+    retentionBody:
+      "I dati delle richieste di prenotazione sono conservati per il tempo necessario a gestire la richiesta e i relativi adempimenti. I dati analitici sono conservati secondo le impostazioni di Google Analytics (fino a 14 mesi).",
+    rightsTitle: "I tuoi diritti",
+    rightsBody:
+      "In qualsiasi momento puoi chiedere l'accesso, la rettifica, la cancellazione o la limitazione dei tuoi dati, opporti al trattamento e revocare il consenso. Hai inoltre diritto di proporre reclamo all'Autorità Garante per la protezione dei dati personali.",
+    changesTitle: "Modifiche",
+    changesBody:
+      "Ci riserviamo di aggiornare questa informativa. Le eventuali modifiche saranno pubblicate su questa pagina con la relativa data di aggiornamento.",
+    contactTitle: "Contatti",
+    contactLabel: "Per esercitare i tuoi diritti o per qualsiasi domanda scrivi a:",
   },
 
   cookie: {
