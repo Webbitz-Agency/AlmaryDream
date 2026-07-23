@@ -76,7 +76,7 @@ const ro: Dictionary = {
   },
 
   features: {
-    breakfast: { title: "Mic dejun inclus", description: "Specialități locale sarde sau o selecție internațională, în fiecare dimineață." },
+    breakfast: { title: "Mic dejun", description: "Specialități locale sarde sau o selecție internațională, în fiecare dimineață." },
     wifi: { title: "Wi-Fi de mare viteză", description: "Conexiune rapidă în toată structura." },
     ac: { title: "Aer condiționat", description: "Climatizare independentă în fiecare cameră." },
     sea: { title: "La 100 m de mare", description: "Plaje largi și complet dotate cu toate serviciile, la câțiva pași de structură." },
@@ -116,7 +116,7 @@ const ro: Dictionary = {
     guests: "{n} oaspeți",
     from: "Începând de la",
     perNight: "/ noapte",
-    priceNote: "Tarif în funcție de perioadă · mic dejun inclus",
+    priceNote: "Tarif în funcție de perioadă",
     availabilityCta: "Verifică disponibilitatea",
   },
 
@@ -185,6 +185,24 @@ const ro: Dictionary = {
     esterno1: "Structura, cu energie verde",
     colazione2: "Sala de mic dejun",
     baja: "În inima Baja Sardinia",
+    scalaMarmo: "Scara din marmură",
+    versoCamere: "Spre camere",
+    pianerottolo: "Palierul înflorit",
+    vialetto: "Aleea din granit",
+    esternoGranito: "Structura din granit sard",
+    targa: "Almary Dream, Baja Sardinia",
+    ingresso: "Intrarea",
+    portone: "Ușa de la intrare",
+    benvenuto: "Bun venit",
+    lounge: "Zona lounge",
+    angoloBar: "Colțul de bar",
+    dehorTavolo: "Terasa",
+    dehorGazebo: "Foișorul umbrit",
+    relaxEsterno: "Zona de relaxare în aer liber",
+    barbecue: "Grătarul",
+    tavolaApparecchiata: "Masa pregătită pentru micul dejun",
+    buffet: "Bufetul de mic dejun",
+    docciaEsterna: "Dușul exterior",
   },
 
   reviewsBadge: {
@@ -355,7 +373,7 @@ const ro: Dictionary = {
       "Această notă descrie modul în care Almary Dream prelucrează datele personale ale utilizatorilor care vizitează acest site, în conformitate cu Regulamentul (UE) 2016/679 (GDPR).",
     controllerTitle: "Operatorul de date",
     controllerBody:
-      "Operatorul de date este Almary Dream, cu sediul în Via della Pineta 1, 07021 Baja Sardinia (SS), Italia. Pentru orice solicitare ne poți contacta la datele de contact indicate la finalul acestei pagini.",
+      "Operatorul de date este Alessandro Vanitelli (Almary Dream), cu sediul în Via della Pineta 1, 07021 Baja Sardinia — Arzachena (SS), Italia. Email: almarydream@gmail.com. Pentru orice solicitare ne poți contacta la datele de contact indicate la finalul acestei pagini.",
     dataTitle: "Datele pe care le colectăm",
     dataBrowsingTitle: "Date de navigare",
     dataBrowsingBody:

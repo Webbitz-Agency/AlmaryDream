@@ -65,21 +65,31 @@ export default function RoomCarousel({ images, name, priority = false, className
             </svg>
           </button>
 
-          {/* Indicatori */}
-          <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
-            {images.map((src, i) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => setIndex(i)}
-                aria-label={`Vai alla foto ${i + 1}`}
-                aria-current={i === index}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === index ? "w-6 bg-white" : "w-1.5 bg-white/60 hover:bg-white/90"
-                }`}
-              />
-            ))}
-          </div>
+          {/* Indicatori: pallini quando le foto sono poche, altrimenti un
+              contatore compatto (con 20-30 foto i pallini sforerebbero). */}
+          {total <= 8 ? (
+            <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+              {images.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`Vai alla foto ${i + 1}`}
+                  aria-current={i === index}
+                  className={`h-1.5 rounded-full transition-all ${
+                    i === index ? "w-6 bg-white" : "w-1.5 bg-white/60 hover:bg-white/90"
+                  }`}
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              aria-hidden
+              className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full bg-black/45 px-3 py-1 text-xs font-medium tabular-nums text-white backdrop-blur-sm"
+            >
+              {index + 1} / {total}
+            </div>
+          )}
         </>
       )}
     </div>

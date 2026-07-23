@@ -43,7 +43,9 @@ export function bedAndBreakfastJsonLd(dict: Dictionary, locale: Locale) {
     sameAs: [SITE.instagram],
     amenityFeature: [
       { "@type": "LocationFeatureSpecification", name: "Free WiFi", value: true },
-      { "@type": "LocationFeatureSpecification", name: "Breakfast included", value: true },
+      // La colazione è servita ma NON è compresa nella tariffa: dichiararla
+      // "included" a Google sarebbe un dato falso nei risultati di ricerca.
+      { "@type": "LocationFeatureSpecification", name: "Breakfast available", value: true },
       { "@type": "LocationFeatureSpecification", name: "Air conditioning", value: true },
       { "@type": "LocationFeatureSpecification", name: "Barbecue", value: true },
     ],

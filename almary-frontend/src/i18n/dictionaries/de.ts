@@ -76,7 +76,7 @@ const de: Dictionary = {
   },
 
   features: {
-    breakfast: { title: "Frühstück inklusive", description: "Lokale sardische Spezialitäten oder internationale Auswahl, jeden Morgen." },
+    breakfast: { title: "Frühstück", description: "Lokale sardische Spezialitäten oder internationale Auswahl, jeden Morgen." },
     wifi: { title: "Highspeed-Wi-Fi", description: "Schnelle Verbindung in der gesamten Unterkunft." },
     ac: { title: "Klimaanlage", description: "Individuell regelbare Klimatisierung in jedem Zimmer." },
     sea: { title: "100 m vom Meer", description: "Weitläufige, voll ausgestattete Strände, nur wenige Schritte von der Unterkunft entfernt." },
@@ -116,7 +116,7 @@ const de: Dictionary = {
     guests: "{n} Gäste",
     from: "Ab",
     perNight: "/ Nacht",
-    priceNote: "Preis je nach Saison · Frühstück inklusive",
+    priceNote: "Preis je nach Saison",
     availabilityCta: "Verfügbarkeit prüfen",
   },
 
@@ -185,6 +185,24 @@ const de: Dictionary = {
     esterno1: "Die Unterkunft, mit grüner Energie",
     colazione2: "Der Frühstücksraum",
     baja: "Im Herzen von Baja Sardinia",
+    scalaMarmo: "Die Marmortreppe",
+    versoCamere: "Auf dem Weg zu den Zimmern",
+    pianerottolo: "Der blumengeschmückte Treppenabsatz",
+    vialetto: "Der Granitweg",
+    esternoGranito: "Die Unterkunft aus sardischem Granit",
+    targa: "Almary Dream, Baja Sardinia",
+    ingresso: "Der Eingang",
+    portone: "Die Eingangstür",
+    benvenuto: "Der Empfang",
+    lounge: "Der Lounge-Bereich",
+    angoloBar: "Die Bar-Ecke",
+    dehorTavolo: "Die Terrasse",
+    dehorGazebo: "Der schattige Gazebo",
+    relaxEsterno: "Die Relaxzone im Freien",
+    barbecue: "Der Grill",
+    tavolaApparecchiata: "Der gedeckte Frühstückstisch",
+    buffet: "Das Frühstücksbuffet",
+    docciaEsterna: "Die Außendusche",
   },
 
   reviewsBadge: {
@@ -355,7 +373,7 @@ const de: Dictionary = {
       "Diese Erklärung beschreibt, wie Almary Dream die personenbezogenen Daten der Besucher dieser Website gemäß der Verordnung (EU) 2016/679 (DSGVO) verarbeitet.",
     controllerTitle: "Verantwortlicher",
     controllerBody:
-      "Verantwortlicher für die Verarbeitung ist Almary Dream, mit Sitz in Via della Pineta 1, 07021 Baja Sardinia (SS), Italien. Bei Fragen erreichen Sie uns über die am Ende dieser Seite angegebenen Kontaktdaten.",
+      "Verantwortlicher für die Verarbeitung ist Alessandro Vanitelli (Almary Dream), mit Sitz in Via della Pineta 1, 07021 Baja Sardinia — Arzachena (SS), Italien. E-Mail: almarydream@gmail.com. Bei Fragen erreichen Sie uns über die am Ende dieser Seite angegebenen Kontaktdaten.",
     dataTitle: "Welche Daten wir erheben",
     dataBrowsingTitle: "Navigationsdaten",
     dataBrowsingBody:

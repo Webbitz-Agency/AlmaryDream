@@ -81,7 +81,7 @@ const it = {
   },
 
   features: {
-    breakfast: { title: "Colazione inclusa", description: "Specialità locali sarde o selezione internazionale, ogni mattina." },
+    breakfast: { title: "Colazione", description: "Specialità locali sarde o selezione internazionale, ogni mattina." },
     wifi: { title: "Wi-Fi alta velocità", description: "Connessione veloce in tutta la struttura." },
     ac: { title: "Aria climatizzata", description: "Climatizzazione autonoma in ogni camera." },
     sea: { title: "A 100 m dal mare", description: "Spiagge ampissime e attrezzate con tutti i servizi, a pochi passi dalla struttura." },
@@ -121,7 +121,7 @@ const it = {
     guests: "{n} ospiti",
     from: "A partire da",
     perNight: "/ notte",
-    priceNote: "Tariffa in base al periodo · colazione inclusa",
+    priceNote: "Tariffa in base al periodo",
     availabilityCta: "Verifica disponibilità",
   },
 
@@ -190,6 +190,26 @@ const it = {
     esterno1: "La struttura, con energia green",
     colazione2: "La sala colazione",
     baja: "Nel cuore di Baja Sardinia",
+    // Servizio fotografico 2026 — più foto possono condividere la stessa
+    // didascalia (la griglia usa `src` come key, non `id`).
+    scalaMarmo: "La scala in marmo",
+    versoCamere: "Verso le camere",
+    pianerottolo: "Il pianerottolo fiorito",
+    vialetto: "Il vialetto in granito",
+    esternoGranito: "La struttura in granito sardo",
+    targa: "Almary Dream, Baja Sardinia",
+    ingresso: "L'ingresso",
+    portone: "Il portone d'ingresso",
+    benvenuto: "Il benvenuto",
+    lounge: "L'area lounge",
+    angoloBar: "L'angolo bar",
+    dehorTavolo: "Il dehor",
+    dehorGazebo: "Il gazebo all'ombra",
+    relaxEsterno: "La zona relax all'aperto",
+    barbecue: "Il barbecue",
+    tavolaApparecchiata: "La tavola apparecchiata",
+    buffet: "Il buffet della colazione",
+    docciaEsterna: "La doccia esterna",
   },
 
   reviewsBadge: {
@@ -360,7 +380,7 @@ const it = {
       "La presente informativa descrive come Almary Dream tratta i dati personali degli utenti che visitano questo sito, in conformità al Regolamento (UE) 2016/679 (GDPR).",
     controllerTitle: "Titolare del trattamento",
     controllerBody:
-      "Il titolare del trattamento è Almary Dream, con sede in Via della Pineta 1, 07021 Baja Sardinia (SS), Italia. Per qualsiasi richiesta puoi contattarci ai recapiti indicati in fondo a questa pagina.",
+      "Il titolare del trattamento è Alessandro Vanitelli (Almary Dream), con sede in Via della Pineta 1, 07021 Baja Sardinia — Arzachena (SS), Italia. Email: almarydream@gmail.com. Per qualsiasi richiesta puoi contattarci ai recapiti indicati in fondo a questa pagina.",
     dataTitle: "Dati che raccogliamo",
     dataBrowsingTitle: "Dati di navigazione",
     dataBrowsingBody:
