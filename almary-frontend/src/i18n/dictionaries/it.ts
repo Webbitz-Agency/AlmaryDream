@@ -321,6 +321,8 @@ const it = {
     messagePlaceholder: "Richieste particolari, orario di arrivo…",
     submit: "Invia richiesta",
     submitting: "Invio in corso…",
+    privacyConsent: "Ho letto e accetto la {link}.",
+    privacyLinkLabel: "Privacy & Cookie Policy",
     noPayment: "Nessun pagamento ora: invii solo una richiesta, ti confermeremo la disponibilità.",
     errorGeneric: "Invio non riuscito. Riprova.",
     sentTitle: "Richiesta inviata!",

@@ -314,6 +314,8 @@ const ro: Dictionary = {
     messagePlaceholder: "Cerințe speciale, ora de sosire…",
     submit: "Trimite cererea",
     submitting: "Se trimite…",
+    privacyConsent: "Am citit și accept {link}.",
+    privacyLinkLabel: "Politica de confidențialitate și cookie-uri",
     noPayment: "Nicio plată acum: trimiți doar o cerere, îți vom confirma disponibilitatea.",
     errorGeneric: "Trimiterea a eșuat. Încearcă din nou.",
     sentTitle: "Cerere trimisă!",

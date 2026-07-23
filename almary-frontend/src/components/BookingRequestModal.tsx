@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { stayCost, formatEuro } from "@/lib/pricing";
 import { useI18n } from "@/i18n/DictionaryProvider";
-import { LOCALE_META } from "@/i18n/config";
+import { LOCALE_META, localizedHref } from "@/i18n/config";
 import { useScrollLock } from "@/lib/useScrollLock";
 import { trackLead } from "@/lib/analytics";
 
@@ -40,6 +40,7 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -51,6 +52,7 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
     if (!open) return;
     setStatus("idle");
     setErrorMsg("");
+    setPrivacyAccepted(false);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -61,6 +63,8 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
   const nightsCount = nights(checkin, checkout);
   const cost = checkin && checkout ? stayCost(checkin, checkout) : null;
   const priceTotal = cost && cost.allPriced ? String(cost.total) : "";
+  const privacyHref = localizedHref("/privacy", locale);
+  const [consentBefore, consentAfter] = dict.request.privacyConsent.split("{link}");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,14 +194,32 @@ export default function BookingRequestModal({ open, onClose, room, checkin, chec
                 <textarea id="br-msg" rows={3} value={message} onChange={(e) => setMessage(e.target.value)} className={`${fieldCls} resize-none`} placeholder={dict.request.messagePlaceholder} />
               </div>
 
+              {/* Consenso privacy obbligatorio prima dell'invio */}
+              <label htmlFor="br-privacy" className="flex cursor-pointer items-start gap-2.5 text-xs text-muted">
+                <input
+                  id="br-privacy"
+                  type="checkbox"
+                  checked={privacyAccepted}
+                  onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-black/20 accent-primary"
+                />
+                <span>
+                  {consentBefore}
+                  <a href={privacyHref} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-2 hover:text-secondary">
+                    {dict.request.privacyLinkLabel}
+                  </a>
+                  {consentAfter}
+                </span>
+              </label>
+
               {status === "error" && (
                 <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{errorMsg}</p>
               )}
 
               <button
                 type="submit"
-                disabled={status === "sending"}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:opacity-60"
+                disabled={status === "sending" || !privacyAccepted}
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {status === "sending" ? dict.request.submitting : dict.request.submit}
               </button>

@@ -314,6 +314,8 @@ const en: Dictionary = {
     messagePlaceholder: "Special requests, arrival time…",
     submit: "Send request",
     submitting: "Sending…",
+    privacyConsent: "I have read and accept the {link}.",
+    privacyLinkLabel: "Privacy & Cookie Policy",
     noPayment: "No payment now: you are only sending a request, and we will confirm availability.",
     errorGeneric: "Submission failed. Please try again.",
     sentTitle: "Request sent!",

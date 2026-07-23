@@ -314,6 +314,8 @@ const de: Dictionary = {
     messagePlaceholder: "Besondere Wünsche, Ankunftszeit…",
     submit: "Anfrage senden",
     submitting: "Wird gesendet…",
+    privacyConsent: "Ich habe die {link} gelesen und akzeptiere sie.",
+    privacyLinkLabel: "Datenschutz- & Cookie-Richtlinie",
     noPayment: "Keine Zahlung jetzt: Sie senden lediglich eine Anfrage, wir bestätigen Ihnen die Verfügbarkeit.",
     errorGeneric: "Senden fehlgeschlagen. Bitte versuchen Sie es erneut.",
     sentTitle: "Anfrage gesendet!",
