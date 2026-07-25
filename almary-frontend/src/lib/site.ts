@@ -28,15 +28,16 @@ export const SITE = {
   address: "Via della Pineta 1",
   zip: "07021",
   city: "Baja Sardinia (SS)",
-  // Coordinate reali della struttura, ricavate dal Plus Code del pin Google
-  // Business Profile (8FHF4FQH+2H, Baja Sardinia). L'indirizzo "Via della
-  // Pineta 1" non è geolocalizzabile da Google → si usano le coordinate.
-  lat: 41.137563,
-  lng: 9.478937,
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=41.137563,9.478937",
+  // Coordinate reali della struttura = pin della scheda Google Business Profile
+  // "Almary Dream Luxury B&B" (Baja Sardinia). L'indirizzo "Via della Pineta 1"
+  // non è geolocalizzabile da Google → si usano le coordinate.
+  lat: 41.13761,
+  lng: 9.4788816,
+  // Link "Apri con Google Maps": punta alla SCHEDA business tramite CID
+  // (mostra nome, foto, recensioni, "indicazioni"), non alle coordinate grezze.
+  mapsUrl: "https://www.google.com/maps?cid=7786261322064095626",
   mapsEmbed:
-    "https://www.google.com/maps?q=41.137563,9.478937&z=16&output=embed",
+    "https://www.google.com/maps?q=41.13761,9.4788816&z=16&output=embed",
 
   // Dati di licenza (dal logo ufficiale)
   cir: "090006C200T5153",
