@@ -5,8 +5,8 @@
  * NOTE:
  * - NIENTE aggregateRating dalle recensioni Booking: violerebbe le linee guida
  *   Google (le review non sono raccolte dal sito stesso).
- * - `geo` (lat/lng) è volutamente OMESSO finché il cliente non fornisce le
- *   coordinate GPS reali. Quando arrivano, aggiungerle qui (vedi TODO).
+ * - `geo` (lat/lng) ricavato dal Plus Code del pin Google Business Profile
+ *   (8FHF4FQH+2H, Baja Sardinia) → SITE.lat / SITE.lng.
  */
 
 import { SITE, ROOMS } from "@/lib/site";
@@ -37,8 +37,11 @@ export function bedAndBreakfastJsonLd(dict: Dictionary, locale: Locale) {
       addressRegion: "SS",
       addressCountry: "IT",
     },
-    // TODO(coordinate GPS): quando il cliente le fornisce, aggiungere:
-    // geo: { "@type": "GeoCoordinates", latitude: <lat>, longitude: <lng> },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE.lat,
+      longitude: SITE.lng,
+    },
     hasMap: SITE.mapsUrl,
     sameAs: [SITE.instagram],
     amenityFeature: [

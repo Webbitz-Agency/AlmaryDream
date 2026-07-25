@@ -28,10 +28,15 @@ export const SITE = {
   address: "Via della Pineta 1",
   zip: "07021",
   city: "Baja Sardinia (SS)",
+  // Coordinate reali della struttura, ricavate dal Plus Code del pin Google
+  // Business Profile (8FHF4FQH+2H, Baja Sardinia). L'indirizzo "Via della
+  // Pineta 1" non è geolocalizzabile da Google → si usano le coordinate.
+  lat: 41.137563,
+  lng: 9.478937,
   mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Almary+Dream+Via+della+Pineta+1+Baja+Sardinia",
+    "https://www.google.com/maps/search/?api=1&query=41.137563,9.478937",
   mapsEmbed:
-    "https://www.google.com/maps?q=Via%20della%20Pineta%201%2C%2007021%20Baja%20Sardinia&output=embed",
+    "https://www.google.com/maps?q=41.137563,9.478937&z=16&output=embed",
 
   // Dati di licenza (dal logo ufficiale)
   cir: "090006C200T5153",
