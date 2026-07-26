@@ -19,6 +19,10 @@ import { isLocale } from "@/i18n/config";
  *   BOOKING_TO  (opzionale) destinatario richieste; default = SMTP_USER
  *   SITE_URL    (opzionale) base URL pubblico per il logo nelle email;
  *               default = dominio di produzione Vercel, poi SITE.url
+ *   SHEETS_WEBHOOK_URL    (opzionale) URL del Web App Apps Script che registra
+ *                         la richiesta su un foglio Google. Se assente, si salta.
+ *   SHEETS_WEBHOOK_TOKEN  (opzionale) token condiviso con lo script, per evitare
+ *                         scritture non autorizzate sul foglio.
  *
  * Il logo nelle email è caricato da {SITE_URL}/Logo/logoBianco.png (URL assoluto).
  *
@@ -34,6 +38,34 @@ function siteBaseUrl(): string {
   if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, "");
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   return SITE.url;
+}
+
+/**
+ * Registra la richiesta su un foglio Google tramite webhook Apps Script.
+ * Best-effort: qualsiasi errore (o timeout) viene solo loggato e NON blocca
+ * l'invio dell'email. Se SHEETS_WEBHOOK_URL non è impostata, non fa nulla.
+ */
+async function logLeadToSheet(booking: BookingData): Promise<void> {
+  const url = process.env.SHEETS_WEBHOOK_URL;
+  if (!url) return;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...booking,
+        token: process.env.SHEETS_WEBHOOK_TOKEN ?? "",
+        receivedAt: new Date().toISOString(),
+      }),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    console.error("[booking-request] log su Google Sheet non riuscito:", err);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function POST(request: Request) {
@@ -68,6 +100,9 @@ export async function POST(request: Request) {
     priceTotal: /^\d+$/.test(String(data.priceTotal ?? "")) ? String(data.priceTotal) : "",
     lang: isLocale(String(data.lang ?? "")) ? (String(data.lang) as BookingData["lang"]) : "it",
   };
+
+  // Registra la richiesta sul foglio Google (best-effort: non blocca l'email).
+  await logLeadToSheet(booking);
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BOOKING_TO } = process.env;
 
