@@ -13,6 +13,8 @@ const ro: Dictionary = {
   },
   cta: {
     book: "Rezervă Acum",
+    whatsappFab: "Bună, Almary Dream! Aș dori să verific disponibilitatea camerelor.",
+    whatsappAria: "Scrie-ne pe WhatsApp",
   },
   langSwitcher: {
     label: "Limbă",

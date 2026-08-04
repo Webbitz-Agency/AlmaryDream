@@ -13,6 +13,8 @@ const en: Dictionary = {
   },
   cta: {
     book: "Book Now",
+    whatsappFab: "Hi Almary Dream! I'd like to check room availability.",
+    whatsappAria: "Message us on WhatsApp",
   },
   langSwitcher: {
     label: "Language",

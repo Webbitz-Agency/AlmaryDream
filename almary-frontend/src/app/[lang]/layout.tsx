@@ -7,6 +7,7 @@ import { LOCALES, LOCALE_META, DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { DictionaryProvider } from "@/i18n/DictionaryProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import WhatsAppFab from "@/components/WhatsAppFab";
 import Analytics from "@/components/Analytics";
 import Clarity from "@/components/Clarity";
 import CookieBanner from "@/components/CookieBanner";
@@ -99,6 +100,7 @@ export default async function RootLayout({
         <DictionaryProvider dict={dict} locale={lang}>
           {children}
           <LanguageSwitcher />
+          <WhatsAppFab />
           <CookieBanner />
         </DictionaryProvider>
         <Analytics />

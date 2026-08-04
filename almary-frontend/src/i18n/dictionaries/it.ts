@@ -18,6 +18,8 @@ const it = {
   },
   cta: {
     book: "Prenota Ora",
+    whatsappFab: "Ciao Almary Dream! Vorrei verificare la disponibilità delle camere.",
+    whatsappAria: "Scrivici su WhatsApp",
   },
   langSwitcher: {
     label: "Lingua",
