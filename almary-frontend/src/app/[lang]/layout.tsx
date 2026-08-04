@@ -8,6 +8,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { DictionaryProvider } from "@/i18n/DictionaryProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Analytics from "@/components/Analytics";
+import Clarity from "@/components/Clarity";
 import CookieBanner from "@/components/CookieBanner";
 import ContactTracker from "@/components/ContactTracker";
 
@@ -101,6 +102,7 @@ export default async function RootLayout({
           <CookieBanner />
         </DictionaryProvider>
         <Analytics />
+        <Clarity />
         <ContactTracker />
       </body>
     </html>

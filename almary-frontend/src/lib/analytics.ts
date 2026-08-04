@@ -48,6 +48,9 @@ export function setConsent(granted: boolean): void {
   } catch {
     /* localStorage non disponibile (private mode): la scelta vale per la sessione */
   }
+  // Notifica i componenti che dipendono dal consenso (es. Clarity) così partono
+  // subito al click "Accetta", senza ricaricare la pagina.
+  window.dispatchEvent(new Event("almary-consent-change"));
 }
 
 /**
