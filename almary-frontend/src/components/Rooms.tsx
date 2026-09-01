@@ -128,8 +128,25 @@ export default function Rooms({ dict }: { dict: Dictionary }) {
             >
               {/* Foto — tocca il bordo dello schermo */}
               <Reveal from={photoRight ? "right" : "left"} className="w-full lg:w-1/2">
-                <RoomCarousel images={room.images} name={rd.name} priority={i === 0} />
+                <RoomCarousel
+                  images={room.images}
+                  name={rd.name}
+                  priority={i === 0}
+                  guests={String(room.maxGuests)}
+                  availabilityLabel={dict.roomMeta.availabilityCta}
+                />
               </Reveal>
+
+              {/* CTA sotto la foto — solo mobile/tablet: la disponibilità è
+                  subito raggiungibile dove l'occhio è già puntato (le foto).
+                  Su desktop resta la CTA nella colonna di testo, accanto alla foto. */}
+              <div className="px-5 pt-6 lg:hidden">
+                <RoomAvailabilityButton
+                  guests={String(room.maxGuests)}
+                  label={dict.roomMeta.availabilityCta}
+                  className="w-full"
+                />
+              </div>
 
               {/* Testo */}
               <div className="flex w-full items-center justify-center lg:w-1/2">
@@ -168,7 +185,9 @@ export default function Rooms({ dict }: { dict: Dictionary }) {
                   </div>
                   <p className="mt-1 text-xs text-muted">{dict.roomMeta.priceNote}</p>
 
-                  <RoomAvailabilityButton guests={String(room.maxGuests)} label={dict.roomMeta.availabilityCta} />
+                  <div className="mt-8 hidden lg:block">
+                    <RoomAvailabilityButton guests={String(room.maxGuests)} label={dict.roomMeta.availabilityCta} />
+                  </div>
                 </Reveal>
               </div>
             </article>

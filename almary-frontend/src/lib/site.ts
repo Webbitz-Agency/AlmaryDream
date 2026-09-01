@@ -41,7 +41,7 @@ export const SITE = {
 
   // Dati di licenza (dal logo ufficiale)
   cir: "090006C200T5153",
-  cin: "090006C2000T153",
+  cin: "090006C2000T5153",
 
   // Hero: video di sfondo + poster (fotogramma reale del video, mostrato
   // durante il caricamento — niente placeholder colorato).

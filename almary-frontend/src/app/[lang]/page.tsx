@@ -8,6 +8,7 @@ import Gallery from "@/components/Gallery";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import MobileStickyCta from "@/components/MobileStickyCta";
 import SardiniaShape from "@/components/SardiniaShape";
 import { bookingHref, SITE } from "@/lib/site";
 import { bedAndBreakfastJsonLd } from "@/lib/jsonLd";
@@ -97,6 +98,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </Reveal>
         </section>
       </main>
+      <MobileStickyCta />
       <Footer dict={dict} locale={locale} />
     </>
   );
